@@ -1,0 +1,9 @@
+logger:
+  path: "/../../var/log/rss2slack/runner.log"
+slack:
+  webhook_url: ""
+mysql:
+  host: "localhost"
+  database: "rss2slack"
+  username: "rss2slack_u"
+  password: "password"
