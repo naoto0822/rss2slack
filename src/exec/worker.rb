@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 require 'logger'
 require_relative '../app/db_client'
+require_relative '../app/feed_model'
 require_relative '../app/feed'
 require_relative '../app/conf'
 
