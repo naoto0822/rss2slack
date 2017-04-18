@@ -68,12 +68,12 @@ end
 namespace :db do
   desc "setup user, database"
    task :setup do
-    sh "mysql -u root < ./conf/setup.sql"
+    sh "mysql -u root < ./scripts/setup.sql"
   end
 
   desc "create table to db"
   task :create_tables do
-    sh "mysql -u rss2slack -p < ./conf/create.sql"
+    sh "mysql -u rss2slack_u -p < ./scripts/create.sql"
   end
 end
 
