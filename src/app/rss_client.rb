@@ -10,15 +10,27 @@ module R2S
       return nil if url.nil? || url.empty?
 
       articles = []
-      rss = RSS::Parser.parse(url)
+      rss = nil
       begin
-        @logger.debug("fetch from #{url}")
-        rss.items.each do |item|
-          
-        end
-      rescue
-
+        @logger.debug("fetch rss feed from #{url}")
+        rss = RSS::Parser.parse(url)
+      rescue RSS::InvalidRSSError
+        rss = RSS::Parser.parse(url, false)
+      rescue => e
+        @logger.warn("fail rss feed from #{url}", e.message)
+        return nil
       end
+
+      begin
+        return nil if rss.nil?
+        rss.items.each do |item|
+          p item
+        end
+      rescue => e
+        @logger.warn("fail parsing feed item", e.message)
+      end
+
+      articles
     end
 
     private
