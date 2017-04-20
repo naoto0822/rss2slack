@@ -9,7 +9,21 @@ module R2S
     end
 
     def find_all
-      #
+      sql = <<-EOS
+        SELECT *
+          FROM ARTICLE;
+      EOS
+      results = @db.execute(sql)
+      ArticleMapper::map(results)
+    end
+
+    def save(article)
+      sql = <<-EOS
+        INSERT INTO
+          ARTICLE (TITLE, DESCRIPTION, BODY, URL)
+          VALUES ("#{article.title}", "#{article.desc}", "#{article.body}", "#{article.url}");
+      EOS
+      re = @db.execute(sql)
     end
   end
 
