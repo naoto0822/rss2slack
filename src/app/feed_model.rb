@@ -20,7 +20,19 @@ module R2S
       sql =  <<-EOS
         INSERT INTO 
           FEED (FEED_NAME, URL) 
-          VALUES ('#{name}', '#{url}');
+        SELECT
+          '#{name}', '#{url}'
+        FROM
+          FEED
+        WHERE
+          NOT EXISTS (
+            SELECT
+              *
+            FROM
+              FEED
+            WHERE
+              URL = '#{url}'
+          ) LIMIT 1;
       EOS
       re = @db.execute(sql)
     end
