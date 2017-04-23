@@ -2,26 +2,43 @@ require_relative './article'
 
 module R2S
   class ArticleModel
-    def initialize(logger:lohher, conf:conf, db:db)
+    def initialize(logger: logger, db: db)
       @logger = logger
-      @conf = conf
       @db = db
     end
 
+    #TODO: order, where date
     def find_all
       sql = <<-EOS
-        SELECT *
-          FROM ARTICLE;
+        SELECT
+          *
+        FROM
+          ARTICLE;
       EOS
       results = @db.execute(sql)
       ArticleMapper::map(results)
     end
 
+    #TODO: insert if not exists url
     def save(article)
       sql = <<-EOS
         INSERT INTO
-          ARTICLE (TITLE, DESCRIPTION, BODY, URL)
-          VALUES ("#{article.title}", "#{article.desc}", "#{article.body}", "#{article.url}");
+          ARTICLE (TITLE, BODY, URL, PUB_DATE)
+        SELECT
+          *
+        FROM (
+          SELECT
+            '#{article.title}', '#{article.body}', '#{article.url}', '#{article.pub_date}'
+        ) AS TMP
+        WHERE
+          NOT EXISTS (
+            SELECT
+              *
+            FROM
+              ARTICLE
+            WHERE
+              URL = '#{article.url}'
+          );
       EOS
       re = @db.execute(sql)
     end
