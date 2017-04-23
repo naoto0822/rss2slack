@@ -2,9 +2,17 @@ require 'rake'
 
 task :default => [:bundle_install, :test]
 
-desc "exec bundle install"
-task :bundle_install do
-  bundle_install
+namespace :env do
+  desc "exec bundle install"
+  task :bundle_install do
+    bundle_install
+  end
+
+  desc "update bundler"
+  task :update_bundler do
+    sh "gem install bundler"
+    sh "gem update bundler"
+  end
 end
 
 namespace :worker do
