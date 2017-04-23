@@ -19,7 +19,7 @@ module R2S
       ArticleMapper::map(results)
     end
 
-    #TODO: insert if not exists url
+    # insert if not exists url
     def save(article)
       sql = <<-EOS
         INSERT INTO
