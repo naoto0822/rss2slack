@@ -2,7 +2,7 @@ require_relative './feed'
 
 module R2S
   class FeedModel
-    def initialize(logger:logger, conf:conf, db:db)
+    def initialize(logger:logger, db:db)
       @logger = logger
       @db = db
     end
@@ -44,15 +44,15 @@ module R2S
 
   class FeedMapper
     def self.map(results)
-      items = []
+      feed_arr = []
       results.each do |row|
-        id = row["FEED_ID"]
-        name = row["FEED_NAME"]
-        url = row["URL"]
+        id = row['FEED_ID']
+        name = row['FEED_NAME']
+        url = row['URL']
         feed = R2S::Feed.new(id:id, name:name, url:url)
-        items.push feed
+        feed_arr.push feed
       end
-      items
+      feed_arr
     end
   end
 end
