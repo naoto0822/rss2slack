@@ -31,14 +31,14 @@ module R2S
     def self.map(results)
       articles = []
       results.each do |row|
-        id = row["ARTICLE_ID"]
-        title = row["TITLE"]
-        desc = row["DESCRIPTION"]
-        body = row["BODY"]
-        url = row["URL"]
-        created_at = row["CREATED_AT"]
-        article = R2S::Article.new(id:id, title:title, desc:desc,
-                                   body:body, url:url, created_at:created_at)
+        id = row['ARTICLE_ID']
+        title = row['TITLE']
+        body = row['BODY']
+        url = row['URL']
+        pub_date = row['PUB_DATE']
+        created_at = row['CREATED_AT']
+        article = R2S::Article.new(id: id, title: title, body: body,
+                                   url: url, pub_date: pub_date, created_at: created_at)
         articles.push article
       end
       articles
