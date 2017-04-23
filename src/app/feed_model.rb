@@ -7,6 +7,7 @@ module R2S
       @db = db
     end
 
+    # TODO: order
     def find_all
       sql = <<-EOS
         SELECT *
@@ -16,14 +17,17 @@ module R2S
       FeedMapper::map(results)
     end
 
+    # insert if not exists article.url
     def save(name, url)
       sql =  <<-EOS
         INSERT INTO 
           FEED (FEED_NAME, URL) 
         SELECT
-          '#{name}', '#{url}'
-        FROM
-          FEED
+          *
+        FROM (
+          SELECT
+            '#{name}', '#{url}'
+        ) AS TMP
         WHERE
           NOT EXISTS (
             SELECT
@@ -32,7 +36,7 @@ module R2S
               FEED
             WHERE
               URL = '#{url}'
-          ) LIMIT 1;
+          );
       EOS
       re = @db.execute(sql)
     end
