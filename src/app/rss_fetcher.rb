@@ -2,7 +2,7 @@ require 'rss'
 
 module R2S
   class RSSFetcher
-    def initialize(logger:logger)
+    def initialize(logger)
       @logger = logger
       @rss = nil
     end

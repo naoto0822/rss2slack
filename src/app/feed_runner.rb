@@ -7,13 +7,13 @@ require_relative './rss_fetcher'
 
 module R2S
   class FeedRunner
-    def initalize(logger: logger, conf: conf)
+    def initalize(logger, conf)
       @logger = logger
       @conf = conf
-      @db = R2S::DBClient.new(logger: logger, conf: conf)
-      @feed_model = R2S::FeedModel.new(logger: logger, db: @db)
-      @article_model = R2S::ArticleModel.new(logger: logger, db: @db)
-      @rss = R2S::RSSFetcher.new(logger: logger)
+      @db = R2S::DBClient.new(logger, conf)
+      @feed_model = R2S::FeedModel.new(logger, @db)
+      @article_model = R2S::ArticleModel.new(logger, @db)
+      @rss = R2S::RSSFetcher.new(logger)
     end
 
     def run

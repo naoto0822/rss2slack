@@ -3,7 +3,7 @@ require 'yaml'
 module R2S
   class Conf
     attr_accessor :webhook_url, :db_host, :db_name, :db_username, :db_password, :logger_path
-    def initialize(env:env)
+    def initialize(env)
       @env = env
 
       begin

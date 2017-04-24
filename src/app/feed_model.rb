@@ -2,7 +2,7 @@ require_relative './feed'
 
 module R2S
   class FeedModel
-    def initialize(logger:logger, db:db)
+    def initialize(logger, db)
       @logger = logger
       @db = db
     end

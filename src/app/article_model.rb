@@ -2,7 +2,7 @@ require_relative './article'
 
 module R2S
   class ArticleModel
-    def initialize(logger: logger, db: db)
+    def initialize(logger, db)
       @logger = logger
       @db = db
     end

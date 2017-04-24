@@ -3,7 +3,7 @@ require 'mysql2'
 module R2S
   class DBClient
     attr_accessor :client, :logger, :conf
-    def initialize(logger:logger, conf:conf)
+    def initialize(logger, conf)
       @logger = logger
       @conf = conf
 
