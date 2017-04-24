@@ -101,6 +101,11 @@ task :create_var do
   sh 'mkdir -p ./var/tmp'
 end
 
+desc 'lint'
+tasl :lint do
+  sh 'bundle exec rubocop'
+end
+
 private
 
 def bundle_install()
