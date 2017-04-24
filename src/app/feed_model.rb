@@ -33,9 +33,9 @@ module R2S
 
     # insert if not exists article.url
     def save(name, url)
-      sql =  <<-EOS
-        INSERT INTO 
-          FEED (FEED_NAME, URL) 
+      sql = <<-EOS
+        INSERT INTO
+          FEED (FEED_NAME, URL)
         SELECT
           *
         FROM (
@@ -63,7 +63,7 @@ module R2S
         id = row['FEED_ID']
         name = row['FEED_NAME']
         url = row['URL']
-        feed = R2S::Feed.new(id:id, name:name, url:url)
+        feed = R2S::Feed.new(id: id, name: name, url: url)
         feed_arr.push feed
       end
       feed_arr

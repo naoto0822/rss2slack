@@ -7,10 +7,10 @@ module R2S
       @logger = logger
       @conf = conf
 
-      @client = Mysql2::Client.new(:host => conf.db_host, 
-                                   :database => conf.db_name,
-                                   :username => conf.db_username,
-                                   :password => conf.db_password)
+      @client = Mysql2::Client.new(host: conf.db_host,
+                                   database: conf.db_name,
+                                   username: conf.db_username,
+                                   password: conf.db_password)
     end
 
     def execute(sql)

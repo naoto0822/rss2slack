@@ -41,4 +41,3 @@ module R2S
     end
   end
 end
-

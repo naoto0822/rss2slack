@@ -48,7 +48,7 @@ module R2S
           body = item.description
           url = item.link
           pub_date = item.pubDate
-          article = R2S::Article.new(title:title, body:body, url:url, pub_date:pub_date)
+          article = R2S::Article.new(title: title, body: body, url: url, pub_date: pub_date)
           article_arr.push article
         end
       rescue => e
