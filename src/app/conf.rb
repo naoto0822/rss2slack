@@ -12,51 +12,51 @@ module R2S
         raise ArgumentError, "#{e.class}, #{e.backtrace}"
       end
 
-      @logger_path = @conf["logger"]["path"]
+      @logger_path = @conf['logger']['path']
       if local?
-        @logger_path = File.expand_path(File.dirname(__FILE__)) + @conf["logger"]["path"]
+        @logger_path = File.expand_path(File.dirname(__FILE__)) + @conf['logger']['path']
       end
 
-      @webhook_url = @conf["slack"]["webhook_url"]
-      @db_host = @conf["mysql"]["host"]
-      @db_name = @conf["mysql"]["database"]
-      @db_username = @conf["mysql"]["username"]
-      @db_password = @conf["mysql"]["password"]
+      @webhook_url = @conf['slack']['webhook_url']
+      @db_host = @conf['mysql']['host']
+      @db_name = @conf['mysql']['database']
+      @db_username = @conf['mysql']['username']
+      @db_password = @conf['mysql']['password']
     end
 
     def prod?
-      @env == "production"
+      @env == 'production'
     end
 
     def dev?
-      @env == "development"
+      @env == 'development'
     end
 
     def local?
-      @env == "local"
+      @env == 'local'
     end
 
     def conf_path
       case @env
-      when "production"
+      when 'production'
         prod_path
-      when "development"
+      when 'development'
         dev_path
-      when "local"
+      when 'local'
         local_path
       else
-        ""
+        nil
       end
     end
 
     private
 
     def prod_path
-      "/etc/conf/rss2slack/conf.prod.yml"
+      '/etc/conf/rss2slack/conf.prod.yml'
     end
 
     def dev_path
-      "/etc/conf/rss2slack/conf.dev.yml"
+      '/etc/conf/rss2slack/conf.dev.yml'
     end
 
     def local_path
