@@ -102,7 +102,7 @@ task :create_var do
 end
 
 desc 'lint'
-tasl :lint do
+task :lint do
   sh 'bundle exec rubocop'
 end
 
