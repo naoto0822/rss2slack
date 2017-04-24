@@ -17,6 +17,20 @@ module R2S
       FeedMapper::map(results)
     end
 
+    def find_by_url(url)
+      sql = <<-EOS
+        SELECT
+          *
+        FROM
+          FEED
+        WHERE
+          URL = '#{url}'
+        LIMIT 1;
+      EOS
+      results = @db.execute(sql)
+      FeedMapper::map(results)
+    end
+
     # insert if not exists article.url
     def save(name, url)
       sql =  <<-EOS
