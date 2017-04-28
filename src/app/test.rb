@@ -1,36 +1,27 @@
 #!/usr/bin/env ruby
-require 'date'
-require_relative './date'
+require_relative './slack/webhooks'
 
-n = R2S::Date::now
-p R2S::Date::format(n)
-y = R2S::Date::yesterday(n)
-p R2S::Date::format(y)
+field1 = Slack::IncomingWebhooks::Field.new
+field1.title = "Article1"
+field1.value = "https://google.com"
+field1.short = false
+field2 = Slack::IncomingWebhooks::Field.new
+field2.value = "http://yahoo.co.jp"
+field2.short = false
 
-p "-------"
+attachment = Slack::IncomingWebhooks::Attachment.new
+attachment.fallback = "Required plain-text summary of the attachment."
+attachment.color = "good"
+attachment.title = "8月22日の記事"
+attachment.fields = [field1, field2]
+attachment.footer = "from Rss2Slack"
+attachment.ts = 123456789
 
-y2 = R2S::Date::yesterday
-p R2S::Date::format(y2)
+payload = Slack::IncomingWebhooks::Payload.new
+payload.username = "Rss2Slack"
+payload.text = "Today's Feed :tada:"
+payload.attachments = [attachment]
 
-p "--------"
-
-now = Time.now
-yes = now - 24*60*60
-
-now_time = now.strftime('%Y-%m-%d %H:%M:%S')
-p now_time
-
-yes_time = yes.strftime('%Y-%m-%d %H:%M:%S')
-p yes_time
-
-p File.expand_path(File.dirname(__FILE__) + '/../')
-# p File.expand_path '../exec/worker.rb', __FILE__
-
-module R2S
-  class Test
-    attr_accessor :name
-    def initialize(name)
-      @name = name
-    end
-  end
-end
+slack = Slack::IncomingWebhooks::Client.new(ENV['webhook_url'])
+re = slack.post(payload)
+p re
