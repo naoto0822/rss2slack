@@ -25,15 +25,9 @@ module R2S
         articles.each { |a| @article_model.save(a) } #TODO: bulk insert
       end
 
-      # fetch today article.
-
       # post slack
       
       @logger.debug('finish running FeedRunner.')
-    end
-
-    def fetch_articles
-
     end
 
     def post_slack
