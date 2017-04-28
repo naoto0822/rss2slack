@@ -6,51 +6,73 @@ require 'json'
 module Slack
 module IncomingWebhooks
   class Client
-    attr_reader :url
-
     def initialize(url)
       @url = url
-      @payload = Payload.new
     end
 
-    def post(channel: nil, text: nil, options: nil)
-      @payload.channel = channel
-      @payload.text = text
-      Connection.send(@payload.build(options))
+    def post(payload)
+      Connection.send(@url, payload.to_params)
     end
   end
 
   class Payload
-    REQUIRE_PARAMS = [
-      'channel', 'text'
+    PAYLOAD_PARAMS = [
+      :channel, :text, :parse, :link_names, :attachments,
+      :unfurl_links, :unfurl_media, :username, :as_user,
+      :icon_url, :icon_emoji, :thread_ts, :reply_broadcast
     ].freeze
 
-    OPTION_PARAMS = [
-      'parse', 'link_names', 'attachments', 'unfurl_links', 'unfurl_media',
-      'username', 'as_user', 'icon_url', 'icon_emoji', 'thread_ts', 'reply_broadcast'
-    ].freeze
+    attr_accessor *PAYLOAD_PARAMS
 
-    attr_accessor :channel, :text
-                  # :parse, :link_names, :attachments, :unfurl_links, :unfurl_media,
-                  # :username, :as_user, :icon_url, :icon_emoji, :thread_ts, :reply_broadcast
-
-    def initialize
-      # NOOP
-    end
-
-    def valid?(payload)
-      REQUIRE_PARAMS.each { |p|
-        return false payload[p].nil?
-        next
-      }
-      true
-    end
-
-    def build(options)
+    def to_params
       params = {}
-      params['channel'] = @channel unless @channel.nil?
-      params['text'] = @text unless @text.nil?
-      params.merge(options) unless options.nil?
+      PAYLOAD_PARAMS.each { |p|
+        if "#{p}" == 'attachments'
+          _attachments = []
+          @attachments.each { |a| _attachments.push(a.to_params) } unless @attachments.nil?
+          params['attachments'] = _attachments unless _attachments.empty?
+          next
+        end
+        params["#{p}"] = send(p) unless send(p).nil?
+      }
+      params
+    end
+  end
+
+  class Attachment
+    ATTACHMENT_PARAMS = [
+      :fallback, :color, :pretext, :author_name, :author_link,
+      :author_icon, :title, :title_link, :text, :fields, :image_url,
+      :thumb_url, :footer, :footer_icon, :ts
+    ].freeze
+
+    attr_accessor *ATTACHMENT_PARAMS
+
+    def to_params
+      params = {}
+      ATTACHMENT_PARAMS.each { |p|
+        if "#{p}" == 'fields'
+          _fields = []
+          @fields.each { |f| _fields.push(f.to_params) } unless @fields.nil?
+          params['fields'] = _fields
+          next
+        end
+        params["#{p}"] = send(p) unless send(p).nil?
+      }
+      params
+    end
+  end
+
+  class Field
+    FIELD_PARAMS = [
+      :title, :value, :short
+    ].freeze
+
+    attr_accessor *FIELD_PARAMS
+
+    def to_params
+      params = {}
+      FIELD_PARAMS.each{ |p| params["#{p}"] = send(p) unless send(p).nil? }
       params
     end
   end
@@ -62,9 +84,9 @@ module IncomingWebhooks
         return Result.new(msg: msg)
       end
 
-      uri = URI::parse(@url)
+      uri = URI.parse(url)
       req = Net::HTTP::Post.new(uri.path)
-      req.set_form_data(payload: payload)
+      req.set_form_data(payload: payload.to_json)
       res = Net::HTTP.start(uri.host, uri.port,
                             use_ssl: uri.scheme == 'https') { |http|
         http.open_timeout = 5
