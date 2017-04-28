@@ -11,7 +11,7 @@ logger.level = Logger::DEBUG
 
 db = R2S::DBClient.new(logger, conf)
 feedmodel = R2S::FeedModel.new(logger, db)
-feedmodel.save('google', 'https://google.com')
+feedmodel.save('google2', 'https://google2.com')
 
 re = feedmodel.find_by_url('https://google.com')
 p re

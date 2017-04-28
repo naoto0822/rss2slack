@@ -1,4 +1,5 @@
 require_relative './article'
+require_relative './date'
 
 module R2S
   class ArticleModel
@@ -7,13 +8,27 @@ module R2S
       @db = db
     end
 
-    #TODO: order, where date
     def find_all
       sql = <<-EOS
         SELECT
           *
         FROM
           ARTICLE;
+      EOS
+      results = @db.execute(sql)
+      ArticleMapper::map(results)
+    end
+
+    def find_by_date(from=now_time, to=yesterday_time)
+      sql = <<-EOS
+        SELECT
+          *
+        FROM
+          ARTICLE
+        WHERE
+          CREATED_AT
+        BETWEEN
+          '#{from}' AND '#{to}';
       EOS
       results = @db.execute(sql)
       ArticleMapper::map(results)
@@ -41,6 +56,18 @@ module R2S
           );
       EOS
       re = @db.execute(sql)
+    end
+
+    private
+
+    def now_time
+      time = R2S::Date::now
+      R2S::Date::format(time)
+    end
+
+    def yesterday_time
+      time = R2S::Date::yesterday
+      R2S::Date::format(time)
     end
   end
 
