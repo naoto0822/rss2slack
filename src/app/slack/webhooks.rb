@@ -93,7 +93,7 @@ module IncomingWebhooks
         http.read_timeout = 5
         http.request(req)
       }
-      Result.new(code: res.code, header: res.header, body: res.body)
+      Result.new(code: res.code, msg:res.message, header: res.header, body: res.body)
     end
   end
 
