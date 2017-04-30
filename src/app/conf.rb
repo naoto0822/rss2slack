@@ -15,7 +15,7 @@ module R2S
 
       @logger_path = @conf['logger']['path']
       if local?
-        @logger_path = File.expand_path(File.dirname(__FILE__)) + @conf['logger']['path']
+        @logger_path = local_logger_path
       end
 
       @webhook_url = ENV['incoming_webhooks_url']
@@ -40,11 +40,11 @@ module R2S
     def conf_path
       case @env
       when 'production'
-        prod_path
+        prod_conf_path
       when 'development'
-        dev_path
+        dev_conf_path
       when 'local'
-        local_path
+        local_conf_path
       else
         nil
       end
@@ -52,16 +52,20 @@ module R2S
 
     private
 
-    def prod_path
+    def prod_conf_path
       '/etc/conf/rss2slack/conf.prod.yml'
     end
 
-    def dev_path
+    def dev_conf_path
       '/etc/conf/rss2slack/conf.dev.yml'
     end
 
-    def local_path
+    def local_conf_path
       File.expand_path(File.dirname(__FILE__)) + '/../../conf/conf.local.yml'
+    end
+
+    def local_logger_path
+      File.expand_path(File.dirname(__FILE__)) + @conf['logger']['path']
     end
   end
 end
