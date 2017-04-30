@@ -1,4 +1,22 @@
 # This is the configuration used to check the rubocop source code.
 
-inherit_from: .rubocop_todo.yml
+# inherit_from: .rubocop_todo.yml
 
+AllCops:
+  Exclude:
+    - 'vendor/**/*'
+    - 'conf/*.rb'
+
+Documentation:
+  Enabled: false
+
+Metrics/ParameterLists:
+  CountKeywordArgs: true
+  Max: 10
+
+Metrics/MethodLength:
+  CountComments: false
+  Max: 25
+
+ColonMethodCall:
+  Enabled: false
