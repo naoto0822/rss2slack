@@ -9,5 +9,6 @@
 
 - [ ] fix worker
 - [ ] submodule deploy
+- [ ] fix SQL injection
 - [ ] server settings
 
