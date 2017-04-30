@@ -8,7 +8,7 @@ module R2S
       @env = ENV['env']
       @webhook_url = ENV['incoming_webhooks_url']
 
-      if !@env.nil? || !@webhook_url.nil?
+      if @env.nil? || @webhook_url.nil?
         raise RuntimeError, 'environment var of env, webhook_url is not set.'
       end
 
