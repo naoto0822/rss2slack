@@ -22,6 +22,6 @@ payload.username = "Rss2Slack"
 payload.text = "Today's Feed :tada:"
 payload.attachments = [attachment]
 
-slack = Slack::IncomingWebhooks::Client.new(ENV['webhook_url'])
+slack = Slack::IncomingWebhooks::Client.new(ENV['incoming_webhooks_url'])
 re = slack.post(payload)
 p re
