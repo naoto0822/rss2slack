@@ -6,6 +6,11 @@ module R2S
                   :db_password, :logger_path
     def initialize
       @env = ENV['env']
+      @webhook_url = ENV['incoming_webhooks_url']
+
+      if !@env.nil? || !@webhook_url.nil?
+        raise RuntimeError, 'env var of env, webhook_url is not set.'
+      end
 
       begin
         @conf = YAML.load_file(conf_path())
@@ -18,7 +23,6 @@ module R2S
         @logger_path = local_logger_path
       end
 
-      @webhook_url = ENV['incoming_webhooks_url']
       @db_host = @conf['mysql']['host']
       @db_name = @conf['mysql']['database']
       @db_username = @conf['mysql']['username']
