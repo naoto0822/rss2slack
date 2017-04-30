@@ -7,7 +7,7 @@ require_relative './slack_msg_builder'
 
 module R2S
   class FeedRunner
-    def initalize(logger, conf)
+    def initialize(logger, conf)
       @logger = logger
       @conf = conf
       @db = R2S::DBClient.new(logger, conf)
