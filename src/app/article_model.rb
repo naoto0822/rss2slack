@@ -44,7 +44,7 @@ module R2S
           *
         FROM (
           SELECT
-            ?, ?, ?, ?
+            ? AS TITLE, ? AS BODY, ? AS URL, ? AS PUB_DATE
         ) AS TMP
         WHERE
           NOT EXISTS (
