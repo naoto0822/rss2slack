@@ -52,7 +52,7 @@ module R2S
               URL = '#{url}'
           );
       EOS
-      re = @db.execute(sql)
+      @db.execute(sql)
     end
   end
 

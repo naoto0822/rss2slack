@@ -16,10 +16,10 @@ module IncomingWebhooks
   end
 
   class Payload
-    PAYLOAD_PARAMS = [
-      :channel, :text, :parse, :link_names, :attachments,
-      :unfurl_links, :unfurl_media, :username, :as_user,
-      :icon_url, :icon_emoji, :thread_ts, :reply_broadcast
+    PAYLOAD_PARAMS = %i[
+      channel text parse link_names attachments
+      unfurl_links unfurl_media username as_user
+      icon_url icon_emoji thread_ts reply_broadcast
     ].freeze
 
     attr_accessor *PAYLOAD_PARAMS
@@ -28,9 +28,9 @@ module IncomingWebhooks
       params = {}
       PAYLOAD_PARAMS.each { |p|
         if "#{p}" == 'attachments'
-          _attachments = []
-          @attachments.each { |a| _attachments.push(a.to_params) } unless @attachments.nil?
-          params['attachments'] = _attachments unless _attachments.empty?
+          attachments = []
+          @attachments.each { |a| attachments.push(a.to_params) } unless @attachments.nil?
+          params['attachments'] = attachments unless attachments.empty?
           next
         end
         params["#{p}"] = send(p) unless send(p).nil?
@@ -40,10 +40,10 @@ module IncomingWebhooks
   end
 
   class Attachment
-    ATTACHMENT_PARAMS = [
-      :fallback, :color, :pretext, :author_name, :author_link,
-      :author_icon, :title, :title_link, :text, :fields, :image_url,
-      :thumb_url, :footer, :footer_icon, :ts
+    ATTACHMENT_PARAMS = %i[
+      fallback color pretext author_name author_link
+      author_icon title title_link text fields image_url
+      thumb_url footer footer_icon ts
     ].freeze
 
     attr_accessor *ATTACHMENT_PARAMS
@@ -52,9 +52,9 @@ module IncomingWebhooks
       params = {}
       ATTACHMENT_PARAMS.each { |p|
         if "#{p}" == 'fields'
-          _fields = []
-          @fields.each { |f| _fields.push(f.to_params) } unless @fields.nil?
-          params['fields'] = _fields
+          fields = []
+          @fields.each { |f| fields.push(f.to_params) } unless @fields.nil?
+          params['fields'] = fields
           next
         end
         params["#{p}"] = send(p) unless send(p).nil?
@@ -64,15 +64,15 @@ module IncomingWebhooks
   end
 
   class Field
-    FIELD_PARAMS = [
-      :title, :value, :short
+    FIELD_PARAMS = %i[
+      title value short
     ].freeze
 
     attr_accessor *FIELD_PARAMS
 
     def to_params
       params = {}
-      FIELD_PARAMS.each{ |p| params["#{p}"] = send(p) unless send(p).nil? }
+      FIELD_PARAMS.each { |p| params["#{p}"] = send(p) unless send(p).nil? }
       params
     end
   end
@@ -84,6 +84,12 @@ module IncomingWebhooks
         return Result.new(msg: msg)
       end
 
+      res = request(url, payload)
+      Result.new(code: res.code, msg: res.message,
+                 header: res.header, body: res.body)
+    end
+
+    def self.request(url, payload)
       uri = URI.parse(url)
       req = Net::HTTP::Post.new(uri.path)
       req.set_form_data(payload: payload.to_json)
@@ -93,7 +99,7 @@ module IncomingWebhooks
         http.read_timeout = 5
         http.request(req)
       }
-      Result.new(code: res.code, msg:res.message, header: res.header, body: res.body)
+      res
     end
   end
 

@@ -16,7 +16,7 @@ module R2S
       end
 
       begin
-        @conf = YAML.load_file(conf_path())
+        @conf = YAML.load_file(conf_path)
       rescue => e
         @logger.warn("error loading conf yaml")
         raise ArgumentError, "#{e.class}, #{e.backtrace}"

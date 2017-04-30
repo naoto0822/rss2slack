@@ -19,7 +19,7 @@ module R2S
       ArticleMapper::map(results)
     end
 
-    def find_by_date(from=now_time, to=yesterday_time)
+    def find_by_date(from = now_time, to = yesterday_time)
       sql = <<-EOS
         SELECT
           *
@@ -55,7 +55,7 @@ module R2S
               URL = '#{article.url}'
           );
       EOS
-      re = @db.execute(sql)
+      @db.execute(sql)
     end
 
     private
@@ -82,8 +82,9 @@ module R2S
         pub_date = row['PUB_DATE']
         created_at = row['CREATED_AT']
         article = R2S::Article.new(id: id, title: title, body: body,
-                                   url: url, pub_date: pub_date, created_at: created_at)
-        articles.push article
+                                   url: url, pub_date: pub_date,
+                                   created_at: created_at)
+        articles.push(article)
       end
       articles
     end

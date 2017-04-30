@@ -23,7 +23,7 @@ module R2S
         @logger.debug("success fetch rss feed from #{url}")
         return results
       rescue => e
-        @logger.warn("fail parsing feed item", e.message)
+        @logger.warn('fail parsing feed item', e.message)
         return nil
       end
     end

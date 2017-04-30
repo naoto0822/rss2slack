@@ -26,3 +26,7 @@ Metrics/MethodLength:
 
 ColonMethodCall:
   Enabled: false
+
+Style/BlockDelimiters:
+  Enabled: false
+
