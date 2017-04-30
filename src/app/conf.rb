@@ -2,9 +2,10 @@ require 'yaml'
 
 module R2S
   class Conf
-    attr_accessor :webhook_url, :db_host, :db_name, :db_username, :db_password, :logger_path
-    def initialize(env)
-      @env = env
+    attr_accessor :webhook_url, :db_host, :db_name, :db_username,
+                  :db_password, :logger_path
+    def initialize
+      @env = ENV['env']
 
       begin
         @conf = YAML.load_file(conf_path())
@@ -17,7 +18,7 @@ module R2S
         @logger_path = File.expand_path(File.dirname(__FILE__)) + @conf['logger']['path']
       end
 
-      @webhook_url = @conf['slack']['webhook_url']
+      @webhook_url = ENV['incoming_webhooks_url']
       @db_host = @conf['mysql']['host']
       @db_name = @conf['mysql']['database']
       @db_username = @conf['mysql']['username']
