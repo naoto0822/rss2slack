@@ -4,17 +4,21 @@ module R2S
   class Conf
     attr_accessor :webhook_url, :db_host, :db_name, :db_username,
                   :db_password, :logger_path
-    def initialize
+    def initialize(logger)
+      @logger = logger
+
       @env = ENV['env']
       @webhook_url = ENV['incoming_webhooks_url']
 
       if !@env.nil? || !@webhook_url.nil?
-        raise RuntimeError, 'env var of env, webhook_url is not set.'
+        @logger.warn("environment var of env, webhook_url is not set.")
+        raise RuntimeError, 'environment var of env, webhook_url is not set.'
       end
 
       begin
         @conf = YAML.load_file(conf_path())
       rescue => e
+        @logger.warn("error loading conf yaml")
         raise ArgumentError, "#{e.class}, #{e.backtrace}"
       end
 
