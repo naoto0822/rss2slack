@@ -24,10 +24,11 @@ module R2S
         FROM
           FEED
         WHERE
-          URL = '#{url}'
+          URL = ?
         LIMIT 1;
       EOS
-      results = @db.execute(sql)
+      statement = @db.statement(sql)
+      results = statement.execute(url)
       FeedMapper::map(results)
     end
 
@@ -40,7 +41,7 @@ module R2S
           *
         FROM (
           SELECT
-            '#{name}', '#{url}'
+            ?, ?
         ) AS TMP
         WHERE
           NOT EXISTS (
@@ -49,10 +50,11 @@ module R2S
             FROM
               FEED
             WHERE
-              URL = '#{url}'
+              URL = ?
           );
       EOS
-      @db.execute(sql)
+      statement = @db.statement(sql)
+      results = statement.execute(name, url, url)
     end
   end
 
