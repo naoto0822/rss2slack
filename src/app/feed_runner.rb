@@ -14,7 +14,7 @@ module R2S
       @feed_model = R2S::FeedModel.new(logger, @db)
       @article_model = R2S::ArticleModel.new(logger, @db)
       @rss = R2S::RSSFetcher.new(logger)
-      @slack = Slack::IncomingWebhooks::Client.new(ENV['incoming_webhooks_url'])
+      @slack = Slack::IncomingWebhooks::Client.new(conf.webhook_url)
     end
 
     def run
