@@ -23,7 +23,8 @@ namespace :worker do
   desc 'start worker for local'
   task :local do
     ENV['env'] = ENV_LOCAL
-    sh 'bundle exec ruby src/exec/worker.rb'
+    ENV['incoming_webhooks_url'] = ''
+    sh 'bundle exec ruby src/exec/feed_worker.rb'
   end
 
   desc 'start worker for dev'
