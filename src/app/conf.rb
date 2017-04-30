@@ -11,7 +11,7 @@ module R2S
       @webhook_url = ENV['incoming_webhooks_url']
 
       if !@env.nil? || !@webhook_url.nil?
-        @logger.warn("environment var of env, webhook_url is not set.")
+        @logger.warn('environment var of env, webhook_url is not set.')
         raise RuntimeError, 'environment var of env, webhook_url is not set.'
       end
 
