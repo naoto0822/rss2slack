@@ -13,7 +13,13 @@ module R2S
                                    password: conf.db_password)
     end
 
+    def statement(sql)
+      @logger.debug("execute query: #{sql}")
+      @client.prepare(sql)
+    end
+
     def execute(sql)
+      @logger.debug("execute query: #{sql}")
       @client.query(sql)
     end
   end

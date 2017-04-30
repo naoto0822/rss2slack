@@ -28,9 +28,10 @@ module R2S
         WHERE
           CREATED_AT
         BETWEEN
-          '#{from}' AND '#{to}';
+          ? AND ?;
       EOS
-      results = @db.execute(sql)
+      statement = @db.statement(sql)
+      results = statement.execute(from, to)
       ArticleMapper::map(results)
     end
 
@@ -43,7 +44,7 @@ module R2S
           *
         FROM (
           SELECT
-            '#{article.title}', '#{article.body}', '#{article.url}', '#{article.pub_date}'
+            ?, ?, ?, ?
         ) AS TMP
         WHERE
           NOT EXISTS (
@@ -52,10 +53,12 @@ module R2S
             FROM
               ARTICLE
             WHERE
-              URL = '#{article.url}'
+              URL = ?
           );
       EOS
-      @db.execute(sql)
+      statement = @db.statement(sql)
+      results = statement.execute(article.title, article.body,
+                                  article.url, article.pub_date, article.url)
     end
 
     private
