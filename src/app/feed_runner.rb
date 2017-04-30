@@ -1,9 +1,9 @@
 require_relative './db_client'
 require_relative './feed_model'
-require_relative './feed.rb'
 require_relative './article_model'
-require_relative './article'
 require_relative './rss_fetcher'
+require_relative './slack/webhooks.rb'
+require_relative './slack_msg_builder'
 
 module R2S
   class FeedRunner
@@ -14,6 +14,7 @@ module R2S
       @feed_model = R2S::FeedModel.new(logger, @db)
       @article_model = R2S::ArticleModel.new(logger, @db)
       @rss = R2S::RSSFetcher.new(logger)
+      @slack = Slack::IncomingWebhooks::Client.new(ENV['incoming_webhooks_url'])
     end
 
     def run
@@ -25,13 +26,13 @@ module R2S
         articles.each { |a| @article_model.save(a) } #TODO: bulk insert
       end
 
-      # post slack
-      
+      post_slack
       @logger.debug('finish running FeedRunner.')
     end
 
     def post_slack
-
+      payload = R2S::SlackMsgBuilder::build_for_feed
+      @slack.post(payload)
     end
   end
 end
