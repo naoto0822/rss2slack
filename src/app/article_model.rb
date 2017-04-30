@@ -44,7 +44,7 @@ module R2S
         SELECT
           ?, ?, ?, ?
         FROM
-          ARTICLE
+          DUAL
         WHERE
           NOT EXISTS (
             SELECT
