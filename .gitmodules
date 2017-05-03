@@ -1,0 +1,3 @@
+[submodule "deploy"]
+	path = deploy
+	url = git@github.com:naoto0822/private-product-deploy.git
