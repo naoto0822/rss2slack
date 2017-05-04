@@ -37,7 +37,6 @@ module R2S
 
     # insert if not exists url
     def save(article)
-      # TODO: ARTICLE -> DUAL?
       sql = <<-EOS
         INSERT INTO
           ARTICLE (TITLE, BODY, URL, PUB_DATE)
