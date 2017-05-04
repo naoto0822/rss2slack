@@ -1,4 +1,5 @@
 require 'rake'
+require 'yaml'
 
 task :default => [:bundle_install, :test]
 
@@ -23,19 +24,21 @@ namespace :worker do
   desc 'start worker for local'
   task :local do
     ENV['env'] = ENV_LOCAL
-    ENV['incoming_webhooks_url'] = ''
+    ENV['incoming_webhooks_url'] = private_conf_file['slack']['incoming_webhooks_url']
     sh 'bundle exec ruby src/exec/feed_worker.rb'
   end
 
   desc 'start worker for dev'
   task :dev do
     ENV['env'] = ENV_DEV
+    ENV['incoming_webhooks_url'] = private_conf_file['slack']['incoming_webhooks_url']
     sh 'bundle exec ruby src/exec/worker.rb'
   end
 
   desc 'start worker for prod'
   task :prod do
     ENV['env'] = ENV_PROD
+    ENV['incoming_webhooks_url'] = private_conf_file['slack']['incoming_webhooks_url']
     sh 'bundle exec ruby src/exec/worker.rb'
   end
 end
@@ -111,4 +114,29 @@ private
 
 def bundle_install()
   sh 'bundle install --path vendor/bundle'
+end
+
+def private_conf_file
+  path = private_conf_path
+  if path.nil?
+    raise RuntimeError, 'not set env.'
+  end
+  YAML.load_file(path)
+rescue => e
+  raise ArgumentError, "#{e.class}, #{e.backtrace}"
+end
+
+# TODO: fix prod, dev path
+def private_conf_path
+  env = ENV['env']
+  case env
+  when 'production'
+    './deploy/rss2slack/private_conf.local.yml'
+  when 'development'
+    './deploy/rss2slack/private_conf.dev.yml'
+  when 'local'
+    './deploy/rss2slack/private_conf.local.yml'
+  else
+    nil
+  end
 end
