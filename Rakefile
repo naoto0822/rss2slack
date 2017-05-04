@@ -75,6 +75,11 @@ namespace :unicorn do
   task :prod do
     sh 'bundle exec unicorn -E production -c ./conf/unicorn.prod.rb -D'
   end
+
+  desc 'stop'
+  task :stop_local do
+    sh 'kill -QUIT `cat ./var/tmp/unicorn.pid`'
+  end
 end
 
 namespace :db do
