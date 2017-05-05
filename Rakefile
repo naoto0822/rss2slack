@@ -1,6 +1,10 @@
 require 'rake'
 require 'yaml'
 
+ENV_LOCAL = 'local'.freeze
+ENV_DEV = 'development'.freeze
+ENV_PROD = 'production'.freeze
+
 task :default => [:bundle_install, :test]
 
 namespace :env do
@@ -17,29 +21,31 @@ namespace :env do
 end
 
 namespace :worker do
-  ENV_LOCAL = 'local'.freeze
-  ENV_DEV = 'development'.freeze
-  ENV_PROD = 'production'.freeze
+  namespace :feed do
+    desc 'start worker for local'
+    task :local do
+      ENV['env'] = ENV_LOCAL
+      ENV['incoming_webhooks_url'] = private_conf_file['slack']['incoming_webhooks_url']
+      sh 'bundle exec ruby src/exec/feed_worker.rb'
+    end
 
-  desc 'start worker for local'
-  task :local do
-    ENV['env'] = ENV_LOCAL
-    ENV['incoming_webhooks_url'] = private_conf_file['slack']['incoming_webhooks_url']
-    sh 'bundle exec ruby src/exec/feed_worker.rb'
+    desc 'start worker for dev'
+    task :dev do
+      ENV['env'] = ENV_DEV
+      ENV['incoming_webhooks_url'] = private_conf_file['slack']['incoming_webhooks_url']
+      sh 'bundle exec ruby src/exec/worker.rb'
+    end
+
+    desc 'start worker for prod'
+    task :prod do
+      ENV['env'] = ENV_PROD
+      ENV['incoming_webhooks_url'] = private_conf_file['slack']['incoming_webhooks_url']
+      sh 'bundle exec ruby src/exec/worker.rb'
+    end
   end
 
-  desc 'start worker for dev'
-  task :dev do
-    ENV['env'] = ENV_DEV
-    ENV['incoming_webhooks_url'] = private_conf_file['slack']['incoming_webhooks_url']
-    sh 'bundle exec ruby src/exec/worker.rb'
-  end
+  namespace :article do
 
-  desc 'start worker for prod'
-  task :prod do
-    ENV['env'] = ENV_PROD
-    ENV['incoming_webhooks_url'] = private_conf_file['slack']['incoming_webhooks_url']
-    sh 'bundle exec ruby src/exec/worker.rb'
   end
 end
 
@@ -61,24 +67,49 @@ namespace :api do
 end
 
 namespace :unicorn do
-  desc 'unicorn for local'
-  task :unicorn_local do
-    sh 'bundle exec unicorn -E development -c ./conf/unicorn.local.rb -D'
+  namespace :local do
+    desc 'local unicorn start'
+    task :start do
+      sh 'bundle exec unicorn -E development -c ./conf/unicorn.local.rb -D'
+    end
+
+    desc 'local unicorn stop'
+    task :stop do
+      sh 'kill -QUIT `cat ./var/tmp/unicorn.pid`'
+    end
+
+    desc 'local unicorn restart'
+    task :restart => ['unicorn:local:stop', 'unicorn:local:start']
   end
 
-  desc 'unicorn for dev'
-  task :dev do
-    sh 'bundle exec unicorn -E development -c ./conf/unicorn.dev.rb -D'
+  namespace :dev do
+    desc 'dev unicorn start'
+    task :start do
+      sh 'bundle exec unicorn -E development -c ./conf/unicorn.dev.rb -D'
+    end
+
+    desc 'dev unicorn stop'
+    task :stop do
+      sh 'kill -QUIT `cat /var/tmp/unicorn.pid`'
+    end
+
+    desc 'dev unicorn restart'
+    task :restart => ['unicorn:dev:stop', 'unicorn:dev:start']
   end
 
-  desc 'unicorn for prod'
-  task :prod do
-    sh 'bundle exec unicorn -E production -c ./conf/unicorn.prod.rb -D'
-  end
+  namespace :prod do
+    desc 'prod unicorn start'
+    task :start do
+      sh 'bundle exec unicorn -E production -c ./conf/unicorn.prod.rb -D'
+    end
 
-  desc 'stop'
-  task :stop_local do
-    sh 'kill -QUIT `cat ./var/tmp/unicorn.pid`'
+    desc 'prod unicorn stop'
+    task :stop do
+      sh 'kill -QUIT `cat /var/tmp/unicorn.pid`'
+    end
+
+    desc 'prod unicorn restart'
+    task :restart => ['unicorn:prod:stop', 'unicorn:prod:start']
   end
 end
 
