@@ -5,41 +5,25 @@ ENV_LOCAL = 'local'.freeze
 ENV_DEV = 'development'.freeze
 ENV_PROD = 'production'.freeze
 
+# !!!!!!!!!!!!!!
+# For Production
+# !!!!!!!!!!!!!!
 task :default => [:bundle_install, :test]
-
-namespace :env do
-  desc 'exec bundle install'
-  task :bundle_install do
-    bundle_install
-  end
-
-  desc 'update bundler'
-  task :update_bundler do
-    sh 'gem install bundler'
-    sh 'gem update bundler'
-  end
-end
 
 namespace :worker do
   namespace :feed do
     desc 'start worker for local'
-    task :local do
-      ENV['env'] = ENV_LOCAL
-      ENV['incoming_webhooks_url'] = private_conf_file['slack']['incoming_webhooks_url']
+    task :local => ['env:local'] do
       sh 'bundle exec ruby src/exec/feed_worker.rb'
     end
 
     desc 'start worker for dev'
-    task :dev do
-      ENV['env'] = ENV_DEV
-      ENV['incoming_webhooks_url'] = private_conf_file['slack']['incoming_webhooks_url']
+    task :dev => ['env:dev'] do
       sh 'bundle exec ruby src/exec/worker.rb'
     end
 
     desc 'start worker for prod'
-    task :prod do
-      ENV['env'] = ENV_PROD
-      ENV['incoming_webhooks_url'] = private_conf_file['slack']['incoming_webhooks_url']
+    task :prod => ['env:prod'] do
       sh 'bundle exec ruby src/exec/worker.rb'
     end
   end
@@ -114,46 +98,123 @@ namespace :unicorn do
 end
 
 namespace :db do
-  desc 'setup user, database'
-   task :setup do
-    sh 'mysql -u root < ./scripts/setup.sql'
+  namespace :local do
+    desc 'db start'
+    task :start do
+      sh 'mysql.server start'
+    end
+
+    desc 'setup user, database'
+    task :setup do
+      sh 'mysql -u root < ./scripts/setup.sql'
+    end
+
+    desc 'create table to db'
+    task :create_tables => ['env:local'] do
+      user = ENV['db_user']
+      pass = ENV['db_password']
+      sh "mysql -u#{user} rss2slack_u -p#{pass} < ./scripts/create.sql"
+    end
   end
 
-  desc 'create table to db'
-  task :create_tables do
-    sh 'mysql -u rss2slack_u -p < ./scripts/create.sql'
+  namespace :dev do
+
+  end
+
+  namespace :prod do
+
   end
 end
 
-desc 'test'
-task :test => [:bootstrap] do
-  sh 'bundle exec rspec spec/'
+namespace :bootstrap do
+  desc 'setting local env'
+  task :local do
+    sh 'mkdir -p ./var/log/rss2slack'
+    sh 'mkdir -p ./var/log/unicorn'
+    sh 'mkdir -p ./var/tmp'
+    sh 'mkdir -p ./etc/unicorn'
+    sh 'mkdir -p ./etc/rss2slack'
+    sh 'cp -f ./conf/unicorn.local.rb ./etc/unicorn'
+    sh 'cp -f ./deploy/rss2slack/conf.local.yml ./etc/rss2slack'
+  end
+
+  desc 'setting dev env'
+  task :dev do
+    sh 'mkdir -p /var/log/rss2slack'
+    sh 'mkdir -p /var/log/unicorn'
+    sh 'mkdir -p /var/tmp'
+    sh 'mkdir -p /etc/unicorn'
+    sh 'mkdir -p /etc/rss2slack'
+    sh 'cp -f ./conf/unicorn.dev.rb /etc/unicorn'
+    sh 'cp -f ./deploy/rss2slack/conf.dev.yml /etc/rss2slack'
+  end
+  
+  desc 'setting prod env'
+  task :prod do
+    sh 'mkdir -p /var/log/rss2slack'
+    sh 'mkdir -p /var/log/unicorn'
+    sh 'mkdir -p /var/tmp'
+    sh 'mkdir -p /etc/unicorn'
+    sh 'mkdir -p /etc/rss2slack'
+    sh 'cp -f ./conf/unicorn.prod.rb /etc/unicorn'
+    sh 'cp -f ./deploy/rss2slack/conf.prod.yml /etc/rss2slack'
+  end
 end
 
-desc 'launch middleware'
-task :bootstrap do
-  sh 'sh ./scripts/bootstrap.sh'
+namespace :env do
+  desc 'set local env'
+  task :local do
+    ENV['env'] = ENV_LOCAL
+    ENV['db_user'] = conf_file['mysql']['username']
+    ENV['db_password'] = conf_file['mysql']['password']
+  end
+
+  desc 'set dev env'
+  task :dev do
+    ENV['env'] = ENV_DEV
+    ENV['db_user'] = conf_file['mysql']['username']
+    ENV['db_password'] = conf_file['mysql']['password']
+  end
+
+  desc 'set prod env'
+  task :prod do
+    ENV['env'] = ENV_PROD
+    ENV['db_user'] = conf_file['mysql']['username']
+    ENV['db_password'] = conf_file['mysql']['password']
+  end
+
+  desc 'exec bundle install'
+  task :bundle_install do
+    bundle_install
+  end
+
+  desc 'update bundler'
+  task :update_bundler do
+    sh 'gem install bundler'
+    sh 'gem update bundler'
+  end
 end
 
-desc 'create var/ dir'
-task :create_var do
-  sh 'mkdir -p ./var/log/rss2slack'
-  sh 'mkdir -p ./var/tmp'
-end
+namespace :test do
+  desc 'exec rspec'
+  task :spec do
+    sh 'bundle exec rspec spec/'
+  end
 
-desc 'lint'
-task :lint do
-  sh 'bundle exec rubocop'
+  desc 'lint'
+  task :lint do
+    sh 'bundle exec rubocop'
+  end
 end
 
 private
 
-def bundle_install()
+def bundle_install
   sh 'bundle install --path vendor/bundle'
 end
 
-def private_conf_file
-  path = private_conf_path
+def conf_file
+  path = conf_path
   if path.nil?
     raise RuntimeError, 'not set env.'
   end
@@ -163,15 +224,15 @@ rescue => e
 end
 
 # TODO: fix prod, dev path
-def private_conf_path
+def conf_path
   env = ENV['env']
   case env
   when 'production'
-    './deploy/rss2slack/private_conf.local.yml'
+    '/etc/rss2slack/conf.prod.yml'
   when 'development'
-    './deploy/rss2slack/private_conf.dev.yml'
+    '/etc/rss2slack/conf.dev.yml'
   when 'local'
-    './deploy/rss2slack/private_conf.local.yml'
+    './etc/rss2slack/conf.local.yml'
   else
     nil
   end
