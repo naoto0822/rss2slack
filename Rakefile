@@ -35,18 +35,16 @@ end
 
 namespace :api do
   desc 'start api for local'
-  task :local do
-
-  end
+  task :local => ['env:local', 'db:local:start', 'unicorn:local:start']
 
   desc 'start api for dev'
   task :dev do
-
+    # NOOP
   end
 
   desc 'start api for prod'
   task :prod do
-
+    # NOOP
   end
 end
 
@@ -54,7 +52,7 @@ namespace :unicorn do
   namespace :local do
     desc 'local unicorn start'
     task :start do
-      sh 'bundle exec unicorn -E development -c ./conf/unicorn.local.rb -D'
+      sh 'bundle exec unicorn -E development -c ./etc/unicorn/unicorn.local.rb -D'
     end
 
     desc 'local unicorn stop'
@@ -69,7 +67,7 @@ namespace :unicorn do
   namespace :dev do
     desc 'dev unicorn start'
     task :start do
-      sh 'bundle exec unicorn -E development -c ./conf/unicorn.dev.rb -D'
+      sh 'bundle exec unicorn -E development -c /etc/unicorn/unicorn.dev.rb -D'
     end
 
     desc 'dev unicorn stop'
@@ -84,7 +82,7 @@ namespace :unicorn do
   namespace :prod do
     desc 'prod unicorn start'
     task :start do
-      sh 'bundle exec unicorn -E production -c ./conf/unicorn.prod.rb -D'
+      sh 'bundle exec unicorn -E production -c /etc/unicorn/unicorn.prod.rb -D'
     end
 
     desc 'prod unicorn stop'
