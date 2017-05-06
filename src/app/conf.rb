@@ -6,10 +6,9 @@ module R2S
                   :db_password, :logger_path
     def initialize
       @env = ENV['env']
-      @webhook_url = ENV['incoming_webhooks_url']
 
-      if @env.nil? || @webhook_url.nil?
-        raise RuntimeError, 'environment var of env, webhook_url is not set.'
+      if @env.nil?
+        raise RuntimeError, 'environment var of env is not set.'
       end
 
       begin
@@ -17,6 +16,8 @@ module R2S
       rescue => e
         raise ArgumentError, "#{e.class}, #{e.backtrace}"
       end
+
+      @webhook_url = @conf['slack']['incoming_webhooks_url']
 
       @logger_path = @conf['logger']['path']
       if local?
@@ -57,15 +58,15 @@ module R2S
     private
 
     def prod_conf_path
-      '/etc/conf/rss2slack/conf.prod.yml'
+      '/etc/rss2slack/conf.prod.yml'
     end
 
     def dev_conf_path
-      '/etc/conf/rss2slack/conf.dev.yml'
+      '/etc/rss2slack/conf.dev.yml'
     end
 
     def local_conf_path
-      File.expand_path(File.dirname(__FILE__)) + '/../../conf/conf.local.yml'
+      File.expand_path(File.dirname(__FILE__)) + '/../../etc/rss2slack/conf.local.yml'
     end
 
     def local_logger_path
