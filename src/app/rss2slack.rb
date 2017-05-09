@@ -13,4 +13,10 @@ class Rss2Slack < Sinatra::Base
     p 'params'
     p request.params
   end
+
+  def handle_response(response)
+    status response.status unless response.status.nil?
+    headers response.headers unless response.headers.nil? && response.headers.empty?
+    body response.body unless response.body.nil?
+  end
 end
