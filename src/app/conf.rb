@@ -3,7 +3,8 @@ require 'yaml'
 module R2S
   class Conf
     attr_accessor :webhook_url, :db_host, :db_name, :db_username,
-                  :db_password, :logger_path, :slack_token
+                  :db_password, :logger_path, :slack_token, :accept_team_domain,
+                  :accept_channel_id
     def initialize
       @env = ENV['env']
 
@@ -19,6 +20,8 @@ module R2S
 
       @webhook_url = @conf['slack']['incoming_webhooks_url']
       @slack_token = @conf['slack']['outgoing_webhooks_token']
+      @accept_team_domain = @conf['slack']['accept_team_domain']
+      @accept_channel_id = @conf['slack']['accept_channel_id']
 
       @logger_path = @conf['logger']['path']
       if local?
@@ -45,6 +48,14 @@ module R2S
 
     def valid_slack_token?(token)
       token == @slack_token
+    end
+
+    def valid_accept_team_domain?(domain)
+      domain == @accept_team_domain
+    end
+
+    def valid_accept_channel_id?(id)
+      id == @accept_channel_id
     end
 
     def conf_path
