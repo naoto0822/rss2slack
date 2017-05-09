@@ -2,22 +2,25 @@
 require 'net/http'
 require 'uri'
 require 'json'
+require 'yaml'
 
-# TODO: yaml load
+conf_path = '../deploy/rss2slack/conf.local.yml'
+conf = YAML.load_file(conf_path)
+token = conf['slack']['outgoing_webhooks_token']
 
 url = 'http://localhost:8080/v1/slack/feed'
 
 body = {
-  'token' => 'token_hoge',
-  'team_id' => 'team_id_hoge',
-  'team_domain' => 'team_domain_hoge',
+  'token' => "#{token}",
+  'team_id' => 'Personal',
+  'team_domain' => 'personal-naoto0822.slack.com',
   'channel_id' => 'channel_id_hoge',
-  'channel_name' => 'channel_name_hoge',
+  'channel_name' => 'dev-rss2slack',
   'timestamp' => 'timestamp_hoge',
   'user_id' => 'user_id_hoge',
-  'user_name' => 'user_name_hoge',
+  'user_name' => 'naoto0822',
   'text' => 'text_hoge',
-  'trigger_word' => 'trigger_word_hoge'
+  'trigger_word' => 'rss2slack_register'
 }
 
 uri = URI.parse(url)
