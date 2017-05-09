@@ -3,7 +3,7 @@ require 'yaml'
 module R2S
   class Conf
     attr_accessor :webhook_url, :db_host, :db_name, :db_username,
-                  :db_password, :logger_path
+                  :db_password, :logger_path, :slack_token
     def initialize
       @env = ENV['env']
 
@@ -18,6 +18,7 @@ module R2S
       end
 
       @webhook_url = @conf['slack']['incoming_webhooks_url']
+      @slack_token = @conf['slack']['outgoing_webhooks_token']
 
       @logger_path = @conf['logger']['path']
       if local?
@@ -40,6 +41,10 @@ module R2S
 
     def local?
       @env == 'local'
+    end
+
+    def valid_slack_token?(token)
+      token == @slack_token
     end
 
     def conf_path
