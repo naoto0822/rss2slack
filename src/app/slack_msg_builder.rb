@@ -41,15 +41,14 @@ module R2S
       payload
     end
 
-    # invalid: POST v1/slack/feed
-    def self.build_for_invalid_feed(title, url)
+    def self.build_for_error(title)
       payload = Slack::IncomingWebhooks::Payload.new
       attachment = Slack::IncomingWebhooks::Attachment.new
       now = R2S::Date::now
 
-      attachment.fallback = "Failure register Feed: #{url}"
+      attachment.fallback = 'error from Rss2Slack'
       attachment.color = 'danger'
-      attachment.title = '記事の登録が失敗しました'
+      attachment.title = 'Failure'
       attachment.footer = 'from Rss2Slack'
       attachment.ts = now.to_i
 
@@ -61,7 +60,7 @@ module R2S
       attachment.fields = [field]
       payload.attachments = [attachment]
       payload.username = 'Rss2Slack'
-      payload.title = 'Failure :tada:'
+      payload.title = 'Failure'
       payload
     end
   end
