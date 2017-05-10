@@ -3,21 +3,22 @@ require 'net/http'
 require 'uri'
 require 'json'
 
-url = 'http://localhost:8080/v1/slack/feed'
+hash = { "Ocean" => { "Squid" => 10, "Octopus" =>8 }}
 
-body = {
-  "token" => "hogehogetoken",
-  "team_id" => "team_id_hoge"
-}
+p hash.to_json
+p JSON.generate(hash)
 
-uri = URI.parse(url)
-req = Net::HTTP::Post.new(uri.path)
-req.set_form_data(body)
-res = Net::HTTP.start(uri.host, uri.port,
-                      use_ssl: uri.scheme == 'https') { |http|
-  http.open_timeout = 5
-  http.read_timeout = 5
-  http.request(req)
-}
-p res
+text = 'hoge, hoge,foo ,aaa'
+
+p text.split(/\s*,\s*/)
+
+def title_url
+  ["aaa", "bbbb"]
+end
+
+title, url = title_url
+
+p "----------"
+p title
+p url
 
