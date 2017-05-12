@@ -41,6 +41,26 @@ module R2S
       payload
     end
 
+    def self.build_for_success(title)
+      payload = Slack::IncomingWebhooks::Payload.new
+      attachment = Slack::IncomingWebhooks::Attachment.new
+      now = R2S::Date::now
+
+      attachment.fallback = 'from Rss2Slack'
+      attachment.color = 'good'
+      attachment.footer = 'from Rss2Slack'
+      attachment.ts = now.to_i
+
+      field = Slack::IncomingWebhooks::Field.new
+      field.title = title
+      field.short = false
+
+      attachment.fields = [field]
+      payload.attachments = [attachment]
+      payload.username = 'Rss2Slack'
+      payload
+    end
+
     def self.build_for_error(title)
       payload = Slack::IncomingWebhooks::Payload.new
       attachment = Slack::IncomingWebhooks::Attachment.new
@@ -48,19 +68,16 @@ module R2S
 
       attachment.fallback = 'error from Rss2Slack'
       attachment.color = 'danger'
-      attachment.title = 'Failure'
       attachment.footer = 'from Rss2Slack'
       attachment.ts = now.to_i
 
       field = Slack::IncomingWebhooks::Field.new
       field.title = title
-      field.value = url
       field.short = false
 
       attachment.fields = [field]
       payload.attachments = [attachment]
       payload.username = 'Rss2Slack'
-      payload.title = 'Failure'
       payload
     end
   end
