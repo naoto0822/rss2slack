@@ -7,7 +7,8 @@
 
 ## TODO
 
-- [ ] fix worker
+- [ ] refactoring slack msg builder
+- [ ] refactoring rss2slack_handler
 - [ ] server settings
 - [ ] implement spec
 
