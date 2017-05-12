@@ -21,15 +21,13 @@ module R2S
       unless valid_outgoing_webhook?(msg)
         e_msg = "invalid request: #{msg}"
         @logger.warn(e_msg)
-        fail_body = R2S::SlackMsgBuilder.build_for_error(e_msg).to_params.to_json
-        return R2S::Response.new(400, nil, fail_body)
+        return bad_request_response(e_msg)
       end
 
       if split_post_text(msg.text).nil?
         e_msg = "invalid text: #{msg.text}"
         @logger.warn(e_msg)
-        fail_body = R2S::SlackMsgBuilder.build_for_error(e_msg).to_params.to_json
-        return R2S::Response.new(400, nil, fail_body)
+        return bad_request_response(msg)
       end
       
       title, url = split_post_text(msg.text)
@@ -37,16 +35,24 @@ module R2S
       if feeds.length >= 1
         e_msg = "already registerd url: #{url}"
         @logger.warn(e_msg)
-        fail_body = R2S::SlackMsgBuilder.build_for_error(e_msg).to_params.to_json
-        return R2S::Response.new(400, nil, fail_body)
+        return ok_response(e_msg)
       end
 
       @feed_model.save(title, url)
-
-      # TODO: return success response
+      ok_response("successflluy registerd #{title}")
     end
 
     private
+
+    def ok_response(msg)
+      body = R2S::SlackMsgBuilder.build_for_success(msg).to_params.to_json
+      return R2S::Response.new(200, nil, body)
+    end
+
+    def bad_request_response(msg)
+      body = R2S::SlackMsgBuilder.build_for_error(msg).to_params.to_json
+      return R2S::Response.new(400, nil, body)
+    end
 
     # text: 'rss2slack_register, feed_name, url'
     def split_post_text(text)
@@ -56,7 +62,7 @@ module R2S
       url = arr[2]
       [title, url]
     rescue
-      @logger.warn("")
+      @logger.warn("failure split post text")
       nil
     end
 
