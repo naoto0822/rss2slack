@@ -8,8 +8,6 @@
 ## TODO
 
 - [ ] fix worker
-- [ ] submodule deploy
-- [ ] fix SQL injection
 - [ ] server settings
 - [ ] implement spec
 
