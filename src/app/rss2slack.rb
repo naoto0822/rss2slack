@@ -1,17 +1,26 @@
 require 'sinatra/base'
+require 'json'
+require_relative './rss2slack_handler'
+require_relative './conf'
 
 class Rss2Slack < Sinatra::Base
+  before do
+    @conf = R2S::Conf.new
+    @handler = R2S::Handler.new(logger, @conf)
+  end
+
   get '/v1/hello' do
-    'i_like_sushi'
+    status 200
+    body 'i_like_sushi'
   end
 
   post '/v1/slack/feed' do
-    p 'headers'
-    p headers
-    p 'request.body'
-    p request.body.read
-    p 'params'
-    p request.params
+    res =  @handler.handle_slack_feed(headers, request.params)
+    handle_response(res)
+  end
+
+  after do
+    # NOOP
   end
 
   def handle_response(response)
