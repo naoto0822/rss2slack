@@ -3,18 +3,7 @@ require_relative './date'
 
 module R2S
   class SlackMsgBuilder
-    # for feed_runner
-    # TODO: rename
-    def self.build_for_feed
-      payload = Slack::IncomingWebhooks::Payload.new
-      payload.username = 'Rss2Slack'
-      payload.text = 'Successfully fetched feed :tada: '
-      payload
-    end
-
-    # for article_runner
-    # TODO: rename
-    def self.build_for_article(articles)
+    def self.build_for_article_runner(articles)
       payload = Slack::IncomingWebhooks::Payload.new
       attachment = Slack::IncomingWebhooks::Attachment.new
       now = R2S::Date::now
@@ -37,7 +26,6 @@ module R2S
 
       payload.attachments = [attachment]
       payload.username = 'Rss2Slack'
-      payload.text = "Today's Feed :tada: "
       payload
     end
 
@@ -46,7 +34,7 @@ module R2S
       attachment = Slack::IncomingWebhooks::Attachment.new
       now = R2S::Date::now
 
-      attachment.fallback = 'from Rss2Slack'
+      attachment.fallback = title
       attachment.color = 'good'
       attachment.footer = 'from Rss2Slack'
       attachment.ts = now.to_i
@@ -66,7 +54,7 @@ module R2S
       attachment = Slack::IncomingWebhooks::Attachment.new
       now = R2S::Date::now
 
-      attachment.fallback = 'error from Rss2Slack'
+      attachment.fallback = title
       attachment.color = 'danger'
       attachment.footer = 'from Rss2Slack'
       attachment.ts = now.to_i

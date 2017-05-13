@@ -2,23 +2,19 @@
 require 'net/http'
 require 'uri'
 require 'json'
+require_relative './slack_msg_builder.rb'
+require_relative './slack/webhooks.rb'
+require_relative './conf.rb'
+require_relative './article.rb'
 
-hash = { "Ocean" => { "Squid" => 10, "Octopus" =>8 }}
+ENV['env'] = 'local'
+conf = R2S::Conf.new
+slack = Slack::IncomingWebhooks::Client.new(conf.webhook_url)
 
-p hash.to_json
-p JSON.generate(hash)
+article = R2S::Article.new(title:"sssssssshoge", url:"http://yahoo.co.jpaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+article2 = R2S::Article.new(title:"hogggggggggggggge", url:"http://yahoo.co.jffffffffffffffffffffffffp")
+article3 = R2S::Article.new(title:"hoge", url:"http://yahoo.co.jprrrrrrrrrrrrrrrrrrrrrr")
 
-text = 'hoge, hoge,foo ,aaa'
-
-p text.split(/\s*,\s*/)
-
-def title_url
-  ["aaa", "bbbb"]
-end
-
-title, url = title_url
-
-p "----------"
-p title
-p url
+payload = R2S::SlackMsgBuilder.build_for_article_runner([article, article2, article3])
+slack.post(payload)
 
