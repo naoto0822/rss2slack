@@ -16,26 +16,26 @@ module R2S
 
     def handle_slack_feed(header, body)
       @logger.debug('handle_slack_feed()')
-      msg = Slack::OutgoingWebhooks.new(body)
+      data = Slack::OutgoingWebhooks.new(body)
 
-      unless valid_outgoing_webhook?(msg)
-        e_msg = "invalid request: #{msg}"
-        @logger.warn(e_msg)
-        return bad_request_response(e_msg)
+      unless valid_outgoing_webhook?(data)
+        msg = "invalid request: #{data}"
+        @logger.warn(msg)
+        return bad_request_response(msg)
       end
 
-      if split_post_text(msg.text).nil?
-        e_msg = "invalid text: #{msg.text}"
-        @logger.warn(e_msg)
+      if split_post_text(data.text).nil?
+        msg = "invalid text: #{data.text}"
+        @logger.warn(msg)
         return bad_request_response(msg)
       end
       
-      title, url = split_post_text(msg.text)
+      title, url = split_post_text(data.text)
       feeds = @feed_model.find_by_url(url)
       if feeds.length >= 1
-        e_msg = "already registerd url: #{url}"
-        @logger.warn(e_msg)
-        return ok_response(e_msg)
+        msg = "already registerd url: #{url}"
+        @logger.warn(msg)
+        return ok_response(msg)
       end
 
       @feed_model.save(title, url)
@@ -66,10 +66,10 @@ module R2S
       nil
     end
 
-    def valid_outgoing_webhook?(msg)
-      false unless @conf.valid_slack_token?(msg.token)
-      false unless @conf.valid_accept_team_domain?(msg.team_domain)
-      false unless @conf.valid_accept_channel_id?(msg.channel_id)
+    def valid_outgoing_webhook?(data)
+      false unless @conf.valid_slack_token?(data.token)
+      false unless @conf.valid_accept_team_domain?(data.team_domain)
+      false unless @conf.valid_accept_channel_id?(data.channel_id)
       true
     end
   end
