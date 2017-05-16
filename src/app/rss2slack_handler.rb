@@ -15,7 +15,7 @@ module R2S
     end
 
     def handle_slack_feed(header, body)
-      @logger.debug('handle_slack_feed()')
+      @logger.debug('start handle_slack_feed()')
       data = Slack::OutgoingWebhooks.new(body)
 
       unless valid_outgoing_webhook?(data)
@@ -39,6 +39,7 @@ module R2S
       end
 
       @feed_model.save(title, url)
+      @logger.debug("finish handle_slack_feed(), text: #{text}")
       ok_response("successflluy registerd #{title}")
     end
 
@@ -46,12 +47,12 @@ module R2S
 
     def ok_response(msg)
       body = R2S::SlackMsgBuilder.build_for_success(msg).to_params.to_json
-      return R2S::Response.new(200, nil, body)
+      R2S::Response::create_ok(nil, body)
     end
 
     def bad_request_response(msg)
       body = R2S::SlackMsgBuilder.build_for_error(msg).to_params.to_json
-      return R2S::Response.new(400, nil, body)
+      R2S::Response::create_bad_request(nil, body)
     end
 
     # text: 'rss2slack_register, feed_name, url'
