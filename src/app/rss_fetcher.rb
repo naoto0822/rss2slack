@@ -9,23 +9,16 @@ module R2S
 
     def fetch(url)
       return nil if url.nil? || url.empty?
-      begin
-        @logger.debug("start fetch rss feed from #{url}")
-        @rss = request(url)
-      rescue => e
-        @logger.warn("fail rss feed from #{url}, #{e.message}")
-        return nil
-      end
+      @logger.debug("start fetch rss feed from #{url}")
+      @rss = request(url)
 
       return nil if @rss.nil?
-      begin
-        results = parse(@rss)
-        @logger.debug("success fetch rss feed from #{url}")
-        return results
-      rescue => e
-        @logger.warn('fail parsing feed item', e.message)
-        return nil
-      end
+      results = parse(@rss)
+      @logger.debug("success fetch rss feed from #{url}")
+      results
+    rescue => e
+      @logger.warn("fail rss feed from #{url}, #{e.message}")
+      nil
     end
 
     private
@@ -42,20 +35,18 @@ module R2S
 
     def parse(rss)
       article_arr = []
-      begin
-        rss.items.each do |item|
-          title = item.title
-          body = item.description
-          url = item.link
-          pub_date = item.pubDate
-          article = R2S::Article.new(title: title, body: body,
-                                     url: url, pub_date: pub_date)
-          article_arr.push article
-        end
-      rescue => e
-        return e
+      rss.items.each do |item|
+        title = item.title
+        body = item.description
+        url = item.link
+        pub_date = item.pubDate
+        article = R2S::Article.new(title: title, body: body,
+                                   url: url, pub_date: pub_date)
+        article_arr.push(article)
       end
       article_arr
+    rescue => e
+      raise e
     end
   end
 end
