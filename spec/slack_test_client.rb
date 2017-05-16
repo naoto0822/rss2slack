@@ -3,18 +3,16 @@ require 'net/http'
 require 'uri'
 require 'json'
 require 'yaml'
+require_relative '../src/app/conf'
 
-conf_path = '../deploy/rss2slack/conf.local.yml'
-conf = YAML.load_file(conf_path)
-token = conf['slack']['outgoing_webhooks_token']
-
+conf = R2S::Conf.new
 url = 'http://localhost:8080/v1/slack/feed'
 
 body = {
-  'token' => "#{token}",
+  'token' => "#{conf.slack_token}",
   'team_id' => 'Personal',
-  'team_domain' => 'personal-naoto0822.slack.com',
-  'channel_id' => 'channel_id_hoge',
+  'team_domain' => "#{conf.accept_team_domain}",
+  'channel_id' => "#{conf.accept_channel_id}",
   'channel_name' => 'dev-rss2slack',
   'timestamp' => 'timestamp_hoge',
   'user_id' => 'user_id_hoge',
