@@ -1,6 +1,5 @@
 require_relative './spec_helper'
 require_relative '../src/app/feed'
-require 'logger'
 
 describe R2S::Feed do
   before(:each) do
