@@ -20,4 +20,14 @@ describe R2S::Article do
     expect(article.pub_date).to eq '1990'
     expect(article.create_at).to eq '1990-08-22'
   end
+
+  it 'no set args' do
+    article = R2S::Article.new
+    expect(article.id).to eq nil
+    expect(article.title).to eq nil
+    expect(article.body).to eq nil
+    expect(article.url).to eq nil
+    expect(article.pub_date).to eq nil
+    expect(article.create_at).to eq nil
+  end
 end
