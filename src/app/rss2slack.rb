@@ -5,6 +5,7 @@ require_relative './conf'
 
 class Rss2Slack < Sinatra::Base
   before do
+    logger.level = Logger::DEBUG
     @conf = R2S::Conf.new
     @handler = R2S::Handler.new(logger, @conf)
   end
