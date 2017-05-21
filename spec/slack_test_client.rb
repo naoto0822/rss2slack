@@ -3,11 +3,21 @@ require 'net/http'
 require 'uri'
 require 'json'
 require 'yaml'
+require 'optparse'
 require_relative '../src/app/conf'
 
 ENV['env'] = 'local'
 conf = R2S::Conf.new
 url = 'http://localhost:8080/v1/slack/feed'
+
+args = ARGV.getopts('t:')
+
+if args['t'].nil?
+  puts 'Usage: ruby slack_test_client -t <text>'
+  exit 1
+end
+
+text = args['t']
 
 body = {
   'token' => "#{conf.slack_token}",
@@ -18,7 +28,7 @@ body = {
   'timestamp' => 'timestamp_hoge',
   'user_id' => 'user_id_hoge',
   'user_name' => 'naoto0822',
-  'text' => 'text_hoge',
+  'text' => "#{text}",
   'trigger_word' => 'rss2slack_register'
 }
 
