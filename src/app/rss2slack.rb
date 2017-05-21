@@ -7,13 +7,15 @@ require_relative './db_client'
 
 class Rss2Slack < Sinatra::Base
   configure :production, :development do
-    @conf = R2S::Conf.new
-    @logger = Logger.new(conf.logger_path)
-    @logger.level = Logger::DEBUG
-    @db = R2S::DBClient.new(@logger, @conf)
+    # NOOP
   end
 
   before do
+    @conf = R2S::Conf.new if @conf.nil?
+    @logger = Logger.new(conf.logger_path) if @logger.nil?
+    @logger.level = Logger::DEBUG
+    @db = R2S::DBClient.new(@logger, @conf) if @db.nil?
+
     @handler = R2S::Handler.new(@logger, @conf, @db)
   end
 
