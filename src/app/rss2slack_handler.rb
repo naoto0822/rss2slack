@@ -16,7 +16,7 @@ module R2S
 
     def handle_slack_feed(headers, body)
       @logger.debug('start handle_slack_feed()')
-      data = Slack::OutgoingWebhooks.new(body)
+      data = Slack::OutgoingWebhooks::Message.new(body)
 
       unless valid_outgoing_webhook?(data)
         msg = "invalid request: #{data}"
