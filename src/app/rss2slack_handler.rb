@@ -11,7 +11,7 @@ module R2S
       @logger = logger
       @conf = conf
       @db = R2S::DBClient.new(logger, conf)
-      @feed_model = R2S::FeedModel.new(logger, conf)
+      @feed_model = R2S::FeedModel.new(logger, @db)
     end
 
     def handle_slack_feed(header, body)
