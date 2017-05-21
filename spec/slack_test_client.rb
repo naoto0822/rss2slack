@@ -5,6 +5,7 @@ require 'json'
 require 'yaml'
 require_relative '../src/app/conf'
 
+ENV['env'] = 'local'
 conf = R2S::Conf.new
 url = 'http://localhost:8080/v1/slack/feed'
 
@@ -32,4 +33,5 @@ res = Net::HTTP.start(uri.host, uri.port,
 }
 
 p res
-
+p res.code
+p res.body
