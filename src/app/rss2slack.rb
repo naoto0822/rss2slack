@@ -1,13 +1,20 @@
 require 'sinatra/base'
 require 'json'
+require 'logger'
 require_relative './rss2slack_handler'
 require_relative './conf'
+require_relative './db_client'
 
 class Rss2Slack < Sinatra::Base
-  before do
-    logger.level = Logger::DEBUG
+  configure :production, :development do
     @conf = R2S::Conf.new
-    @handler = R2S::Handler.new(logger, @conf)
+    @logger = Logger.new(conf.logger_path)
+    @logger.level = Logger::DEBUG
+    @db = R2S::DBClient.new(@logger, @conf)
+  end
+
+  before do
+    @handler = R2S::Handler.new(@logger, @conf, @db)
   end
 
   get '/v1/hello' do
@@ -24,6 +31,7 @@ class Rss2Slack < Sinatra::Base
     # NOOP
   end
 
+  # move helper?
   def handle_response(response)
     status response.status unless response.status.nil?
     headers response.headers unless response.headers.nil? && response.headers.empty?
