@@ -41,6 +41,8 @@ module R2S
       @feed_model.save(title, url)
       @logger.debug("finish handle_slack_feed(), text: #{text}")
       ok_response("successflluy registerd #{title}")
+    rescue => e
+      raise e
     end
 
     private

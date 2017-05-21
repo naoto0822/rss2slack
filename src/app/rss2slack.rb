@@ -1,13 +1,19 @@
 require 'sinatra/base'
+require 'sinatra/reloader'
 require 'json'
 require 'logger'
 require_relative './rss2slack_handler'
 require_relative './conf'
 require_relative './db_client'
+require_relative './slack_msg_builder'
 
 class Rss2Slack < Sinatra::Base
   configure :production, :development do
-    # NOOP
+    set :show_exceptions, false
+  end
+
+  configure :development do
+    register Sinatra::Reloader
   end
 
   before do
@@ -25,12 +31,29 @@ class Rss2Slack < Sinatra::Base
   end
 
   post '/v1/slack/feed' do
-    res =  @handler.handle_slack_feed(headers, request.params)
-    handle_response(res)
+    begin
+      res =  @handler.handle_slack_feed(headers, request.params)
+      handle_response(res)
+    rescue => e
+      raise e
+    end
   end
 
   after do
     # NOOP
+  end
+
+  error do |e|
+    if request.path.include?('slack')
+      title = env['sinatra.error'].message
+      payload = R2S::SlackMsgBuilder::build_for_error("#{title}").to_params.to_json
+
+      status 200
+      body payload
+    else
+      states 500
+      body env['sinatra.error'].message
+    end
   end
 
   # move helper?
