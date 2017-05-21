@@ -7,6 +7,7 @@ gem 'mysql2'
 gem 'sinatra'
 gem 'unicorn'
 gem 'rubocop', '~> 0.48.1', require: false
+gem 'sinatra-contrib'
 
 group :test do
   gem 'rspec'
