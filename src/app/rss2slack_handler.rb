@@ -14,7 +14,7 @@ module R2S
       @feed_model = R2S::FeedModel.new(logger, @db)
     end
 
-    def handle_slack_feed(header, body)
+    def handle_slack_feed(headers, body)
       @logger.debug('start handle_slack_feed()')
       data = Slack::OutgoingWebhooks.new(body)
 
