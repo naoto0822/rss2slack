@@ -7,10 +7,10 @@ require_relative './slack_msg_builder'
 
 module R2S
   class Handler
-    def initialize(logger, conf)
+    def initialize(logger, conf, db)
       @logger = logger
       @conf = conf
-      @db = R2S::DBClient.new(logger, conf)
+      @db = db
       @feed_model = R2S::FeedModel.new(logger, @db)
     end
 
