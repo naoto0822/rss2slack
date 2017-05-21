@@ -32,6 +32,11 @@ res = Net::HTTP.start(uri.host, uri.port,
   http.request(req)
 }
 
+p ':Response'
 p res
+p ':Status Code'
 p res.code
+p ':Header'
+res.each { |k, v| p "#{k} => #{v}" }
+p ':Body'
 p res.body
