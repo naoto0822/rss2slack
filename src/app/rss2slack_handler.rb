@@ -53,7 +53,7 @@ module R2S
     end
 
     def bad_request_response(msg)
-      body = R2S::SlackMsgBuilder.build_for_error(msg).to_params.to_json
+      body = ''
       R2S::Response::create_bad_request(nil, body)
     end
 
