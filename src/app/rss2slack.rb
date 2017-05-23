@@ -32,7 +32,6 @@ class Rss2Slack < Sinatra::Base
 
   post '/v1/slack/feed' do
     begin
-      return if request.params.nil?
       res =  @handler.handle_slack_feed(headers, request.params)
       handle_response(res)
     rescue => e
