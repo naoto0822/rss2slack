@@ -3,10 +3,10 @@ require 'yaml'
 module R2S
   class Conf
     attr_accessor :webhook_url, :db_host, :db_name, :db_username,
-                  :db_password, :logger_path, :slack_token, :accept_team_domain,
-                  :accept_channel_id
+                  :db_password, :slack_token, :accept_team_domain,
+                  :accept_channel_id, :logger_runner_path, :logger_app_path
     def initialize
-      @env = ENV['env']
+      @env = current_env
 
       if @env.nil?
         raise RuntimeError, 'environment var of env is not set.'
@@ -23,15 +23,21 @@ module R2S
       @accept_team_domain = @conf['slack']['accept_team_domain']
       @accept_channel_id = @conf['slack']['accept_channel_id']
 
-      @logger_path = @conf['logger']['path']
+      @logger_runner_path = @conf['logger']['runner']['path']
+      @logger_app_path = @conf['logger']['app']['path']
       if local?
-        @logger_path = local_logger_path
+        @logger_runner_path = local_logger_runner_path
+        @logger_app_path = local_logger_app_path
       end
 
       @db_host = @conf['mysql']['host']
       @db_name = @conf['mysql']['database']
       @db_username = @conf['mysql']['username']
       @db_password = @conf['mysql']['password']
+    end
+
+    def current_env
+      ENV['env']
     end
 
     def prod?
@@ -85,8 +91,12 @@ module R2S
       File.expand_path(File.dirname(__FILE__)) + '/../../etc/rss2slack/conf.local.yml'
     end
 
-    def local_logger_path
-      File.expand_path(File.dirname(__FILE__)) + @conf['logger']['path']
+    def local_logger_runner_path
+      File.expand_path(File.dirname(__FILE__)) + @conf['logger']['runner']['path']
+    end
+
+    def local_logger_app_path
+      File.expand_path(File.dirname(__FILE__)) + @conf['logger']['app']['path']
     end
   end
 end
