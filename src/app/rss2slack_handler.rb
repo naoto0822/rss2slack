@@ -42,11 +42,11 @@ module R2S
 
       case texts[0]
       when REGISTER_COMMAND
-        return handle_slack_register_feed(data)
+        return handle_slack_register_feed(data, texts)
       when UPDATE_COMMAND
-        return handle_slack_update_feed(data)
+        return handle_slack_update_feed(data, texts)
       when DELETE_COMMAND
-        return handle_slack_delete_feed(data)
+        return handle_slack_delete_feed(data, texts)
       when HELP_COMMAND
         return handle_slack_help
       else
@@ -79,12 +79,12 @@ module R2S
     end
 
     # TODO:
-    def handle_slack_update_feed(data)
+    def handle_slack_update_feed(data, texts)
       ok_response('Unimplemented rss2slack_update command')
     end
 
     # TODO:
-    def handle_slack_delete_feed(data)
+    def handle_slack_delete_feed(data, texts)
       ok_response('Unimplemented rss2slack_delete command')
     end
 
