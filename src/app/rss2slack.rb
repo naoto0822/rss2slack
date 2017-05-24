@@ -18,7 +18,7 @@ class Rss2Slack < Sinatra::Base
 
   before do
     @conf = R2S::Conf.new if @conf.nil?
-    @logger = Logger.new(@conf.logger_path) if @logger.nil?
+    @logger = Logger.new(@conf.logger_app_path) if @logger.nil?
     @logger.level = Logger::DEBUG
     @db = R2S::DBClient.new(@logger, @conf) if @db.nil?
 
