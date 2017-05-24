@@ -37,24 +37,11 @@ module R2S
       sql = <<-EOS
         INSERT INTO
           FEED (FEED_NAME, URL)
-        SELECT
-          *
-        FROM (
-          SELECT
-            ?, ?
-        ) AS TMP
-        WHERE
-          NOT EXISTS (
-            SELECT
-              *
-            FROM
-              FEED
-            WHERE
-              URL = ?
-          );
+        VALUES
+          (?, ?);
       EOS
       statement = @db.statement(sql)
-      results = statement.execute(name, url, url)
+      results = statement.execute(name, url)
     end
   end
 
