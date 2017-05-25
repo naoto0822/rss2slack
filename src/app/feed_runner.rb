@@ -23,7 +23,8 @@ module R2S
       feeds.each do |f|
         next if f.url.nil?
         articles = @rss.fetch(f.url)
-        articles.each { |a| @article_model.save(a) } # TODO: bulk insert
+        # TODO: bulk insert
+        articles.each { |a| @article_model.save(a) } if !articles.nil? && !articles.empty?
       end
 
       post_slack
@@ -33,7 +34,7 @@ module R2S
     private
 
     def post_slack
-      payload = R2S::SlackMsgBuilder::build_for_feed
+      payload = R2S::SlackMsgBuilder::build_for_success('successfully feed_runner run')
       @slack.post(payload)
     end
   end
