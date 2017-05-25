@@ -19,7 +19,7 @@ module R2S
       ArticleMapper::map(results)
     end
 
-    def find_by_date(from = now_time, to = yesterday_time)
+    def find_by_date(from = yesterday_time, to = now_time)
       sql = <<-EOS
         SELECT
           *
