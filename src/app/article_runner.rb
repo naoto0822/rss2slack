@@ -23,7 +23,7 @@ module R2S
     private
 
     def post_slack(articles)
-      payload = R2S::SlackMsgBuilder::build_for_article(articles)
+      payload = R2S::SlackMsgBuilder::build_for_article_runner(articles)
       @slack.post(payload)
     end
   end

@@ -13,22 +13,27 @@ task :default => [:bundle_install, :test]
 namespace :worker do
   namespace :feed do
     desc 'start worker for local'
-    task :local => ['env:local'] do
+    task :local => ['env:local', 'db:local:start'] do
       sh 'bundle exec ruby src/exec/feed_worker.rb'
     end
 
     desc 'start worker for dev'
     task :dev => ['env:dev'] do
-      sh 'bundle exec ruby src/exec/worker.rb'
+      sh 'bundle exec ruby src/exec/feed_worker.rb'
     end
 
     desc 'start worker for prod'
     task :prod => ['env:prod'] do
-      sh 'bundle exec ruby src/exec/worker.rb'
+      sh 'bundle exec ruby src/exec/feed_worker.rb'
     end
   end
 
   namespace :article do
+    desc 'start article worker for local'
+    task :local => ['env:local', 'db:local:start'] do
+      sh 'bundle exec ruby src/exec/article_worker.rb'
+    end
+
 
   end
 end
