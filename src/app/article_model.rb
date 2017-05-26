@@ -28,10 +28,9 @@ module R2S
         WHERE
           CREATED_AT
         BETWEEN
-          ? AND ?;
+          '#{from}' AND '#{to}';
       EOS
-      statement = @db.statement(sql)
-      results = statement.execute(from, to)
+      results = @db.execute(sql)
       ArticleMapper::map(results)
     end
 
