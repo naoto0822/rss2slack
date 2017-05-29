@@ -8,6 +8,7 @@ ENV_PROD = 'production'.freeze
 # !!!!!!!!!!!!!!
 # For Production
 # !!!!!!!!!!!!!!
+# TODO:
 task :default => [:bundle_install, :test]
 
 namespace :worker do
@@ -34,7 +35,15 @@ namespace :worker do
       sh 'bundle exec ruby src/exec/article_worker.rb'
     end
 
+    desc 'start article worker for dev'
+    task :dev => ['env:dev'] do
+      sh 'bundle exec ruby src/exec/article_worker.rb'
+    end
 
+    desc 'start article worker for prod'
+    task :prod => ['env:prod'] do
+      sh 'bundle exec ruby src/exec/article_worker.rb'
+    end
   end
 end
 
