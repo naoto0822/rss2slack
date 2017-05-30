@@ -62,6 +62,23 @@ namespace :api do
   end
 end
 
+namespace :nginx do
+  namespace :local do
+    desc 'local nginx start'
+    task :start do
+      # TODO:
+    end
+  end
+
+  namespace :dev do
+    # NOOP
+  end
+
+  namespace :prod do
+    # NOOP
+  end
+end
+
 namespace :unicorn do
   namespace :local do
     desc 'local unicorn start'
