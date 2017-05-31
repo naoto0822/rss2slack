@@ -68,6 +68,14 @@ namespace :nginx do
     task :start do
       # TODO:
     end
+
+    desc 'local nginx stop'
+    task :stop do
+      # NOOP
+    end
+
+    desc 'local nginx restart'
+    task :restart => ['nginx:local:stop', 'nginx:local:start']
   end
 
   namespace :dev do
