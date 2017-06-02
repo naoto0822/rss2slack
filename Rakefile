@@ -96,7 +96,7 @@ namespace :unicorn do
 
     desc 'local unicorn stop'
     task :stop do
-      sh 'kill -QUIT `cat ./var/tmp/unicorn.pid`'
+      sh 'kill -QUIT `cat ./tmp/unicorn.pid`'
     end
 
     desc 'local unicorn restart'
@@ -111,7 +111,7 @@ namespace :unicorn do
 
     desc 'dev unicorn stop'
     task :stop do
-      sh 'kill -QUIT `cat /var/tmp/unicorn.pid`'
+      sh 'kill -QUIT `cat /tmp/unicorn.pid`'
     end
 
     desc 'dev unicorn restart'
@@ -126,7 +126,7 @@ namespace :unicorn do
 
     desc 'prod unicorn stop'
     task :stop do
-      sh 'kill -QUIT `cat /var/tmp/unicorn.pid`'
+      sh 'kill -QUIT `cat /tmp/unicorn.pid`'
     end
 
     desc 'prod unicorn restart'
@@ -168,7 +168,7 @@ namespace :bootstrap do
   task :local do
     sh 'mkdir -p ./var/log/rss2slack'
     sh 'mkdir -p ./var/log/unicorn'
-    sh 'mkdir -p ./var/tmp'
+    sh 'mkdir -p ./tmp'
     sh 'mkdir -p ./etc/unicorn'
     sh 'mkdir -p ./etc/rss2slack'
     sh 'cp -f ./conf/unicorn.local.rb ./etc/unicorn'
@@ -179,7 +179,7 @@ namespace :bootstrap do
   task :dev do
     sh 'mkdir -p /var/log/rss2slack'
     sh 'mkdir -p /var/log/unicorn'
-    sh 'mkdir -p /var/tmp'
+    sh 'mkdir -p /tmp'
     sh 'mkdir -p /etc/unicorn'
     sh 'mkdir -p /etc/rss2slack'
     sh 'cp -f ./conf/unicorn.dev.rb /etc/unicorn'
@@ -190,7 +190,7 @@ namespace :bootstrap do
   task :prod do
     sh 'mkdir -p /var/log/rss2slack'
     sh 'mkdir -p /var/log/unicorn'
-    sh 'mkdir -p /var/tmp'
+    sh 'mkdir -p /tmp'
     sh 'mkdir -p /etc/unicorn'
     sh 'mkdir -p /etc/rss2slack'
     sh 'cp -f ./conf/unicorn.prod.rb /etc/unicorn'
