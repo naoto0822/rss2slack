@@ -4,7 +4,6 @@ worker_processes 1
 working_directory @dir
 timeout 300
 listen 8080
-pid "#{@dir}/var/tmp/unicorn.pid"
+pid "#{@dir}/tmp/unicorn.pid"
 stderr_path "#{@dir}/var/log/unicorn/stderr.log"
 stdout_path "#{@dir}/var/log/unicorn/stdout.log"
-
