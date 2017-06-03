@@ -93,12 +93,12 @@ namespace :unicorn do
   namespace :local do
     desc 'local unicorn start'
     task :start do
-      sh 'bundle exec unicorn -E development -c ./etc/unicorn/unicorn.local.rb -D'
+      sh 'bundle exec unicorn -E development -c /etc/unicorn/unicorn.local.rb -D'
     end
 
     desc 'local unicorn stop'
     task :stop do
-      sh 'kill -QUIT `cat ./tmp/unicorn.pid`'
+      sh 'kill -QUIT `cat /tmp/unicorn.pid`'
     end
 
     desc 'local unicorn restart'
@@ -168,14 +168,15 @@ end
 namespace :bootstrap do
   desc 'setting local env'
   task :local do
-    sh 'mkdir -p ./var/log/rss2slack'
-    sh 'mkdir -p ./var/log/unicorn'
-    sh 'mkdir -p ./tmp'
-    sh 'mkdir -p ./etc/unicorn'
-    sh 'mkdir -p ./etc/rss2slack'
-    sh 'cp -f ./conf/unicorn.local.rb ./etc/unicorn'
+    sh 'mkdir -p /var/log/rss2slack'
+    sh 'mkdir -p /var/log/unicorn'
+    sh 'mkdir -p /var/log/nginx'
+    sh 'mkdir -p /tmp'
+    sh 'mkdir -p /etc/unicorn'
+    sh 'mkdir -p /etc/rss2slack'
+    sh 'cp -f ./conf/unicorn.local.rb /etc/unicorn'
     sh 'cp -f ./conf/rss2slack_nginx.local.conf /usr/local/etc/nginx/servers/rss2slack.conf'
-    sh 'cp -f ./deploy/rss2slack/conf.local.yml ./etc/rss2slack'
+    sh 'cp -f ./deploy/rss2slack/conf.local.yml /etc/rss2slack'
   end
 
   desc 'setting dev env'
@@ -272,7 +273,7 @@ def conf_path
   when 'development'
     '/etc/rss2slack/conf.dev.yml'
   when 'local'
-    './etc/rss2slack/conf.local.yml'
+    '/etc/rss2slack/conf.local.yml'
   else
     nil
   end
