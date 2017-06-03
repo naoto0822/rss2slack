@@ -1,9 +1,12 @@
-@dir = File.expand_path(File.dirname(__FILE__) + '/../../')
+@dir = "/Users/naoto/develop/ruby/app/rss2slack"
+@app_name = "rss2slack"
 
 worker_processes 1 
 working_directory @dir
+
 timeout 300
-listen 8080
-pid "#{@dir}/tmp/unicorn.pid"
-stderr_path "#{@dir}/var/log/unicorn/stderr.log"
-stdout_path "#{@dir}/var/log/unicorn/stdout.log"
+listen "/tmp/unicorn.sock"
+pid "/tmp/unicorn.pid"
+
+stderr_path "/var/log/unicorn/#{@app_name}_stderr.log"
+stdout_path "/var/log/unicorn/#{@app_name}_stdout.log"
