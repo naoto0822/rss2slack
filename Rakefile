@@ -66,16 +66,18 @@ namespace :nginx do
   namespace :local do
     desc 'local nginx start'
     task :start do
-      # TODO:
+      sh 'sudo nginx'
     end
 
     desc 'local nginx stop'
     task :stop do
-      # NOOP
+      sh 'sudo nginx -s stop'
     end
 
     desc 'local nginx restart'
-    task :restart => ['nginx:local:stop', 'nginx:local:start']
+    task :restart do
+      sh 'sudo nginx -s reload'
+    end
   end
 
   namespace :dev do
@@ -172,6 +174,7 @@ namespace :bootstrap do
     sh 'mkdir -p ./etc/unicorn'
     sh 'mkdir -p ./etc/rss2slack'
     sh 'cp -f ./conf/unicorn.local.rb ./etc/unicorn'
+    sh 'cp -f ./conf/rss2slack_nginx.local.conf /usr/local/etc/nginx/servers/rss2slack.conf'
     sh 'cp -f ./deploy/rss2slack/conf.local.yml ./etc/rss2slack'
   end
 
