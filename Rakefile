@@ -49,7 +49,7 @@ end
 
 namespace :api do
   desc 'start api for local'
-  task :local => ['env:local', 'db:local:start', 'unicorn:local:start']
+  task :local => ['env:local', 'db:local:start', 'nginx:local:start', 'unicorn:local:start']
 
   desc 'start api for dev'
   task :dev do
