@@ -25,10 +25,6 @@ module R2S
 
       @logger_runner_path = @conf['logger']['runner']['path']
       @logger_app_path = @conf['logger']['app']['path']
-      if local?
-        @logger_runner_path = local_logger_runner_path
-        @logger_app_path = local_logger_app_path
-      end
 
       @db_host = @conf['mysql']['host']
       @db_name = @conf['mysql']['database']
@@ -88,15 +84,7 @@ module R2S
     end
 
     def local_conf_path
-      File.expand_path(File.dirname(__FILE__)) + '/../../etc/rss2slack/conf.local.yml'
-    end
-
-    def local_logger_runner_path
-      File.expand_path(File.dirname(__FILE__)) + @conf['logger']['runner']['path']
-    end
-
-    def local_logger_app_path
-      File.expand_path(File.dirname(__FILE__)) + @conf['logger']['app']['path']
+      '/etc/rss2slack/conf.local.yml'
     end
   end
 end
