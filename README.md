@@ -5,6 +5,16 @@
 - 7:00 exec FeedWorker.
 - 8:00 exec ArticleWorker.
 
+## Required
+
+### Mac Local
+
+|    env     |   name  |
+|:--------- -|:-------:|
+| web server | nginx   |
+| app server | unicorn |
+| database   | MySql   |
+
 ## TODO
 
 - [ ] server settings
