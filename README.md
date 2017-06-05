@@ -10,7 +10,7 @@
 ### Mac Local
 
 |    env     |   name  |
-|:--------- -|:-------:|
+|:----------:|:-------:|
 | web server | nginx   |
 | app server | unicorn |
 | database   | MySql   |
