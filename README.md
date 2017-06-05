@@ -17,6 +17,6 @@
 
 ## TODO
 
-- [ ] server settings
+- [ ] build in CI service
 - [ ] implement spec
 
