@@ -8,7 +8,7 @@ require_relative '../src/app/conf'
 
 ENV['env'] = 'local'
 conf = R2S::Conf.new
-url = 'http://localhost:8080/v1/slack/feed'
+url = 'http://localhost:8082/v1/slack/feed'
 
 args = ARGV.getopts('t:')
 
