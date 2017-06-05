@@ -175,7 +175,7 @@ namespace :bootstrap do
     sh 'mkdir -p /etc/unicorn'
     sh 'mkdir -p /etc/rss2slack'
     sh 'cp -f ./conf/unicorn.local.rb /etc/unicorn'
-    sh 'cp -f ./conf/rss2slack_nginx.local.conf /usr/local/etc/nginx/servers/rss2slack.conf'
+    sh 'cp -f ./conf/nginx.local.conf /usr/local/etc/nginx/servers/rss2slack.conf'
     sh 'cp -f ./deploy/rss2slack/conf.local.yml /etc/rss2slack'
   end
 
