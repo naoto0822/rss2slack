@@ -7,13 +7,21 @@
 
 ## Required
 
+### Dev
+
+|    env     |   name  |
+|:----------:|:-------:|
+| Paas       | Heroku  |
+| app server | unicorn |
+| database   | SQLite3 |
+
 ### Mac Local
 
 |    env     |   name  |
 |:----------:|:-------:|
 | web server | nginx   |
 | app server | unicorn |
-| database   | MySql   |
+| database   | MySQL   |
 
 ## TODO
 
