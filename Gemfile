@@ -8,7 +8,6 @@ gem 'sinatra'
 gem 'unicorn'
 gem 'rubocop', '~> 0.48.1', require: false
 gem 'sinatra-contrib'
-gem 'sqlite3'
 
 group :test do
   gem 'rspec'
