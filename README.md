@@ -11,9 +11,10 @@
 
 |    env     |   name  |
 |:----------:|:-------:|
-| Paas       | Heroku  |
+| OS         | CentOS  |
+| web server | nginx   |
 | app server | unicorn |
-| database   | SQLite3 |
+| database   | MySQL   |
 
 ### Mac Local
 
