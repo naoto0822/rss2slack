@@ -48,6 +48,10 @@ module R2S
       @env == 'local'
     end
 
+    def test?
+      @env == 'test'
+    end
+
     def valid_slack_token?(token)
       token == @slack_token
     end
@@ -68,6 +72,8 @@ module R2S
         dev_conf_path
       when 'local'
         local_conf_path
+      when 'test'
+        test_conf_path
       else
         nil
       end
@@ -85,6 +91,10 @@ module R2S
 
     def local_conf_path
       '/etc/rss2slack/conf.local.yml'
+    end
+
+    def test_conf_path
+      File.expand_path(File.dirname(__FILE__)) + '/../../spec/conf.test.yml'
     end
   end
 end
