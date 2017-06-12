@@ -1,0 +1,15 @@
+slack:
+  incoming_webhooks_url: 'https://hooks.slack.com/'
+  outgoing_webhooks_token: 'TEST_TOKEN'
+  accept_team_domain: 'test.domain'
+  accept_channel_id: 'channel_id'
+logger:
+  runner:
+    path: "/var/log/rss2slack/runner.log"
+  app:
+    path: "/var/log/rss2slack/app.log"
+mysql:
+  host: "localhost"
+  database: "test"
+  username: "test_user"
+  password: "test_pass"
