@@ -29,3 +29,6 @@
 - [ ] build in CI service
 - [ ] implement spec
 
+reference
+https://www.sitepoint.com/building-a-slackbot-with-ruby-and-sinatra/
+
