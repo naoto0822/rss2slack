@@ -2,6 +2,11 @@ require 'yaml'
 
 module R2S
   class Conf
+    ENV_PROD = 'production'.freeze
+    ENV_DEV = 'development'.freeze
+    ENV_LOCAL = 'local'.freeze
+    ENV_TEST = 'test'.freeze
+
     attr_accessor :webhook_url, :db_host, :db_name, :db_username,
                   :db_password, :slack_token, :accept_team_domain,
                   :accept_channel_id, :logger_runner_path, :logger_app_path
@@ -37,19 +42,19 @@ module R2S
     end
 
     def prod?
-      @env == 'production'
+      @env == ENV_PROD
     end
 
     def dev?
-      @env == 'development'
+      @env == ENV_DEV
     end
 
     def local?
-      @env == 'local'
+      @env == ENV_LOCAL
     end
 
     def test?
-      @env == 'test'
+      @env == ENV_TEST
     end
 
     def valid_slack_token?(token)
@@ -66,13 +71,13 @@ module R2S
 
     def conf_path
       case @env
-      when 'production'
+      when ENV_PROD
         prod_conf_path
-      when 'development'
+      when ENV_DEV
         dev_conf_path
-      when 'local'
+      when ENV_LOCAL
         local_conf_path
-      when 'test'
+      when ENV_TEST
         test_conf_path
       else
         nil
