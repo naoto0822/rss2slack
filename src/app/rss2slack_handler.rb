@@ -12,11 +12,10 @@ module R2S
     DELETE_COMMAND = 'rss2slack_delete'.freeze
     HELP_COMMAND = 'rss2slack_help'.freeze
 
-    def initialize(logger, conf, db)
+    def initialize(logger, conf, feed_model)
       @logger = logger
       @conf = conf
-      @db = db
-      @feed_model = R2S::FeedModel.new(logger, @db)
+      @feed_model = feed_model
     end
 
     def handle_slack_feed(headers, body)

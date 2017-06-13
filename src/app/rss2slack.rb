@@ -21,7 +21,8 @@ class Rss2Slack < Sinatra::Base
     @logger = Logger.new(@conf.logger_app_path) if @logger.nil?
     @logger.level = Logger::DEBUG
     @db = R2S::DBClient.new(@logger, @conf) if @db.nil?
-    @handler = R2S::Handler.new(@logger, @conf, @db)
+    @feed_model = R2S::FeedModel.new(@logger, @db) if @feed_model.nil?
+    @handler = R2S::Handler.new(@logger, @conf, @feed_model)
   end
 
   get '/v1/hello' do
