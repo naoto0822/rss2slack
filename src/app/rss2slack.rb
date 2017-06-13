@@ -21,7 +21,6 @@ class Rss2Slack < Sinatra::Base
     @logger = Logger.new(@conf.logger_app_path) if @logger.nil?
     @logger.level = Logger::DEBUG
     @db = R2S::DBClient.new(@logger, @conf) if @db.nil?
-
     @handler = R2S::Handler.new(@logger, @conf, @db)
   end
 
@@ -32,7 +31,7 @@ class Rss2Slack < Sinatra::Base
 
   post '/v1/slack/feed' do
     begin
-      res =  @handler.handle_slack_feed(headers, request.params)
+      res =  @handler.handle_slack_feed(headers, params)
       handle_response(res)
     rescue => e
       raise e
