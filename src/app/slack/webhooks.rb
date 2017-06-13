@@ -119,16 +119,16 @@ module OutgoingWebhooks
     attr_reader :token, :team_id, :team_domain, :channel_id, :channel_name, :timestamp,
                 :user_id, :user_name, :text, :trigger
     def initialize(body)
-      @token = body['token']
-      @team_id = body['team_id']
-      @team_domain = body['team_domain']
-      @channel_id = body['channel_id']
-      @channel_name = body['channel_name']
-      @timestamp = body['timestamp']
-      @user_id = body['user_id']
-      @user_name = body['user_name']
-      @text = body['text']
-      @trigger = body['trigger']
+      @token = body[:token]
+      @team_id = body[:team_id]
+      @team_domain = body[:team_domain]
+      @channel_id = body[:channel_id]
+      @channel_name = body[:channel_name]
+      @timestamp = body[:timestamp]
+      @user_id = body[:user_id]
+      @user_name = body[:user_name]
+      @text = body[:text]
+      @trigger = body[:trigger]
     end
   end
 end
