@@ -118,9 +118,9 @@ module R2S
     end
 
     def valid_outgoing_webhook?(data)
-      false unless @conf.valid_slack_token?(data.token)
-      false unless @conf.valid_accept_team_domain?(data.team_domain)
-      false unless @conf.valid_accept_channel_id?(data.channel_id)
+      return false unless @conf.valid_slack_token?(data.token)
+      return false unless @conf.valid_accept_team_domain?(data.team_domain)
+      return false unless @conf.valid_accept_channel_id?(data.channel_id)
       true
     end
   end
