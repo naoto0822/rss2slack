@@ -51,7 +51,10 @@ module R2S
       else
         return bad_request_response
       end
+
+      @logger.debug('finish handle_slack_feed()')
     rescue => e
+      @logger.error("error handle_slack_feed(), #{e}")
       raise e
     end
 
