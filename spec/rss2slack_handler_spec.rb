@@ -83,7 +83,55 @@ describe R2S::Handler do
     end
   end
 
-  # TODO:
-  it 'normal test' do
+  describe 'invalid post text' do
+    it 'nil text' do
+      headers = {}
+      nil_text = { :text => nil }
+      body = MockOutgoingMessage::body(nil_text)
+
+      allow(@feed_model).to receive(:find_by_url).and_return([])
+      allow(@feed_model).to receive(:save).and_return(true)
+
+      handler = R2S::Handler.new(@logger, @conf, @feed_model)
+      res = handler.handle_slack_feed(headers, body)
+
+      expect(res.code).to eq 400
+      expect(res.headers).to eq nil
+      expect(res.body).to eq ''
+    end
+
+    it 'empty text' do
+      headers = {}
+      empty_text = { :text => '' }
+      body = MockOutgoingMessage::body(empty_text)
+
+      allow(@feed_model).to receive(:find_by_url).and_return([])
+      allow(@feed_model).to receive(:save).and_return(true)
+
+      handler = R2S::Handler.new(@logger, @conf, @feed_model)
+      res = handler.handle_slack_feed(headers, body)
+
+      expect(res.code).to eq 400
+      expect(res.headers).to eq nil
+      expect(res.body).to eq ''
+    end
+
+    it 'not command' do
+      headers = {}
+      shorter_text = { :text => 'hahaha' }
+      body = MockOutgoingMessage::body(shorter_text)
+
+      allow(@feed_model).to receive(:find_by_url).and_return([])
+      allow(@feed_model).to receive(:save).and_return(true)
+
+      handler = R2S::Handler.new(@logger, @conf, @feed_model)
+      res = handler.handle_slack_feed(headers, body)
+
+      expect(res.code).to eq 400
+      expect(res.headers).to eq nil
+      expect(res.body).to eq ''
+    end
+
+
   end
 end
