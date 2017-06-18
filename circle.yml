@@ -1,0 +1,26 @@
+machine:
+  ruby:
+    version: 2.4.0
+
+checkout:
+  post:
+    - git submodule update --init --recursive
+
+dependencies:
+  override:
+    - bundle install --path vendor/bundle
+
+test:
+  override:
+    - rake test:spec
+
+deployment:
+  debug:
+    branch: /^(?!release$).*$/
+    commands:
+      - echo "deployment is debug"
+
+  release:
+    branch: release
+    commands:
+      - echo "deployment is release"
