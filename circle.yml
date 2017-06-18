@@ -18,9 +18,9 @@ deployment:
   debug:
     branch: /^(?!release$).*$/
     commands:
-      - echo "deployment is debug"
+      - echo "build is development"
 
   release:
     branch: release
     commands:
-      - echo "deployment is release"
+      - echo "deploy for prod!"

@@ -1,5 +1,7 @@
 # rss2slack
 
+[![CircleCI](https://circleci.com/gh/naoto0822/rss2slack.svg?style=svg)](https://circleci.com/gh/naoto0822/rss2slack)
+
 ## worker timing
 
 - 7:00 exec FeedWorker.
