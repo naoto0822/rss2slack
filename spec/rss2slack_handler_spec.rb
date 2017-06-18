@@ -169,7 +169,7 @@ describe R2S::Handler do
   end
 
   describe 'normal request' do
-    it 'new register text' do
+    it 'new register' do
       headers = {}
       media = 'hoge_media'
       command = { :text => "rss2slack_register, #{media}, http://yahoo.co.jp" }
@@ -182,15 +182,102 @@ describe R2S::Handler do
       expect(res.code).to eq 200
       expect(res.headers).to eq nil
 
-      body = JSON.parse(res.body)
-      expect(body['username']).to eq 'Rss2Slack'
+      json = JSON.parse(res.body)
+      expect(json['username']).to eq 'Rss2Slack'
 
-      attachments = body['attachments']
+      attachments = json['attachments']
       attachment = attachments[0]
       expect(attachment['fallback']).to eq "successflluy registerd #{media}"
       expect(attachment['color']).to eq 'good'
       expect(attachment['fields']).not_to eq nil
       expect(attachment['footer']).to eq 'from Rss2Slack'
+    end
+
+    it 'continuity save' do
+      headers = {}
+      media = 'hoge_media'
+      command = { :text => "rss2slack_register, #{media}, https://yahoo.co.jp" }
+      body = MockOutgoingMessage::body(command)
+
+      mock_model = MockFeedModel.new
+      handler = R2S::Handler.new(@logger, @conf, mock_model)
+      res = handler.handle_slack_feed(headers, body)
+
+      expect(res.code).to eq 200
+      expect(res.headers).to eq nil
+
+      json = JSON.parse(res.body)
+      expect(json['username']).to eq 'Rss2Slack'
+
+      attachments = json['attachments']
+      attachment = attachments[0]
+      expect(attachment['fallback']).to eq "successflluy registerd #{media}"
+      expect(attachment['color']).to eq 'good'
+      expect(attachment['fields']).not_to eq nil
+      expect(attachment['footer']).to eq 'from Rss2Slack'
+
+      media2 = 'foo_media'
+      command2 = { :text => "rss2slack_register, #{media2}, https://google.com" }
+      body2 = MockOutgoingMessage::body(command2)
+
+      res2 = handler.handle_slack_feed(headers, body2)
+
+      expect(res2.code).to eq 200
+      expect(res2.headers).to eq nil
+
+      json2 = JSON.parse(res2.body)
+      expect(json2['username']).to eq 'Rss2Slack'
+
+      attachments2 = json2['attachments']
+      attachment2 = attachments2[0]
+      expect(attachment2['fallback']).to eq "successflluy registerd #{media2}"
+      expect(attachment2['color']).to eq 'good'
+      expect(attachment2['fields']).not_to eq nil
+      expect(attachment2['footer']).to eq 'from Rss2Slack'
+    end
+
+    it 'duplicated save' do
+      headers = {}
+      media = 'hoge_media'
+      url = 'https://yahoo.co.jp'
+      command = { :text => "rss2slack_register, #{media}, #{url}" }
+      body = MockOutgoingMessage::body(command)
+
+      mock_model = MockFeedModel.new
+      handler = R2S::Handler.new(@logger, @conf, mock_model)
+      res = handler.handle_slack_feed(headers, body)
+
+      expect(res.code).to eq 200
+      expect(res.headers).to eq nil
+
+      json = JSON.parse(res.body)
+      expect(json['username']).to eq 'Rss2Slack'
+
+      attachments = json['attachments']
+      attachment = attachments[0]
+      expect(attachment['fallback']).to eq "successflluy registerd #{media}"
+      expect(attachment['color']).to eq 'good'
+      expect(attachment['fields']).not_to eq nil
+      expect(attachment['footer']).to eq 'from Rss2Slack'
+
+      media2 = 'foo_media'
+      command2 = { :text => "rss2slack_register, #{media2}, #{url}" }
+      body2 = MockOutgoingMessage::body(command2)
+
+      res2 = handler.handle_slack_feed(headers, body2)
+
+      expect(res2.code).to eq 200
+      expect(res2.headers).to eq nil
+
+      json2 = JSON.parse(res2.body)
+      expect(json2['username']).to eq 'Rss2Slack'
+
+      attachments2 = json2['attachments']
+      attachment2 = attachments2[0]
+      expect(attachment2['fallback']).to eq "already registerd url: #{url}"
+      expect(attachment2['color']).to eq 'good'
+      expect(attachment2['fields']).not_to eq nil
+      expect(attachment2['footer']).to eq 'from Rss2Slack'
     end
   end
 end
