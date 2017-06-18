@@ -32,9 +32,10 @@
 
 ## TODO
 
-- [ ] build in CI service
-- [ ] implement spec
+- [☓] build in CI service
+- [☓] implement spec
+- [ ] deploy
 
-reference
+reference  
 https://www.sitepoint.com/building-a-slackbot-with-ruby-and-sinatra/
 
