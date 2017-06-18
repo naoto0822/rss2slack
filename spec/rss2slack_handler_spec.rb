@@ -1,6 +1,8 @@
 require_relative './spec_helper'
 require_relative '../src/app/rss2slack_handler'
+require_relative '../src/app/feed'
 require 'logger'
+require 'json'
 
 class MockOutgoingMessage
   def self.body(other)
@@ -17,6 +19,23 @@ class MockOutgoingMessage
       :trigger_word => 'rss2slack_register, hoge, http://hoge.com'
     }
     base.merge(other)
+  end
+end
+
+class MockFeedModel
+  def initialize
+    @feed_arr = []
+  end
+  def find_by_url(url)
+    re = []
+    @feed_arr.each { |feed|
+      re.push(feed) if feed.url == url
+    }
+    re
+  end
+  def save(name, url)
+    feed = R2S::Feed.new(name: name, url: url)
+    @feed_arr.push(feed)
   end
 end
 
@@ -146,6 +165,32 @@ describe R2S::Handler do
       expect(res.code).to eq 400
       expect(res.headers).to eq nil
       expect(res.body).to eq ''
+    end
+  end
+
+  describe 'normal request' do
+    it 'new register text' do
+      headers = {}
+      media = 'hoge_media'
+      command = { :text => "rss2slack_register, #{media}, http://yahoo.co.jp" }
+      body = MockOutgoingMessage::body(command)
+
+      mock_model = MockFeedModel.new
+      handler = R2S::Handler.new(@logger, @conf, mock_model)
+      res = handler.handle_slack_feed(headers, body)
+
+      expect(res.code).to eq 200
+      expect(res.headers).to eq nil
+
+      body = JSON.parse(res.body)
+      expect(body['username']).to eq 'Rss2Slack'
+
+      attachments = body['attachments']
+      attachment = attachments[0]
+      expect(attachment['fallback']).to eq "successflluy registerd #{media}"
+      expect(attachment['color']).to eq 'good'
+      expect(attachment['fields']).not_to eq nil
+      expect(attachment['footer']).to eq 'from Rss2Slack'
     end
   end
 end
