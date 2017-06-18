@@ -1,5 +1,6 @@
 @dir = "/Users/naoto/develop/ruby/app/rss2slack"
 @app_name = "rss2slack"
+preload_app true
 
 worker_processes 1 
 working_directory @dir
