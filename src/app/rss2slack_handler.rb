@@ -39,18 +39,22 @@ module R2S
 
       texts = split_post_text(data.text)
 
+      res = nil
       case texts[0]
       when REGISTER_COMMAND
-        return handle_slack_register_feed(data, texts)
+        res = handle_slack_register_feed(data, texts)
       when UPDATE_COMMAND
-        return handle_slack_update_feed(data, texts)
+        res = handle_slack_update_feed(data, texts)
       when DELETE_COMMAND
-        return handle_slack_delete_feed(data, texts)
+        res = handle_slack_delete_feed(data, texts)
       when HELP_COMMAND
-        return handle_slack_help
+        res = handle_slack_help
       else
-        return bad_request_response
+        res = bad_request_response
       end
+
+      @logger.debug('finish handle_slack_feed()')
+      res
     rescue => e
       @logger.error("error handle_slack_feed(), #{e}")
       raise e
