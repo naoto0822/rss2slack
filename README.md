@@ -37,5 +37,6 @@
 - [ ] deploy
 
 reference  
-https://www.sitepoint.com/building-a-slackbot-with-ruby-and-sinatra/
+- https://www.sitepoint.com/building-a-slackbot-with-ruby-and-sinatra/
+- https://moneyforward.com/engineers_blog/2015/02/18/slack-timer/
 
