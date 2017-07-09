@@ -63,77 +63,41 @@ namespace :api do
 end
 
 namespace :nginx do
-  namespace :local do
-    desc 'local nginx start'
-    task :start do
-      sh 'sudo nginx'
-    end
-
-    desc 'local nginx stop'
-    task :stop do
-      sh 'sudo nginx -s stop'
-    end
-
-    desc 'local nginx restart'
-    task :restart do
-      sh 'sudo nginx -s reload'
-    end
+  desc 'start nginx'
+  task :start do
+    sh 'systemctl start nginx' if is_linux?
+    sh 'sudo nginx' if is_osx?
   end
 
-  namespace :dev do
-    # NOOP
+  desc 'stop nginx'
+  task :stop do
+    sh 'systemctl stop nginx' if is_linux?
+    sh 'sudo nginx -s stop' if is_osx?
   end
 
-  namespace :prod do
-    # NOOP
+  desc 'restart nginx'
+  task :restart do
+    sh 'systemctl reload nginx' if is_linux?
+    sh 'sudo nginx -s reload' if is_osx?
   end
 end
 
 namespace :unicorn do
-  namespace :local do
-    desc 'local unicorn start'
-    task :start do
-      sh 'bundle exec unicorn -E development -c /etc/unicorn/unicorn.local.rb -D'
-    end
-
-    desc 'local unicorn stop'
-    task :stop do
-      sh 'kill -QUIT `cat /tmp/unicorn.pid`'
-    end
-
-    desc 'local unicorn restart'
-    task :restart => ['unicorn:local:stop', 'unicorn:local:start']
+  desc 'start unicorn'
+  task :start do
+    env = ENV['env']
+    file_opt = "unicorn.#{env}.rb"
+    env_opt = unicorn_env
+    sh "bundle exec unicorn -E #{env_opt} -c /etc/unicorn/#{file_opt} -D"
   end
 
-  namespace :dev do
-    desc 'dev unicorn start'
-    task :start do
-      sh 'bundle exec unicorn -E development -c /etc/unicorn/unicorn.dev.rb -D'
-    end
-
-    desc 'dev unicorn stop'
-    task :stop do
-      sh 'kill -QUIT `cat /tmp/unicorn.pid`'
-    end
-
-    desc 'dev unicorn restart'
-    task :restart => ['unicorn:dev:stop', 'unicorn:dev:start']
+  desc 'stop unicorn'
+  task :stop do
+    sh 'kill -QUIT `cat /tmp/unicorn.pid`'
   end
 
-  namespace :prod do
-    desc 'prod unicorn start'
-    task :start do
-      sh 'bundle exec unicorn -E production -c /etc/unicorn/unicorn.prod.rb -D'
-    end
-
-    desc 'prod unicorn stop'
-    task :stop do
-      sh 'kill -QUIT `cat /tmp/unicorn.pid`'
-    end
-
-    desc 'prod unicorn restart'
-    task :restart => ['unicorn:prod:stop', 'unicorn:prod:start']
-  end
+  desc 'restart unicorn'
+  task :restart => ['unicorn:stop', 'unicorn:start']
 end
 
 namespace :db do
@@ -252,6 +216,32 @@ private
 
 def bundle_install
   sh 'bundle install --path vendor/bundle'
+end
+
+def what_os
+  RUBY_PLATFORM
+end
+
+def is_osx?
+  what_os.include?('darwin')
+end
+
+def is_linux?
+  what_os.include?('linux')
+end
+
+def unicorn_env
+  env = ENV['env']
+  case env
+  when 'production'
+    'production'
+  when 'development'
+    'development'
+  when 'local'
+    'development'
+  else
+    nil
+  end
 end
 
 def conf_file
