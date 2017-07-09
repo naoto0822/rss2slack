@@ -183,7 +183,7 @@ namespace :bootstrap do
   task :dev do
     sh 'sudo mkdir -p /var/log/rss2slack'
     sh 'sudo mkdir -p /var/log/unicorn'
-    sh 'sudo mkdir -p /tmp'
+    sh 'sudo mkdir -p /var/log/nginx'
     sh 'sudo mkdir -p /etc/unicorn'
     sh 'sudo mkdir -p /etc/rss2slack'
     sh 'sudo cp -f ./conf/unicorn.dev.rb /etc/unicorn'
