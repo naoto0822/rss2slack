@@ -251,17 +251,7 @@ rescue => e
   raise ArgumentError, "#{e.class}, #{e.backtrace}"
 end
 
-# TODO: fix prod, dev path
 def conf_path
   env = ENV['env']
-  case env
-  when 'production'
-    '/etc/rss2slack/conf.prod.yml'
-  when 'development'
-    '/etc/rss2slack/conf.dev.yml'
-  when 'local'
-    '/etc/rss2slack/conf.local.yml'
-  else
-    nil
-  end
+  "/etc/rss2slack/conf.#{env}.yml"
 end
