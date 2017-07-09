@@ -101,31 +101,28 @@ namespace :unicorn do
 end
 
 namespace :db do
-  namespace :local do
-    desc 'db start'
-    task :start do
-      sh 'mysql.server start'
-    end
-
-    desc 'setup user, database'
-    task :setup do
-      sh 'mysql -u root < ./scripts/setup.sql'
-    end
-
-    desc 'create table to db'
-    task :create_tables => ['env:local'] do
-      user = ENV['db_user']
-      pass = ENV['db_password']
-      sh "mysql -u#{user} rss2slack_u -p#{pass} < ./scripts/create.sql"
-    end
+  desc 'start db'
+  task :start do
+    sh 'systemctl start mysqld' if is_linux?
+    sh 'mysql.server start' if is_osx?
   end
 
-  namespace :dev do
-
+  desc 'stop db'
+  task :stop do
+    sh 'systemctl stop mysqld' if is_linux?
+    sh 'mysql.server stop' if is_osx?
   end
 
-  namespace :prod do
+  desc 'setup user, database'
+  task :setup do
+    sh 'mysql -uroot < ./scripts/setup.sql'
+  end
 
+  desc 'create tables to db'
+  task :create_tables do
+    user = ENV['db_user']
+    pass = ENV['db_password']
+    sh "mysql -u#{user} rss2slack_u -p#{pass} < ./scripts/create.sql"
   end
 end
 
@@ -150,8 +147,8 @@ namespace :bootstrap do
     sh 'sudo mkdir -p /var/log/nginx'
     sh 'sudo mkdir -p /etc/unicorn'
     sh 'sudo mkdir -p /etc/rss2slack'
-    sh 'sudo cp -f ./conf/unicorn.dev.rb /etc/unicorn'
-    sh 'sudo cp -f ./deploy/rss2slack/conf.dev.yml /etc/rss2slack'
+    sh 'sudo cp -f ./conf/unicorn.development.rb /etc/unicorn'
+    sh 'sudo cp -f ./deploy/rss2slack/conf.development.yml /etc/rss2slack'
   end
   
   desc 'setting prod env'
@@ -161,8 +158,8 @@ namespace :bootstrap do
     sh 'mkdir -p /tmp'
     sh 'mkdir -p /etc/unicorn'
     sh 'mkdir -p /etc/rss2slack'
-    sh 'cp -f ./conf/unicorn.prod.rb /etc/unicorn'
-    sh 'cp -f ./deploy/rss2slack/conf.prod.yml /etc/rss2slack'
+    sh 'cp -f ./conf/unicorn.production.rb /etc/unicorn'
+    sh 'cp -f ./deploy/rss2slack/conf.production.yml /etc/rss2slack'
   end
 end
 
@@ -170,22 +167,19 @@ namespace :env do
   desc 'set local env'
   task :local do
     ENV['env'] = ENV_LOCAL
-    ENV['db_user'] = conf_file['mysql']['username']
-    ENV['db_password'] = conf_file['mysql']['password']
+    set_db_user
   end
 
   desc 'set dev env'
   task :dev do
     ENV['env'] = ENV_DEV
-    ENV['db_user'] = conf_file['mysql']['username']
-    ENV['db_password'] = conf_file['mysql']['password']
+    set_db_user
   end
 
   desc 'set prod env'
   task :prod do
     ENV['env'] = ENV_PROD
-    ENV['db_user'] = conf_file['mysql']['username']
-    ENV['db_password'] = conf_file['mysql']['password']
+    set_db_user
   end
 
   desc 'exec bundle install'
@@ -200,16 +194,14 @@ namespace :env do
   end
 end
 
-namespace :test do
-  desc 'exec rspec'
-  task :spec do
-    sh 'bundle exec rspec spec/'
-  end
+desc 'exec rspec'
+task :spec do
+  sh 'bundle exec rspec spec/'
+end
 
-  desc 'lint'
-  task :lint do
-    sh 'bundle exec rubocop'
-  end
+desc 'lint'
+task :lint do
+  sh 'bundle exec rubocop'
 end
 
 private
@@ -242,6 +234,11 @@ def unicorn_env
   else
     nil
   end
+end
+
+def set_db_user
+  ENV['db_user'] = conf_file['mysql']['username']
+  ENV['db_password'] = conf_file['mysql']['password']
 end
 
 def conf_file
