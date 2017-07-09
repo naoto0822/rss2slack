@@ -181,13 +181,13 @@ namespace :bootstrap do
 
   desc 'setting dev env'
   task :dev do
-    sh 'mkdir -p /var/log/rss2slack'
-    sh 'mkdir -p /var/log/unicorn'
-    sh 'mkdir -p /tmp'
-    sh 'mkdir -p /etc/unicorn'
-    sh 'mkdir -p /etc/rss2slack'
-    sh 'cp -f ./conf/unicorn.dev.rb /etc/unicorn'
-    sh 'cp -f ./deploy/rss2slack/conf.dev.yml /etc/rss2slack'
+    sh 'sudo mkdir -p /var/log/rss2slack'
+    sh 'sudo mkdir -p /var/log/unicorn'
+    sh 'sudo mkdir -p /tmp'
+    sh 'sudo mkdir -p /etc/unicorn'
+    sh 'sudo mkdir -p /etc/rss2slack'
+    sh 'sudo cp -f ./conf/unicorn.dev.rb /etc/unicorn'
+    sh 'sudo cp -f ./deploy/rss2slack/conf.dev.yml /etc/rss2slack'
   end
   
   desc 'setting prod env'
