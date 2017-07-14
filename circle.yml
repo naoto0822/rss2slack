@@ -12,7 +12,7 @@ dependencies:
 
 test:
   override:
-    - bundle exec rake test:spec
+    - bundle exec rake spec
 
 deployment:
   debug:
