@@ -51,7 +51,7 @@ class Rss2Slack < Sinatra::Base
       status 200
       body payload
     else
-      states 500
+      status 500
       body env['sinatra.error'].message
     end
   end
