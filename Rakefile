@@ -132,7 +132,6 @@ namespace :bootstrap do
     sh 'mkdir -p /var/log/rss2slack'
     sh 'mkdir -p /var/log/unicorn'
     sh 'mkdir -p /var/log/nginx'
-    sh 'mkdir -p /tmp'
     sh 'mkdir -p /etc/unicorn'
     sh 'mkdir -p /etc/rss2slack'
     sh 'cp -f ./conf/unicorn.local.rb /etc/unicorn'
