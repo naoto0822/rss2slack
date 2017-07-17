@@ -87,11 +87,11 @@ module R2S
     private
 
     def prod_conf_path
-      '/etc/rss2slack/conf.prod.yml'
+      '/etc/rss2slack/conf.production.yml'
     end
 
     def dev_conf_path
-      '/etc/rss2slack/conf.dev.yml'
+      '/etc/rss2slack/conf.development.yml'
     end
 
     def local_conf_path
