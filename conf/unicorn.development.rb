@@ -1,5 +1,5 @@
 # /var/www/lib
-@dir = ENV["HOME"] + "rss2slack"
+@dir = ENV["HOME"] + "/rss2slack"
 @app_name = "rss2slack"
 preload_app true
 
