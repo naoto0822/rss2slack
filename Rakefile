@@ -139,7 +139,7 @@ namespace :bootstrap do
     sh 'sudo mkdir -p /etc/rss2slack'
     sh 'sudo cp -f ./conf/unicorn.local.rb /etc/unicorn'
     sh 'sudo cp -f ./conf/nginx.local.conf /usr/local/etc/nginx/servers/rss2slack.conf'
-    sh 'sudo cp -f ./deploy/rss2slack/conf.local.yml /etc/rss2slack'
+    sh 'sudo cp -f ./private/rss2slack/conf.local.yml /etc/rss2slack'
   end
 
   desc 'setting dev env'
@@ -154,7 +154,7 @@ namespace :bootstrap do
     sh 'sudo mkdir -p /etc/rss2slack'
     sh 'sudo cp -f ./conf/unicorn.development.rb /etc/unicorn'
     sh 'sudo cp -f ./conf/nginx.development.conf /etc/nginx/conf.d/rss2slack.conf'
-    sh 'sudo cp -f ./deploy/rss2slack/conf.development.yml /etc/rss2slack'
+    sh 'sudo cp -f ./private/rss2slack/conf.development.yml /etc/rss2slack'
   end
   
   desc 'setting prod env'
@@ -165,7 +165,7 @@ namespace :bootstrap do
     sh 'mkdir -p /etc/unicorn'
     sh 'mkdir -p /etc/rss2slack'
     sh 'cp -f ./conf/unicorn.production.rb /etc/unicorn'
-    sh 'cp -f ./deploy/rss2slack/conf.production.yml /etc/rss2slack'
+    sh 'cp -f ./private/rss2slack/conf.production.yml /etc/rss2slack'
   end
 end
 
