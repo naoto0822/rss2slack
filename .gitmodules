@@ -1,6 +1,3 @@
-[submodule "deploy"]
-	path = deploy
-	url = git@github.com:naoto0822/private-product-deploy.git
 [submodule "private"]
 	path = private
 	url = git@github.com:naoto0822/private.git
