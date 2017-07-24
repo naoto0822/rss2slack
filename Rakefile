@@ -116,6 +116,7 @@ namespace :db do
   desc 'setup user, database'
   task :setup do
     sh 'sh ./scripts/create_mysql_root_user.sh'
+    sh 'sh ./private/rss2slack/alter_db_root_pass.sh'
     sh 'mysql < ./private/rss2slack/setup_db.sql'
     sh 'mysql rss2slack < ./scripts/create_tables.sql'
   end
