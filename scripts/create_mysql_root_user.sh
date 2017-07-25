@@ -9,4 +9,5 @@ cat > $root_mycnf <<EOF
 [client]
 user=root
 password="$tmp_pass"
+connect-expired-password
 EOF
