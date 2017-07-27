@@ -43,6 +43,10 @@ class Rss2Slack < Sinatra::Base
     # NOOP
   end
 
+  not_found do
+    status 404
+  end
+
   error do |e|
     if request.path.include?('slack')
       title = env['sinatra.error'].message
