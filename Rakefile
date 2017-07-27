@@ -120,13 +120,6 @@ namespace :db do
     sh 'mysql < ./private/rss2slack/setup_db.sql'
     sh 'mysql rss2slack < ./scripts/create_tables.sql'
   end
-
-  desc 'create tables to db'
-  task :create_tables do
-    user = ENV['db_user']
-    pass = ENV['db_password']
-    sh "mysql -u#{user} rss2slack_u -p#{pass} < ./scripts/create.sql"
-  end
 end
 
 namespace :bootstrap do
@@ -177,19 +170,16 @@ namespace :env do
   desc 'set local env'
   task :local do
     ENV['env'] = ENV_LOCAL
-    set_db_user
   end
 
   desc 'set dev env'
   task :dev do
     ENV['env'] = ENV_DEV
-    set_db_user
   end
 
   desc 'set prod env'
   task :prod do
     ENV['env'] = ENV_PROD
-    set_db_user
   end
 
   desc 'exec bundle install'
@@ -244,11 +234,6 @@ def unicorn_env
   else
     nil
   end
-end
-
-def set_db_user
-  ENV['db_user'] = conf_file['mysql']['username']
-  ENV['db_password'] = conf_file['mysql']['password']
 end
 
 def conf_file
