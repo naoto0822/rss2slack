@@ -49,17 +49,13 @@ end
 
 namespace :api do
   desc 'start api for local'
-  task :local => ['env:local', 'db:start', 'nginx:start', 'unicorn:start']
+  task :local => ['env:local', 'db:start', 'unicorn:start', 'nginx:start']
 
   desc 'start api for dev'
-  task :dev do
-    # NOOP
-  end
+  task :dev => ['env:dev', 'db:start', 'unicorn:start', 'nginx:start']
 
   desc 'start api for prod'
-  task :prod do
-    # NOOP
-  end
+  task :prod => ['env:production', 'db:start', 'unicorn:start', 'nginx:start']
 end
 
 namespace :nginx do
@@ -86,9 +82,12 @@ namespace :unicorn do
   desc 'start unicorn'
   task :start do
     env = ENV['env']
-    file_opt = "unicorn.#{env}.rb"
-    env_opt = unicorn_env
-    sh "bundle exec unicorn -E #{env_opt} -c /etc/unicorn/#{file_opt} -D"
+    if env.nil? || env.empty?
+      raise ArgumentError, 'required set env.'
+    end
+    conf_file = "unicorn.#{env}.rb"
+    env_opt = unicorn_env(env)
+    sh "bundle exec unicorn -E #{env_opt} -c /etc/unicorn/#{conf_file} -D"
   end
 
   desc 'stop unicorn'
@@ -222,8 +221,7 @@ def is_linux?
   what_os.include?('linux')
 end
 
-def unicorn_env
-  env = ENV['env']
+def unicorn_env(env)
   case env
   when 'production'
     'production'
