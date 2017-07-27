@@ -25,9 +25,9 @@ class Rss2Slack < Sinatra::Base
     @handler = R2S::Handler.new(@logger, @conf, @feed_model)
   end
 
-  get '/v1/hello' do
+  get '/health' do
     status 200
-    body 'i_like_sushi'
+    body 'ok'
   end
 
   post '/v1/slack/feed' do
