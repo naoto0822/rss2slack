@@ -149,6 +149,7 @@ namespace :bootstrap do
     sh 'sudo mkdir -p /etc/rss2slack'
     sh 'sudo cp -f ./conf/unicorn.development.rb /etc/unicorn'
     sh 'sudo cp -f ./conf/nginx.development.conf /etc/nginx/conf.d/rss2slack.conf'
+    sh 'sudo mv /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf.org'
     sh 'sudo cp -f ./conf/my.cnf /etc'
     sh 'sudo cp -f ./private/rss2slack/conf.development.yml /etc/rss2slack'
   end
