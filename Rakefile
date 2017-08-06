@@ -147,6 +147,8 @@ namespace :bootstrap do
     sh 'sudo chown -R nginx:nginx /var/log/nginx'
     sh 'sudo mkdir -p /etc/unicorn'
     sh 'sudo mkdir -p /etc/rss2slack'
+    sh 'sudo mkdir -p /var/log/mysql'
+    sh 'sudo chown -R mysql:mysql /var/log/mysql'
     sh 'sudo cp -f ./conf/unicorn.development.rb /etc/unicorn'
     sh 'sudo cp -f ./conf/nginx.development.conf /etc/nginx/conf.d/rss2slack.conf'
     sh 'sudo rm -f /etc/nginx/conf.d/default.conf'
