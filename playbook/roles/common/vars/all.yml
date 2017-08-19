@@ -1,0 +1,7 @@
+---
+ssh_user: rss2slack
+ssh_password: hoge
+ssh_gorups: wheel
+ssh_port: 22
+base_locale: LANG=ja_JP.UTF-8
+base_timezone: Asia/Tokyo
