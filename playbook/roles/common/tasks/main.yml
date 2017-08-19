@@ -1,0 +1,64 @@
+---
+- name: register user
+  user:
+    name={{ssh_user}}
+    state=present
+    password={{ssh_password}}
+    groups={{ssh_groups}}
+  tags: users
+
+- name: change permission ~/.ssh dir
+  file: path="/home/{{ssh_user}}/.ssh" state=directory owner={{ssh_user}} group={{ssh_user}} mode=0700
+  tags: users
+
+- name: set ssh public key
+  copy: src="authorized_keys" dest="/home/{{ssh_user}}/.ssh/authorized_keys" owner={{ssh_user}} group={{ssh_user}} mode=0600
+
+- name: update system
+  command: yum -y update
+
+- name: set locale
+  command: localectl set-locale {{ base_local }}
+
+- name: set timezone
+  command: timedatectl set-timezone {{ base_timezone }}
+
+- name: install base package
+  yum: name={{item}} state=present
+  with_items:
+    - git
+    - ntp
+    - sysstat
+
+- name: start ntpd
+  service: name=ntpd state=started enabled=yes
+
+- name: show SELinux
+  shell: getenforce
+  tags: selinux
+
+- name: set permissive mode
+  selinux: policy=targeted state=permissive
+  tags: selinux
+
+- name: set ssh conf. (change port, ban root login, only ssh auth, deny pass login.)
+  notify:
+    - restart sshd
+  template: src="sshd_config" dest="/etc/ssh/sshd_config" owner=root group=root mode=0600
+  tags: sshd
+
+- name: start sshd
+  service: name=sshd state=running enabled=yes
+  tags: sshd
+
+- name: setting firewall
+  service: name=firewalld state=started enabled=yes
+  tags: firewalld
+
+- name: allow ssh port
+  firewalld: port={{ ssh_port }}/tcp permanent=true state=enabled immediate=yes zone=public
+  tags: firewalld
+
+- name: deny default ssh port
+  firewalld: service=ssh permanent=true state=disabled immediate=yes
+  tags: firewalld
