@@ -18,7 +18,7 @@
   command: yum -y update
 
 - name: set locale
-  command: localectl set-locale {{ base_local }}
+  command: localectl set-locale {{ base_locale }}
 
 - name: set timezone
   command: timedatectl set-timezone {{ base_timezone }}
