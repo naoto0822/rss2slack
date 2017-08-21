@@ -35,6 +35,8 @@
 - [☓] build in CI service
 - [☓] implement spec
 - [ ] deploy
+- [ ] ansible
+- [ ] SSL
 
 reference  
 - https://www.sitepoint.com/building-a-slackbot-with-ruby-and-sinatra/
