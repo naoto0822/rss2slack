@@ -48,7 +48,7 @@
   tags: sshd
 
 - name: start sshd
-  service: name=sshd state=running enabled=yes
+  service: name=sshd state=started enabled=yes
   tags: sshd
 
 - name: setting firewall
