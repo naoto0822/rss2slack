@@ -2,4 +2,4 @@
 http_port: 80
 https_port: 443
 nginx_user: nginx
-worker_process: 1
+worker_processes: 1
