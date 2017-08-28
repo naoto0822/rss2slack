@@ -1,0 +1,38 @@
+---
+- name: install the nginx from remote repo
+  yum:
+    name: http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm
+    state: present
+  tags: nginx
+
+- name: install the latest version of nginx from nginx repo
+  yum: name=nginx enablerepo=nginx state=present
+  tags: nginx
+
+- name: upload nginx.conf
+  template: src=nginx.conf dest=/etc/nginx/nginx.conf
+  notify: restart nginx
+  tags: nginx
+
+- name: upload dev default.conf
+  template: src=dev.default.conf dest=/etc/nginx/conf.d/default.conf
+  notify: restart nginx
+  when: target == 'dev'
+  tags: nginx
+
+- name: upload prod default.conf
+  template: src=prod.default.conf dest=/etc/nginx/conf.d/default.conf
+  notify: restart nginx
+  when: target == 'prod'
+  tags: nginx
+
+- name: open http port
+  firewalld: service=http permanent=true state=enabled immediate=yes zone=public
+  tags: nginx
+
+- name: open https port
+  firewalld: service=https permanent=true state=enabled immediate=yes zone=public
+  tags: nginx
+
+- name: start nginx
+  service: name=nginx state=started enabled=yes
