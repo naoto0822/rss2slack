@@ -17,13 +17,13 @@
 - name: upload dev default.conf
   template: src=dev.default.conf dest=/etc/nginx/conf.d/default.conf
   notify: restart nginx
-  when: target == 'dev'
+  when: inventory_hostname in groups['dev']
   tags: nginx
 
 - name: upload prod default.conf
   template: src=prod.default.conf dest=/etc/nginx/conf.d/default.conf
   notify: restart nginx
-  when: target == 'prod'
+  when: inventory_hostname in groups['prod']
   tags: nginx
 
 - name: open http port
@@ -32,6 +32,7 @@
 
 - name: open https port
   firewalld: service=https permanent=true state=enabled immediate=yes zone=public
+  when: inventory_hostname in groups['prod']
   tags: nginx
 
 - name: start nginx
