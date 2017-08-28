@@ -4,5 +4,6 @@
   remote_user: vagrant
   roles:
     - common
+    - nginx
   vars_files:
     - ../private/rss2slack/external_vars.yml
