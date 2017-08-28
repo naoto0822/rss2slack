@@ -1,0 +1,50 @@
+---
+- name: install dependences package
+  yum: name={{item}} state=present
+  with_items:
+    - git
+    - gcc
+    - openssl-devel
+    - readline-devel
+    - bzip2
+  tags: ruby
+
+- name: clone rbenv
+  git: repo=https://github.com/sstephenson/rbenv.git dest=~/.rbenv
+  tags: ruby
+
+- name: set rbenv path
+  lineinfile: dest=~/.bash_profile line='export PATH="$HOME/.rbenv/bin:$PATH"' create=yes
+  tags: ruby
+
+- name: set rbenv init
+  lineinfile: dest=~/.bash_profile line='eval "$(rbenv init -)"' create=yes
+  tags: ruby
+
+- name: read .bash_profile
+  command: source ~/.bash_profile
+  tags: ruby
+
+- name: clone ruby-build
+  git: repo=https://github.com/sstephenson/ruby-build.git dest=~/.rbenv/plugins/ruby-build
+  tags: ruby
+
+- name: install ruby 
+  command: rbenv install {{ruby_version}}
+  tags: ruby
+
+- name: set ruby
+  command: rbenv global {{ruby_version}}
+  tags: ruby
+
+- name: rehash rbenv
+  command: rbenv rehash
+  tags: ruby
+
+- name: install bundler
+  command: gem install bundler
+  tags: ruby
+
+- name: echo ruby version
+  command: which ruby
+  tags: ruby
