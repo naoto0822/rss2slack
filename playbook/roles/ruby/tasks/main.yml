@@ -18,11 +18,11 @@
   tags: ruby
 
 - name: copy rbenv.sh
-  copy: src="rbenv.sh" dest=/etc/profile.d/rbenv.sh
+  copy: src="rbenv.sh" dest=/etc/profile.d/rbenv.sh owner=root group=root mode=0755
   tags: ruby
 
 - name: exec sh
-  shell: source /etc/profile.d/rbenv.sh
+  shell: /etc/profile.d/rbenv.sh
   tags: ruby
 
 - name: install ruby 
@@ -38,7 +38,7 @@
   tags: ruby
 
 - name: install bundler
-  shell: gem install bundler
+  shell: bash -lc "gem install bundler"
   tags: ruby
 
 - name: echo ruby version
