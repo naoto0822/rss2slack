@@ -5,5 +5,6 @@
   roles:
     - common
     - nginx
+    - ruby
   vars_files:
     - ../private/rss2slack/external_vars.yml
