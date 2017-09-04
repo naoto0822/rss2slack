@@ -10,39 +10,35 @@
   tags: ruby
 
 - name: clone rbenv
-  git: repo=https://github.com/sstephenson/rbenv.git dest=~/.rbenv
-  tags: ruby
-
-- name: set rbenv path
-  lineinfile: dest=~/.bash_profile line='export PATH="$HOME/.rbenv/bin:$PATH"' create=yes
-  tags: ruby
-
-- name: set rbenv init
-  lineinfile: dest=~/.bash_profile line='eval "$(rbenv init -)"' create=yes
-  tags: ruby
-
-- name: read .bash_profile
-  command: source ~/.bash_profile
+  git: repo=https://github.com/sstephenson/rbenv.git dest=/usr/local/rbenv
   tags: ruby
 
 - name: clone ruby-build
-  git: repo=https://github.com/sstephenson/ruby-build.git dest=~/.rbenv/plugins/ruby-build
+  git: repo=https://github.com/sstephenson/ruby-build.git dest=/usr/local/rbenv/plugins/ruby-build
+  tags: ruby
+
+- name: copy rbenv.sh
+  copy: src="rbenv.sh" dest=/etc/profile.d/rbenv.sh
+  tags: ruby
+
+- name: exec sh
+  shell: source /etc/profile.d/rbenv.sh
   tags: ruby
 
 - name: install ruby 
-  command: rbenv install {{ruby_version}}
+  shell: bash -lc "rbenv install {{ruby_version}}"
   tags: ruby
 
 - name: set ruby
-  command: rbenv global {{ruby_version}}
+  shell: bash -lc "rbenv global {{ruby_version}}"
   tags: ruby
 
 - name: rehash rbenv
-  command: rbenv rehash
+  shell: bash -lc "rbenv rehash"
   tags: ruby
 
 - name: install bundler
-  command: gem install bundler
+  shell: gem install bundler
   tags: ruby
 
 - name: echo ruby version
