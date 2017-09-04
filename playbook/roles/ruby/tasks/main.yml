@@ -26,19 +26,19 @@
   tags: ruby
 
 - name: install ruby 
-  shell: bash -lc "rbenv install {{ruby_version}}"
+  shell: /bin/bash -lc "rbenv install {{ruby_version}}"
   tags: ruby
 
 - name: set ruby
-  shell: bash -lc "rbenv global {{ruby_version}}"
+  shell: /bin/bash -lc "rbenv global {{ruby_version}}"
   tags: ruby
 
 - name: rehash rbenv
-  shell: bash -lc "rbenv rehash"
+  shell: /bin/bash -lc "rbenv rehash"
   tags: ruby
 
 - name: install bundler
-  shell: bash -lc "gem install bundler"
+  shell: /bin/bash -lc "gem install bundler"
   tags: ruby
 
 - name: echo ruby version
