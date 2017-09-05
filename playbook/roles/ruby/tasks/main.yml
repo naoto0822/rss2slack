@@ -1,4 +1,10 @@
 ---
+- name: installed ruby?
+  shell: /bin/bash -lc "which ruby"
+  register: ruby_installed
+  failed_when: ruby_installed.rc not in [0, 1]
+  tags: ruby
+
 - name: install dependences package
   yum: name={{item}} state=present
   with_items:
@@ -7,40 +13,45 @@
     - openssl-devel
     - readline-devel
     - bzip2
+  when: ruby_installed.rc == 1
   tags: ruby
 
 - name: clone rbenv
   git: repo=https://github.com/sstephenson/rbenv.git dest=/usr/local/rbenv
+  when: ruby_installed.rc == 1
   tags: ruby
 
 - name: clone ruby-build
   git: repo=https://github.com/sstephenson/ruby-build.git dest=/usr/local/rbenv/plugins/ruby-build
+  when: ruby_installed.rc == 1
   tags: ruby
 
 - name: copy rbenv.sh
   copy: src="rbenv.sh" dest=/etc/profile.d/rbenv.sh owner=root group=root mode=0755
+  when: ruby_installed.rc == 1
   tags: ruby
 
 - name: exec sh
   shell: /etc/profile.d/rbenv.sh
+  when: ruby_installed.rc == 1
   tags: ruby
 
 - name: install ruby 
   shell: /bin/bash -lc "rbenv install {{ruby_version}}"
+  when: ruby_installed.rc == 1
   tags: ruby
 
 - name: set ruby
   shell: /bin/bash -lc "rbenv global {{ruby_version}}"
+  when: ruby_installed.rc == 1
   tags: ruby
 
 - name: rehash rbenv
   shell: /bin/bash -lc "rbenv rehash"
+  when: ruby_installed.rc == 1
   tags: ruby
 
 - name: install bundler
   shell: /bin/bash -lc "gem install bundler"
-  tags: ruby
-
-- name: echo ruby version
-  command: which ruby
+  when: ruby_installed.rc == 1
   tags: ruby
