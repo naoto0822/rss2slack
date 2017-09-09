@@ -1,0 +1,16 @@
+---
+- name: installed mysql?
+  shell: /bin/bash -lc "which mysql"
+  register: mysql_installed
+  failed_when: mysql_installed.rc not in [0, 1]
+  tags: mysql
+
+- name: remove mariaDB
+  yum: name=mariadb-libs state=absent
+  when: mysql_installed.rc == 1
+  tags: mysql
+
+- name: delete mariaDB path
+  file: path="/var/lib/mysql/" state=absent
+  when: mysql_installed.rc == 1
+  tags: mysql

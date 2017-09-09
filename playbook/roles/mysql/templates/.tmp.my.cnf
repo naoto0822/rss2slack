@@ -1,0 +1,4 @@
+[client]
+user=root
+password={{ tmp_db_password }}
+connect-expired-password
