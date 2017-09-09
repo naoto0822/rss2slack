@@ -1,39 +1,51 @@
 ---
+- name: installed nginx?
+  shell: /bin/bash -lc "which nginx"
+  register: nginx_installed
+  failed_when: nginx_installed.rc not in [0, 1]
+  tags: nginx
+
 - name: install the nginx from remote repo
   yum:
     name: http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm
     state: present
+  when: nginx_installed.rc == 1
   tags: nginx
 
 - name: install the latest version of nginx from nginx repo
   yum: name=nginx enablerepo=nginx state=present
+  when: nginx_installed.rc == 1
   tags: nginx
 
 - name: upload nginx.conf
   template: src=nginx.conf dest=/etc/nginx/nginx.conf
   notify: restart nginx
+  when: nginx_installed.rc == 1
   tags: nginx
 
 - name: upload dev default.conf
   template: src=dev.default.conf dest=/etc/nginx/conf.d/default.conf
   notify: restart nginx
-  when: inventory_hostname in groups['dev']
+  when: inventory_hostname in groups['dev'] and nginx_installed.rc == 1
   tags: nginx
 
 - name: upload prod default.conf
   template: src=prod.default.conf dest=/etc/nginx/conf.d/default.conf
   notify: restart nginx
-  when: inventory_hostname in groups['prod']
+  when: inventory_hostname in groups['prod'] and nginx_installed.rc == 1
   tags: nginx
 
 - name: open http port
   firewalld: service=http permanent=true state=enabled immediate=yes zone=public
+  when: nginx_installed.rc == 1
   tags: nginx
 
 - name: open https port
   firewalld: service=https permanent=true state=enabled immediate=yes zone=public
-  when: inventory_hostname in groups['prod']
+  when: inventory_hostname in groups['prod'] and nginx_installed.rc == 1
   tags: nginx
 
 - name: start nginx
   service: name=nginx state=started enabled=yes
+  when: nginx_installed.rc == 1
+  tags: nginx
