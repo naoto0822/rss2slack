@@ -55,3 +55,8 @@
   shell: /bin/bash -lc "gem install bundler"
   when: ruby_installed.rc == 1
   tags: ruby
+
+- name: check installed ruby
+  shell: /bin/bash -lc "which ruby"
+  when: ruby_installed.rc == 1
+  tags: ruby
