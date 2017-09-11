@@ -19,6 +19,36 @@
   yum:
     name: http://dev.mysql.com/get/mysql57-community-release-el7-8.noarch.rpm
     state: present
+  when: mysql_installed.rc == 1
+  tags: mysql
 
 - name: install mysql
   yum: name=mysql-community-server state=present
+  when: mysql_installed.rc == 1
+  tags: mysql
+
+- name: install MySQL-python
+  yum: name=MySQL-python state=present
+  when: mysql_installed.rc == 1
+  tags: mysql
+
+- name: start mysql
+  service: name=mysqld enabled=yes state=started
+  when: mysql_installed.rc == 1
+  tags: mysql
+
+- name: upload .tmp.my.cnf
+  template: src=.tmp.my.cnf dest=/tmp/.tmp.my.cnf
+  when: mysql_installed.rc == 1
+  tags: mysql
+
+- name: get tmp password
+  shell: cat /var/log/mysqld.log | grep "temporary password" | awk '{print $11}'
+  register: tmp_db_password
+  when: mysql_installed.rc == 1
+  tags: mysql
+
+- name: set new password for root
+  shell: mysql --defaults-file=/tmp/.tmp.my.cnf -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '{{ db_root_password }}'"
+  when: mysql_installed.rc == 1
+  tags: mysql
