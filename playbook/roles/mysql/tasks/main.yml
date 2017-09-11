@@ -14,3 +14,11 @@
   file: path="/var/lib/mysql/" state=absent
   when: mysql_installed.rc == 1
   tags: mysql
+
+- name: install mysql rpm from remote repo
+  yum:
+    name: http://dev.mysql.com/get/mysql57-community-release-el7-8.noarch.rpm
+    state: present
+
+- name: install mysql
+  yum: name=mysql-community-server state=present
