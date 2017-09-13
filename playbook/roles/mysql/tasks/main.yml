@@ -73,7 +73,7 @@
   tags: mysql
 
 - name: upload sql
-  copy: src="create_table.sql" dest="/tmp/create_table.sql" mode=0755
+  copy: src="create_tables.sql" dest="/tmp/create_tables.sql" mode=0755
   when: mysql_installed.rc == 1
   tags: mysql
 
@@ -81,7 +81,7 @@
   mysql_db:
     name: {{ db_database }}
     state: import
-    target: /tmp/create_table.sql
+    target: /tmp/create_tables.sql
   when: mysql_installed.rc == 1
   tags: mysql
 
