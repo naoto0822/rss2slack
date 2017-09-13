@@ -52,3 +52,27 @@
   shell: mysql --defaults-file=/tmp/.tmp.my.cnf -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '{{ db_root_password }}'"
   when: mysql_installed.rc == 1
   tags: mysql
+
+- name: upload .my.cnf
+  template: src=.my.cnf dest=~/.my.cnf
+  when: mysql_installed.rc == 1
+  tags: mysql
+
+- name: create database
+  mysql_db: name={{ db_database }} state=present
+  when: mysql_installed.rc == 1
+  tags: mysql
+
+- name: create user
+  mysql_user:
+    name: {{ db_user }}
+    password: {{ db_password }}
+    priv: '{{ db_database }}.*:ALL,GRANT'
+    state: present
+  when: mysql_installed.rc == 1
+  tags: mysql
+
+- name: restart mysql
+  service: name=mysqld state=restarted
+  when: mysql_installed.rc == 1
+  tags: mysql
