@@ -72,6 +72,19 @@
   when: mysql_installed.rc == 1
   tags: mysql
 
+- name: upload sql
+  copy: src="create_table.sql" dest="/tmp/create_table.sql" mode=0755
+  when: mysql_installed.rc == 1
+  tags: mysql
+
+- name: create table
+  mysql_db:
+    name: {{ db_database }}
+    state: import
+    target: /tmp/create_table.sql
+  when: mysql_installed.rc == 1
+  tags: mysql
+
 - name: restart mysql
   service: name=mysqld state=restarted
   when: mysql_installed.rc == 1
