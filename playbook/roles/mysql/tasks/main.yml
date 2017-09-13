@@ -65,8 +65,8 @@
 
 - name: create user
   mysql_user:
-    name: {{ db_user }}
-    password: {{ db_password }}
+    name: '{{ db_user }}'
+    password: '{{ db_password }}'
     priv: '{{ db_database }}.*:ALL,GRANT'
     state: present
   when: mysql_installed.rc == 1
@@ -79,7 +79,7 @@
 
 - name: create table
   mysql_db:
-    name: {{ db_database }}
+    name: '{{ db_database }}'
     state: import
     target: /tmp/create_tables.sql
   when: mysql_installed.rc == 1
