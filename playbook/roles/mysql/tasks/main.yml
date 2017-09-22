@@ -37,14 +37,14 @@
   when: mysql_installed.rc == 1
   tags: mysql
 
-- name: upload .tmp.my.cnf
-  template: src=.tmp.my.cnf dest=/tmp/.tmp.my.cnf
-  when: mysql_installed.rc == 1
-  tags: mysql
-
 - name: get tmp password
   shell: cat /var/log/mysqld.log | grep "temporary password" | awk '{print $11}'
   register: tmp_db_password
+  when: mysql_installed.rc == 1
+  tags: mysql
+
+- name: upload .tmp.my.cnf
+  template: src=.tmp.my.cnf dest=/tmp/.tmp.my.cnf
   when: mysql_installed.rc == 1
   tags: mysql
 
