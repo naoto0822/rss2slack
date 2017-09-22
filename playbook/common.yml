@@ -1,7 +1,0 @@
----
-- hosts: dev
-  become: yes
-  roles:
-    - common
-  vars_files:
-    - ../private/rss2slack/external_vars.yml
