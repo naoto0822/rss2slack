@@ -5,13 +5,13 @@
   failed_when: mysql_installed.rc not in [0, 1]
   tags: mysql
 
-- name: remove mariaDB
+- name: remove mariaDB libs
   yum: name=mariadb-libs state=absent
   when: mysql_installed.rc == 1
   tags: mysql
 
 - name: delete mariaDB path
-  file: path="/var/lib/mysql/" state=absent
+  file: path=/var/lib/mysql/ state=absent
   when: mysql_installed.rc == 1
   tags: mysql
 
@@ -37,13 +37,13 @@
   when: mysql_installed.rc == 1
   tags: mysql
 
-- name: get tmp password
+- name: get tmp password for root
   shell: cat /var/log/mysqld.log | grep "temporary password" | awk '{print $11}'
   register: tmp_db_password
   when: mysql_installed.rc == 1
   tags: mysql
 
-- name: upload .tmp.my.cnf
+- name: upload .tmp.my.cnf for root
   template: src=.tmp.my.cnf dest=/tmp/.tmp.my.cnf
   when: mysql_installed.rc == 1
   tags: mysql
@@ -53,35 +53,40 @@
   when: mysql_installed.rc == 1
   tags: mysql
 
-- name: upload .my.cnf
-  template: src=.my.cnf dest=~/.my.cnf
+- name: upload .my.cnf for root
+  template: src=.my.cnf dest=/tmp/.my.cnf
   when: mysql_installed.rc == 1
   tags: mysql
 
 - name: create database
-  mysql_db: name={{ db_database }} state=present
+  mysql_db:
+    name: {{ db_database }}
+    config_file: /tmp/.my.cnf
+    state: present
   when: mysql_installed.rc == 1
   tags: mysql
 
 - name: create user
   mysql_user:
-    name: '{{ db_user }}'
-    password: '{{ db_password }}'
+    name: {{ db_user }}
+    password: {{ db_password }}
     priv: '{{ db_database }}.*:ALL,GRANT'
+    config_file: /tmp/.my.cnf
     state: present
   when: mysql_installed.rc == 1
   tags: mysql
 
-- name: upload sql
-  copy: src="create_tables.sql" dest="/tmp/create_tables.sql" mode=0755
+- name: upload create_tables.sql
+  copy: src=create_tables.sql dest=/tmp/create_tables.sql mode=0755
   when: mysql_installed.rc == 1
   tags: mysql
 
-- name: create table
+- name: exec create_tables.sql
   mysql_db:
-    name: '{{ db_database }}'
+    name: {{ db_database }}
     state: import
     target: /tmp/create_tables.sql
+    config_file: /tmp/.my.cnf
   when: mysql_installed.rc == 1
   tags: mysql
 
