@@ -90,6 +90,11 @@
   when: mysql_installed.rc == 1
   tags: mysql
 
+- name: upload my.cnf
+  copy: src=my.cnf dest=/etc/my.cnf
+  when: mysql_installed.rc == 1
+  tags: mysql
+
 - name: restart mysql
   service: name=mysqld state=restarted
   when: mysql_installed.rc == 1
