@@ -1,6 +1,2 @@
 ---
-db_database: rss2slack
-db_user: rss2slack
-db_password: Password-1
-db_root_password: Password-1
 
