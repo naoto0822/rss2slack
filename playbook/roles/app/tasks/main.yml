@@ -1,0 +1,72 @@
+---
+- name: create app log dir
+  file:
+    path: /var/log/rss2slack
+    state: directory
+    owner: rss2slack
+    groups: wheel
+  tags: app
+
+- name: create unicorn log dir
+  file:
+    path: /var/log/unicorn
+    state: directory
+    owner: rss2slack
+    groups: wheel
+  tags: app
+
+- name: create nginx log dir
+  file:
+    path: /var/log/nginx
+    state: directory
+    owner: nginx
+    groups: nginx
+  tags: app
+
+- name: create mysql log dir
+  file:
+    path: /var/log/mysql
+    state: directory
+    owner: mysql
+    group: mysql
+  tags: app
+
+- name: create rss2slack conf dir
+  file:
+    path: /etc/rss2slack
+    state: directory
+  tags: app
+
+- name: create unicorn conf dir
+  file:
+    path: /etc/unicorn
+    state: directory
+  tags: app
+
+- name: set dev conf
+  template:
+    src: dev_rss2slack_conf.yml
+    dest: /etc/rss2slack/rss2slack_conf.yml
+  when: inventory_hostname in groups['dev']
+  tags: app
+
+- name: set prod conf
+  template:
+    src: prod_rss2slack_conf.yml
+    dest: /etc/rss2slack/rss2slack_conf.yml
+  when: inventory_hostname in groups['prod']
+  tags: app
+
+- name: set dev unicorn conf
+  template:
+    src: dev_unicorn_conf.rb
+    dest: /etc/unicorn/unicorn_conf.rb
+  when: inventory_hostname in groups['dev']
+  tags: app
+
+- name: set prod unicorn conf
+  template:
+    src: prod_unicorn_conf.rb
+    dest: /etc/unicorn/unicorn.rb
+  when: inventory_hostname in groups['prod']
+  tags: app

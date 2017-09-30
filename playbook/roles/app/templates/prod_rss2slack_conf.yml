@@ -1,0 +1,15 @@
+slack:
+  incoming_webhooks_url: '{{ prod_incoming_webhooks_url }}'
+  outgoing_webhooks_token: '{{ prod_outgoing_webhooks_token }}'
+  accept_team_domain: '{{ prod_accept_team_domain }}'
+  accept_channel_id: '{{ prod_accept_channel_id }}'
+logger:
+  runner:
+    path: "/var/log/rss2slack/runner.log"
+  app:
+    path: "/var/log/rss2slack/app.log"
+mysql:
+  host: '{{ prod_db_host }}'
+  database: '{{ db_database }}'
+  username: '{{ db_user }}'
+  password: '{{ db_password }}'
