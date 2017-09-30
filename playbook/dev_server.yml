@@ -7,5 +7,6 @@
     - nginx
     - ruby
     - mysql
+    - app
   vars_files:
     - ../private/rss2slack/external_vars.yml
