@@ -4,7 +4,7 @@
     path: /var/log/rss2slack
     state: directory
     owner: rss2slack
-    groups: wheel
+    group: wheel
   tags: app
 
 - name: create unicorn log dir
@@ -12,7 +12,7 @@
     path: /var/log/unicorn
     state: directory
     owner: rss2slack
-    groups: wheel
+    group: wheel
   tags: app
 
 - name: create nginx log dir
@@ -20,7 +20,7 @@
     path: /var/log/nginx
     state: directory
     owner: nginx
-    groups: nginx
+    group: nginx
   tags: app
 
 - name: create mysql log dir
