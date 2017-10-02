@@ -39,7 +39,7 @@ set :format_options, command_output: true, log_file: "log/capistrano.log", color
 # set :keep_releases, 5
 
 # capistrano3/unicorn
-set :unicorn_pid, -> { "/tmp/unicorn.pid") }
+set :unicorn_pid, -> { "/tmp/unicorn.pid" }
 set :unicorn_config_path, -> { "/etc/unicorn/unicorn_conf.rb" }
 
 after 'deploy:publishing', 'deploy:restart'
