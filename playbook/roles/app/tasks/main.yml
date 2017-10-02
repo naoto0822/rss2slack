@@ -1,4 +1,12 @@
 ---
+- name: create exec app dir
+  file:
+    path: /var/www
+    state: directory
+    owner: rss2slack
+    group: wheel
+  tags: app
+
 - name: create app log dir
   file:
     path: /var/log/rss2slack
