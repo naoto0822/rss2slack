@@ -1,21 +1,24 @@
 # config valid only for current version of Capistrano
 lock "3.9.1"
 
-set :application, "my_app_name"
-set :repo_url, "git@example.com:me/my_repo.git"
+APP_NAME = "rss2slack".freeze
+GIT_URL = "https://github.com/naoto0822/rss2slack.git".freeze
+
+set :application, "#{APP_NAME}"
+set :repo_url, "#{GIT_URL}"
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
 # Default deploy_to directory is /var/www/my_app_name
-# set :deploy_to, "/var/www/my_app_name"
+set :deploy_to, "/var/www/"
 
 # Default value for :format is :airbrussh.
 # set :format, :airbrussh
 
 # You can configure the Airbrussh format using :format_options.
 # These are the defaults.
-# set :format_options, command_output: true, log_file: "log/capistrano.log", color: :auto, truncate: :auto
+set :format_options, command_output: true, log_file: "log/capistrano.log", color: :auto, truncate: :auto
 
 # Default value for :pty is false
 # set :pty, true
@@ -34,3 +37,14 @@ set :repo_url, "git@example.com:me/my_repo.git"
 
 # Default value for keep_releases is 5
 # set :keep_releases, 5
+
+# capistrano3/unicorn
+set :unicorn_pid, -> { "/tmp/unicorn.pid") }
+set :unicorn_config_path, -> { "/etc/unicorn/unicorn_conf.rb" }
+
+after 'deploy:publishing', 'deploy:restart'
+namespace :deploy do
+  task :restart do
+    invoke 'unicorn:restart'
+  end
+end
