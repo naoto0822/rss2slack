@@ -7,7 +7,7 @@
 # server "example.com", user: "deploy", roles: %w{app web}, other_property: :other_value
 # server "db.example.com", user: "deploy", roles: %w{db}
 
-
+server "192.168.56.30", user: "rss2slack", roles: %w{app}
 
 # role-based syntax
 # ==================
@@ -21,7 +21,7 @@
 # role :web, %w{user1@primary.com user2@additional.com}, other_property: :other_value
 # role :db,  %w{deploy@example.com}
 
-
+role :app, %w{192.168.56.30}
 
 # Configuration
 # =============
@@ -31,7 +31,7 @@
 # http://capistranorb.com/documentation/getting-started/configuration/
 # Feel free to add new variables to customise your setup.
 
-
+set :branch, "master"
 
 # Custom SSH Options
 # ==================
@@ -41,11 +41,11 @@
 #
 # Global options
 # --------------
-#  set :ssh_options, {
-#    keys: %w(/home/rlisowski/.ssh/id_rsa),
-#    forward_agent: false,
-#    auth_methods: %w(password)
-#  }
+set :ssh_options, {
+  keys: %w(~/.ssh/id_rsa_dev),
+  forward_agent: false,
+  auth_methods: %w(publickey)
+}
 #
 # The server-based syntax can be used to override options:
 # ------------------------------------
