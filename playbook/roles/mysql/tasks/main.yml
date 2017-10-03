@@ -95,6 +95,11 @@
   when: mysql_installed.rc == 1
   tags: mysql
 
+- name: install mysql-devel
+  yum: name=mysql-devel state=present
+  when: mysql_installed.rc == 1
+  tags: mysql
+
 - name: restart mysql
   service: name=mysqld state=restarted
   when: mysql_installed.rc == 1
