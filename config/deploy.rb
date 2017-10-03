@@ -38,6 +38,9 @@ set :format_options, command_output: true, log_file: "log/capistrano.log", color
 # Default value for keep_releases is 5
 # set :keep_releases, 5
 
+# rbenv
+set :rbenv_custom_path, "/usr/local/rbenv"
+
 # capistrano3/unicorn
 set :unicorn_pid, -> { "/tmp/unicorn.pid" }
 set :unicorn_config_path, -> { "/etc/unicorn/unicorn_conf.rb" }
