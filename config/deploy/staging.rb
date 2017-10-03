@@ -7,7 +7,7 @@
 # server "example.com", user: "deploy", roles: %w{app web}, other_property: :other_value
 # server "db.example.com", user: "deploy", roles: %w{db}
 
-server "192.168.56.30", user: "rss2slack", roles: %w{app}
+server "192.168.56.30", user: "rss2slack", roles: %w{app db}
 
 # role-based syntax
 # ==================
@@ -22,6 +22,7 @@ server "192.168.56.30", user: "rss2slack", roles: %w{app}
 # role :db,  %w{deploy@example.com}
 
 role :app, %w{192.168.56.30}
+role :db, %w{192.168.56.30}
 
 # Configuration
 # =============
