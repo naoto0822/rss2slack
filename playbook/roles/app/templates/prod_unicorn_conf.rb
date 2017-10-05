@@ -1,6 +1,6 @@
 # /var/www/lib
-@dir = ENV["HOME"] + "/rss2slack"
 @app_name = "rss2slack"
+@dir = "/var/www/#{@app_name}"
 preload_app true
 
 worker_processes {{ prod_unicorn_worker_processes }} 
