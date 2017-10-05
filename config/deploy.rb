@@ -11,7 +11,7 @@ set :repo_url, "#{GIT_URL}"
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
 # Default deploy_to directory is /var/www/my_app_name
-set :deploy_to, "/var/www/"
+set :deploy_to, "/var/www/#{APP_NAME}"
 
 # Default value for :format is :airbrussh.
 # set :format, :airbrussh
