@@ -121,53 +121,6 @@ namespace :db do
   end
 end
 
-namespace :bootstrap do
-  desc 'setting local env'
-  task :local do
-    sh 'sudo mkdir -p /var/log/rss2slack'
-    sh 'sudo chown -R naoto /var/log/rss2slack'
-    sh 'sudo mkdir -p /var/log/unicorn'
-    sh 'sudo chown -R naoto /var/log/unicorn'
-    sh 'sudo mkdir -p /var/log/nginx'
-    sh 'sudo chown -R nginx:nginx /var/log/nginx'
-    sh 'sudo mkdir -p /etc/unicorn'
-    sh 'sudo mkdir -p /etc/rss2slack'
-    sh 'sudo cp -f ./conf/unicorn.local.rb /etc/unicorn'
-    sh 'sudo cp -f ./conf/nginx.local.conf /usr/local/etc/nginx/servers/rss2slack.conf'
-    sh 'sudo cp -f ./private/rss2slack/conf.local.yml /etc/rss2slack'
-  end
-
-  desc 'setting dev env'
-  task :dev do
-    sh 'sudo mkdir -p /var/log/rss2slack'
-    sh 'sudo chown -R naoto:wheel /var/log/rss2slack'
-    sh 'sudo mkdir -p /var/log/unicorn'
-    sh 'sudo chown -R naoto:wheel /var/log/unicorn'
-    sh 'sudo mkdir -p /var/log/nginx'
-    sh 'sudo chown -R nginx:nginx /var/log/nginx'
-    sh 'sudo mkdir -p /etc/unicorn'
-    sh 'sudo mkdir -p /etc/rss2slack'
-    sh 'sudo mkdir -p /var/log/mysql'
-    sh 'sudo chown -R mysql:mysql /var/log/mysql'
-    sh 'sudo cp -f ./conf/unicorn.development.rb /etc/unicorn'
-    sh 'sudo cp -f ./conf/nginx.development.conf /etc/nginx/conf.d/rss2slack.conf'
-    sh 'sudo rm -f /etc/nginx/conf.d/default.conf'
-    sh 'sudo cp -f ./conf/my.cnf /etc'
-    sh 'sudo cp -f ./private/rss2slack/conf.development.yml /etc/rss2slack'
-  end
-  
-  desc 'setting prod env'
-  task :prod do
-    sh 'mkdir -p /var/log/rss2slack'
-    sh 'mkdir -p /var/log/unicorn'
-    sh 'mkdir -p /tmp'
-    sh 'mkdir -p /etc/unicorn'
-    sh 'mkdir -p /etc/rss2slack'
-    sh 'cp -f ./conf/unicorn.production.rb /etc/unicorn'
-    sh 'cp -f ./private/rss2slack/conf.production.yml /etc/rss2slack'
-  end
-end
-
 namespace :env do
   desc 'set local env'
   task :local do
