@@ -1,3 +1,5 @@
+app:
+  env: 'test'
 slack:
   incoming_webhooks_url: 'https://hooks.slack.com/'
   outgoing_webhooks_token: 'TEST_TOKEN'

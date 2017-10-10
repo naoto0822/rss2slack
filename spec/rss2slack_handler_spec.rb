@@ -41,8 +41,8 @@ end
 
 describe R2S::Handler do
   before(:each) do
-    ENV['env'] = 'test'
-    @conf = R2S::Conf.new
+    path = File.expand_path(File.dirname(__FILE__)) + '/conf.test.yml'
+    @conf = R2S::Conf.new(conf_path: path)
     @logger = Logger.new(STDOUT)
     @db = Object.new
     @feed_model = R2S::FeedModel.new(@logger, @db)
