@@ -75,6 +75,6 @@
 - name: set prod unicorn conf
   template:
     src: prod_unicorn_conf.rb
-    dest: /etc/unicorn/unicorn.rb
+    dest: /etc/unicorn/unicorn_conf.rb
   when: inventory_hostname in groups['prod']
   tags: app
