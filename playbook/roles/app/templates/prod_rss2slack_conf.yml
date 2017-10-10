@@ -1,3 +1,5 @@
+app:
+  env: 'prod'
 slack:
   incoming_webhooks_url: '{{ prod_incoming_webhooks_url }}'
   outgoing_webhooks_token: '{{ prod_outgoing_webhooks_token }}'
