@@ -7,21 +7,27 @@ module R2S
     ENV_LOCAL = 'local'.freeze
     ENV_TEST = 'test'.freeze
 
+    DEFAULT_CONF_PATH = '/etc/rss2slack/rss2slack_conf.yml'.freeze
+
+    attr_reader :conf_path
+
     attr_accessor :webhook_url, :db_host, :db_name, :db_username,
                   :db_password, :slack_token, :accept_team_domain,
                   :accept_channel_id, :logger_runner_path, :logger_app_path
-    def initialize
-      @env = current_env
-
-      if @env.nil?
-        raise RuntimeError, 'environment var of env is not set.'
+    def initialize(conf_path:nil)
+      if conf_path.nil?
+        @conf_path = DEFAULT_CONF_PATH
+      else
+        @conf_path = conf_path
       end
 
       begin
-        @conf = YAML.load_file(conf_path)
+        @conf = YAML.load_file(@conf_path)
       rescue => e
         raise ArgumentError, "#{e.class}, #{e.backtrace}"
       end
+
+      @env = @conf['app']['env']
 
       @webhook_url = @conf['slack']['incoming_webhooks_url']
       @slack_token = @conf['slack']['outgoing_webhooks_token']
@@ -35,10 +41,6 @@ module R2S
       @db_name = @conf['mysql']['database']
       @db_username = @conf['mysql']['username']
       @db_password = @conf['mysql']['password']
-    end
-
-    def current_env
-      ENV['env']
     end
 
     def prod?
@@ -67,39 +69,6 @@ module R2S
 
     def valid_accept_channel_id?(id)
       id == @accept_channel_id
-    end
-
-    def conf_path
-      case @env
-      when ENV_PROD
-        prod_conf_path
-      when ENV_DEV
-        dev_conf_path
-      when ENV_LOCAL
-        local_conf_path
-      when ENV_TEST
-        test_conf_path
-      else
-        nil
-      end
-    end
-
-    private
-
-    def prod_conf_path
-      '/etc/rss2slack/conf.production.yml'
-    end
-
-    def dev_conf_path
-      '/etc/rss2slack/conf.development.yml'
-    end
-
-    def local_conf_path
-      '/etc/rss2slack/conf.local.yml'
-    end
-
-    def test_conf_path
-      File.expand_path(File.dirname(__FILE__)) + '/../../spec/conf.test.yml'
     end
   end
 end
