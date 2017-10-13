@@ -6,9 +6,9 @@ require 'yaml'
 require 'optparse'
 require_relative '../src/app/conf'
 
-ENV['env'] = 'local'
-conf = R2S::Conf.new
-url = 'http://localhost:8082/v1/slack/feed'
+conf = R2S::Conf.new(conf_path: "./conf.test.yml")
+secret_var = YAML.load_file("../private/rss2slack/external_vars.yml")
+url = 'http://192.168.56.30/v1/slack/feed'
 
 args = ARGV.getopts('t:')
 
@@ -20,10 +20,10 @@ end
 text = args['t']
 
 body = {
-  'token' => "#{conf.slack_token}",
+  'token' => secret_var["dev_outgoing_webhooks_token"],
   'team_id' => 'Personal',
-  'team_domain' => "#{conf.accept_team_domain}",
-  'channel_id' => "#{conf.accept_channel_id}",
+  'team_domain' => secret_var["dev_accept_team_domain"],
+  'channel_id' => secret_var["dev_accept_channel_id"],
   'channel_name' => 'dev-rss2slack',
   'timestamp' => 'timestamp_hoge',
   'user_id' => 'user_id_hoge',
