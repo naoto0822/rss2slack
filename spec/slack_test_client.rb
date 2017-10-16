@@ -6,6 +6,9 @@ require 'yaml'
 require 'optparse'
 require_relative '../src/app/conf'
 
+# valid text
+# "rss2slack_register, feed_name, url"
+
 conf = R2S::Conf.new(conf_path: "./conf.test.yml")
 secret_var = YAML.load_file("../private/rss2slack/external_vars.yml")
 url = 'http://192.168.56.30/v1/slack/feed'
