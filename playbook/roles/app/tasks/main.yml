@@ -78,3 +78,15 @@
     dest: /etc/unicorn/unicorn_conf.rb
   when: inventory_hostname in groups['prod']
   tags: app
+
+- name: set run script
+  copy:
+    src: run_rss2slack.sh
+    dest: /opt/run_rss2slack.sh
+    mode: 0755
+
+- name: set service script
+  copy:
+    src: rss2slack.service
+    dest: /etc/systemd/system/rss2slack.service
+    mode: 0755
