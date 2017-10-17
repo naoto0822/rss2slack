@@ -45,7 +45,8 @@ set :rbenv_custom_path, "/usr/local/rbenv"
 set :unicorn_pid, -> { "/tmp/unicorn.pid" }
 set :unicorn_config_path, -> { "/etc/unicorn/unicorn_conf.rb" }
 
-after 'deploy:publishing', 'deploy:restart', 'deploy:enabled_service'
+after 'deploy:publishing', 'deploy:restart'
+after 'deploy:finishing', 'deploy:enabled_service'
 namespace :deploy do
   task :restart do
     invoke 'unicorn:restart'
