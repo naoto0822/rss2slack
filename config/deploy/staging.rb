@@ -42,6 +42,7 @@ set :branch, "master"
 #
 # Global options
 # --------------
+set :user, "rss2slack"
 set :ssh_options, {
   keys: %w(~/.ssh/id_rsa_dev),
   forward_agent: false,
