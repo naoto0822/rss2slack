@@ -37,6 +37,9 @@
 - name: start ntpd
   service: name=ntpd state=started enabled=yes
 
+- name: start crond
+  service: name=crond state=started enabled=yes
+
 - name: show SELinux
   shell: getenforce
   tags: selinux

@@ -101,3 +101,42 @@
     dest: /etc/systemd/system/rss2slack.service
     mode: 0755
   tags: app
+
+- name: set cron for article worker
+  copy:
+    src: cron_article_worker
+    dest: /etc/cron.d/cron_article_worker
+    mode: 0644
+    owner: root
+    group: root
+  tags: app
+
+- name: set cron for feed worker
+  copy:
+    src: cron_feed_worker
+    dest: /etc/cron.d/cron_feed_worker
+    mode: 0644
+    owner: root
+    group: root
+  tags: app
+
+- name: set exec article worker script
+  copy:
+    src: exec_article_worker.sh
+    dest: /opt/exec_article_worker.sh
+    mode: 0755
+  tags: app
+
+- name: set exec feed worker script
+  copy:
+    src: exec_feed_worker.sh
+    dest: /opt/exec_feed_worker.sh
+    mode: 0755
+  tags: app
+
+- name: restart crond.service
+  service:
+    name: crond
+    state: restarted
+    enabled: yes
+  tags: app
