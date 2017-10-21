@@ -52,6 +52,8 @@ namespace :deploy do
     invoke 'unicorn:restart'
   end
   task :enabled_service do
-    sh 'sudo systemctl enabled rss2slack'
+    on roles(:app) do
+      execute :sudo, :systemctl, "enable", "rss2slack"
+    end
   end
 end
