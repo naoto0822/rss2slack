@@ -1,0 +1,4 @@
+# Run the rss2slack runner
+SHELL=/bin/bash
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+* 1 * * * rss2slack /opt/exec_article_worker.sh
