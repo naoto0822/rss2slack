@@ -79,14 +79,25 @@
   when: inventory_hostname in groups['prod']
   tags: app
 
-- name: set run script
+- name: set dev exec app script
   copy:
-    src: run_rss2slack.sh
-    dest: /opt/run_rss2slack.sh
+    src: dev_exec_rss2slack.sh
+    dest: /opt/exec_rss2slack.sh
     mode: 0755
+  when: inventory_hostname in groups['dev']
+  tags: app
+
+- name: set prod exec app script
+  copy:
+    src: prod_exec_rss2slack.sh
+    dest: /opt/exec_rss2slack.sh
+    mode: 0755
+  when: inventory_hostname in groups['prod']
+  tags: app
 
 - name: set service script
   copy:
     src: rss2slack.service
     dest: /etc/systemd/system/rss2slack.service
     mode: 0755
+  tags: app

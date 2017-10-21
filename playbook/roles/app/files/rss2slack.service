@@ -2,7 +2,7 @@
 Description = start rss2slack deamon
 
 [Service]
-ExecStart = /opt/run_rss2slack.sh
+ExecStart = /opt/exec_rss2slack.sh
 Restart = always
 Type = simple
 
