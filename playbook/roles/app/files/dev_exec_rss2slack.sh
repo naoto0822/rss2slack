@@ -4,6 +4,8 @@ PID_COUNT=$(ps aux | grep "unicorn master" | grep -v grep | wc -l)
 
 if [ $PID_COUNT -eq 0 ]; then
   if [ -e /tmp/unicorn.pid ]; then
+    PID=$(cat /tmp/unicorn.pid)
+    kill $PID
     rm -f /tmp/unicorn.pid
   fi
   if [ -e /tmp/unicorn.sock ]; then
