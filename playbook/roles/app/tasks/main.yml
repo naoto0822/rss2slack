@@ -43,18 +43,24 @@
   file:
     path: /etc/rss2slack
     state: directory
+    owner: rss2slack
+    group: wheel
   tags: app
 
 - name: create unicorn conf dir
   file:
     path: /etc/unicorn
     state: directory
+    owner: rss2slack
+    group: wheel
   tags: app
 
 - name: set dev conf
   template:
     src: dev_rss2slack_conf.yml
     dest: /etc/rss2slack/rss2slack_conf.yml
+    owner: rss2slack
+    group: wheel
   when: inventory_hostname in groups['dev']
   tags: app
 
@@ -62,6 +68,8 @@
   template:
     src: prod_rss2slack_conf.yml
     dest: /etc/rss2slack/rss2slack_conf.yml
+    owner: rss2slack
+    group: wheel
   when: inventory_hostname in groups['prod']
   tags: app
 
@@ -69,6 +77,8 @@
   template:
     src: dev_unicorn_conf.rb
     dest: /etc/unicorn/unicorn_conf.rb
+    owner: rss2slack
+    group: wheel
   when: inventory_hostname in groups['dev']
   tags: app
 
@@ -76,6 +86,8 @@
   template:
     src: prod_unicorn_conf.rb
     dest: /etc/unicorn/unicorn_conf.rb
+    owner: rss2slack
+    group: wheel
   when: inventory_hostname in groups['prod']
   tags: app
 
@@ -125,6 +137,8 @@
     src: exec_article_worker.sh
     dest: /opt/exec_article_worker.sh
     mode: 0755
+    owner: rss2slack
+    group: wheel
   tags: app
 
 - name: set exec feed worker script
@@ -132,6 +146,8 @@
     src: exec_feed_worker.sh
     dest: /opt/exec_feed_worker.sh
     mode: 0755
+    owner: rss2slack
+    group: wheel
   tags: app
 
 - name: restart crond.service
