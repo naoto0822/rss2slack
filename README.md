@@ -34,8 +34,8 @@
 
 - [☓] build in CI service
 - [☓] implement spec
-- [ ] deploy
-- [ ] ansible
+- [☓] deploy
+- [☓] ansible
 - [ ] SSL
 
 reference  
