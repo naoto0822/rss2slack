@@ -7,12 +7,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "centos/7"
 
   config.vm.define :staging do |staging|
-    staging.vm.host = "staging"
+    staging.vm.hostname = "staging"
     staging.vm.network "private_network", ip: "192.168.56.30"
   end
 
   config.vm.define :dev do |dev|
-    dev.vm.host = "dev"
+    dev.vm.hostname = "dev"
     dev.vm.network "private_network", ip: "192.168.56.40"
   end
   
