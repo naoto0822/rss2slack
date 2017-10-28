@@ -1,93 +1,63 @@
 require 'rake'
 require 'yaml'
 
-ENV_LOCAL = 'local'.freeze
-ENV_DEV = 'development'.freeze
-ENV_PROD = 'production'.freeze
-
 # !!!!!!!!!!!!!!
 # For Production
 # !!!!!!!!!!!!!!
-# TODO:
+
 task :default => [:bundle_install, :test]
 
 namespace :worker do
   namespace :feed do
-    desc 'start worker for local'
-    task :local => ['env:local', 'db:local:start'] do
-      sh 'bundle exec ruby src/exec/feed_worker.rb'
-    end
-
-    desc 'start worker for dev'
-    task :dev => ['env:dev'] do
-      sh 'bundle exec ruby src/exec/feed_worker.rb'
-    end
-
-    desc 'start worker for prod'
-    task :prod => ['env:prod'] do
-      sh 'bundle exec ruby src/exec/feed_worker.rb'
+    desc 'start feed worker'
+    task :start => ['db:start'] do
+      sh 'bundle exec ruby ./src/exec/feed_worker.rb'
     end
   end
 
   namespace :article do
-    desc 'start article worker for local'
-    task :local => ['env:local', 'db:local:start'] do
-      sh 'bundle exec ruby src/exec/article_worker.rb'
-    end
-
-    desc 'start article worker for dev'
-    task :dev => ['env:dev'] do
-      sh 'bundle exec ruby src/exec/article_worker.rb'
-    end
-
-    desc 'start article worker for prod'
-    task :prod => ['env:prod'] do
-      sh 'bundle exec ruby src/exec/article_worker.rb'
-    end
+    desc 'start article worker'
+    task :start => ['db:start'] do
+      sh 'bundle exec ruby ./src/exec/article_worker.rb'
+    end  
   end
 end
 
-namespace :api do
-  desc 'start api for local'
-  task :local => ['env:local', 'db:start', 'unicorn:start', 'nginx:start']
-
-  desc 'start api for dev'
-  task :dev => ['env:dev', 'db:start', 'unicorn:start', 'nginx:start']
-
-  desc 'start api for prod'
-  task :prod => ['env:production', 'db:start', 'unicorn:start', 'nginx:start']
+namespace :app do
+  desc 'start app'
+  task :start => [
+    'db:start',
+    'unicorn:start',
+    'nginx:start'
+  ]
 end
 
 namespace :nginx do
   desc 'start nginx'
   task :start do
-    sh 'systemctl start nginx' if is_linux?
-    sh 'sudo nginx' if is_osx?
+    sh 'systemctl start nginx'
   end
 
   desc 'stop nginx'
   task :stop do
-    sh 'systemctl stop nginx' if is_linux?
-    sh 'sudo nginx -s stop' if is_osx?
+    sh 'systemctl stop nginx'
   end
 
   desc 'restart nginx'
   task :restart do
-    sh 'systemctl reload nginx' if is_linux?
-    sh 'sudo nginx -s reload' if is_osx?
+    sh 'systemctl reload nginx'
   end
 end
 
 namespace :unicorn do
   desc 'start unicorn'
   task :start do
-    env = ENV['env']
+    env = conf_file()["app"]["env"]
     if env.nil? || env.empty?
       raise ArgumentError, 'required set env.'
     end
-    conf_file = "unicorn.#{env}.rb"
     env_opt = unicorn_env(env)
-    sh "bundle exec unicorn -E #{env_opt} -c /etc/unicorn/#{conf_file} -D"
+    sh "bundle exec unicorn -E #{env_opt} -c /etc/unicorn/unicorn_conf.rb -D"
   end
 
   desc 'stop unicorn'
@@ -102,51 +72,29 @@ end
 namespace :db do
   desc 'start db'
   task :start do
-    sh 'systemctl start mysqld' if is_linux?
-    sh 'mysql.server start' if is_osx?
+    sh 'systemctl start mysqld'
   end
 
   desc 'stop db'
   task :stop do
-    sh 'systemctl stop mysqld' if is_linux?
-    sh 'mysql.server stop' if is_osx?
+    sh 'systemctl stop mysqld'
   end
 
-  desc 'setup user, database'
+  desc 'setup database, user, table'
   task :setup do
-    sh 'sh ./scripts/create_mysql_root_user.sh'
-    sh 'sh ./private/rss2slack/alter_db_root_pass.sh'
-    sh 'mysql < ./private/rss2slack/setup_db.sql'
-    sh 'mysql rss2slack < ./scripts/create_tables.sql'
+    sh 'sh ./scripts/setup_mysql.sh'
   end
 end
 
-namespace :env do
-  desc 'set local env'
-  task :local do
-    ENV['env'] = ENV_LOCAL
-  end
+desc 'exec bundle install'
+task :bundle_install do
+  bundle_install
+end
 
-  desc 'set dev env'
-  task :dev do
-    ENV['env'] = ENV_DEV
-  end
-
-  desc 'set prod env'
-  task :prod do
-    ENV['env'] = ENV_PROD
-  end
-
-  desc 'exec bundle install'
-  task :bundle_install do
-    bundle_install
-  end
-
-  desc 'update bundler'
-  task :update_bundler do
-    sh 'gem install bundler'
-    sh 'gem update bundler'
-  end
+desc 'update bundler'
+task :update_bundler do
+  sh 'gem install bundler'
+  sh 'gem update bundler'
 end
 
 desc 'exec rspec'
@@ -165,25 +113,11 @@ def bundle_install
   sh 'bundle install --path vendor/bundle'
 end
 
-def what_os
-  RUBY_PLATFORM
-end
-
-def is_osx?
-  what_os.include?('darwin')
-end
-
-def is_linux?
-  what_os.include?('linux')
-end
-
 def unicorn_env(env)
   case env
-  when 'production'
+  when 'prod'
     'production'
-  when 'development'
-    'development'
-  when 'local'
+  when 'dev'
     'development'
   else
     nil
@@ -193,7 +127,7 @@ end
 def conf_file
   path = conf_path
   if path.nil?
-    raise RuntimeError, 'not set env.'
+    raise RuntimeError, 'not set conf_file'
   end
   YAML.load_file(path)
 rescue => e
@@ -201,6 +135,5 @@ rescue => e
 end
 
 def conf_path
-  env = ENV['env']
-  "/etc/rss2slack/conf.#{env}.yml"
+  "/etc/rss2slack/rss2slack_conf.yml"
 end
