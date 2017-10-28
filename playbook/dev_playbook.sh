@@ -1,6 +1,6 @@
 #!/bin/sh
 
-PRIVATE_KEY=$(vagrant ssh-config | grep "IdentityFile" | awk '{print $2}');
+PRIVATE_KEY=$(vagrant ssh-config | grep "IdentityFile" | grep "/dev/" | awk '{print $2}');
 ansible-playbook -i hosts \
                  -l dev \
                  --private-key $PRIVATE_KEY \
