@@ -1,0 +1,17 @@
+app:
+  env: 'dev'
+slack:
+  incoming_webhooks_url: '{{ dev_incoming_webhooks_url }}'
+  outgoing_webhooks_token: '{{ dev_outgoing_webhooks_token }}'
+  accept_team_domain: '{{ dev_accept_team_domain }}'
+  accept_channel_id: '{{ dev_accept_channel_id }}'
+logger:
+  runner:
+    path: "/var/log/rss2slack/runner.log"
+  app:
+    path: "/var/log/rss2slack/app.log"
+mysql:
+  host: '{{ dev_db_host }}'
+  database: '{{ db_database }}'
+  username: '{{ db_user }}'
+  password: '{{ db_password }}'
