@@ -64,6 +64,15 @@
   when: inventory_hostname in groups['dev']
   tags: app
 
+- name: set staging conf
+  template:
+    src: staging_rss2slack_conf.yml
+    dest: /etc/rss2slack/rss2slack_conf.yml
+    owner: rss2slack
+    group: wheel
+  when: inventory_hostname in groups['staging']
+  tags: app
+
 - name: set prod conf
   template:
     src: prod_rss2slack_conf.yml
@@ -82,6 +91,15 @@
   when: inventory_hostname in groups['dev']
   tags: app
 
+- name: set staging unicorn conf
+  template:
+    src: staging_unicorn_conf.rb
+    dest: /etc/unicorn/unicorn_conf.rb
+    owner: rss2slack
+    group: wheel
+  when: inventory_hostname in groups['staging']
+  tags: app
+
 - name: set prod unicorn conf
   template:
     src: prod_unicorn_conf.rb
@@ -91,12 +109,12 @@
   when: inventory_hostname in groups['prod']
   tags: app
 
-- name: set dev exec app script
+- name: set staging exec app script
   copy:
-    src: dev_exec_rss2slack.sh
+    src: staging_exec_rss2slack.sh
     dest: /opt/exec_rss2slack.sh
     mode: 0755
-  when: inventory_hostname in groups['dev']
+  when: inventory_hostname in groups['staging']
   tags: app
 
 - name: set prod exec app script
@@ -112,6 +130,7 @@
     src: rss2slack.service
     dest: /etc/systemd/system/rss2slack.service
     mode: 0755
+  when: (inventory_hostname in groups['staging']) or (inventory_hostname in groups['prod'])
   tags: app
 
 - name: set cron for article worker
@@ -121,6 +140,7 @@
     mode: 0644
     owner: root
     group: root
+  when: (inventory_hostname in groups['staging']) or (inventory_hostname in groups['prod'])
   tags: app
 
 - name: set cron for feed worker
@@ -130,6 +150,7 @@
     mode: 0644
     owner: root
     group: root
+  when: (inventory_hostname in groups['staging']) or (inventory_hostname in groups['prod'])
   tags: app
 
 - name: set exec article worker script
@@ -139,6 +160,7 @@
     mode: 0755
     owner: rss2slack
     group: wheel
+  when: (inventory_hostname in groups['staging']) or (inventory_hostname in groups['prod'])
   tags: app
 
 - name: set exec feed worker script
@@ -148,6 +170,7 @@
     mode: 0755
     owner: rss2slack
     group: wheel
+  when: (inventory_hostname in groups['staging']) or (inventory_hostname in groups['prod'])
   tags: app
 
 - name: restart crond.service

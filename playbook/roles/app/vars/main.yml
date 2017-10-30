@@ -1,5 +1,6 @@
 ---
 dev_unicorn_worker_processes: 1
+staging_unicorn_worker_processes: 1
 prod_unicorn_worker_processes: 1
 unicorn_timeout: 300
 
