@@ -1,10 +1,6 @@
 require 'rake'
 require 'yaml'
 
-# !!!!!!!!!!!!!!
-# For Production
-# !!!!!!!!!!!!!!
-
 task :default => [:bundle_install, :test]
 
 namespace :worker do
