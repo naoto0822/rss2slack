@@ -133,24 +133,44 @@
   when: (inventory_hostname in groups['staging']) or (inventory_hostname in groups['prod'])
   tags: app
 
-- name: set cron for article worker
+- name: set staging cron for article worker
   copy:
-    src: cron_article_worker
+    src: staging_cron_article_worker
     dest: /etc/cron.d/cron_article_worker
     mode: 0644
     owner: root
     group: root
-  when: (inventory_hostname in groups['staging']) or (inventory_hostname in groups['prod'])
+  when: inventory_hostname in groups['staging']
   tags: app
 
-- name: set cron for feed worker
+- name: set prod cron for article worker
   copy:
-    src: cron_feed_worker
+    src: prod_cron_article_worker
+    dest: /etc/cron.d/cron_article_worker
+    mode: 0644
+    owner: root
+    group: root
+  when: inventory_hostname in groups['prod']
+  tags: app
+
+- name: set staging cron for feed worker
+  copy:
+    src: staging_cron_feed_worker
     dest: /etc/cron.d/cron_feed_worker
     mode: 0644
     owner: root
     group: root
-  when: (inventory_hostname in groups['staging']) or (inventory_hostname in groups['prod'])
+  when: inventory_hostname in groups['staging']
+  tags: app
+
+- name: set prod cron for feed worker
+  copy:
+    src: prod_cron_feed_worker
+    dest: /etc/cron.d/cron_feed_worker
+    mode: 0644
+    owner: root
+    group: root
+  when: inventory_hostname in groups['prod']
   tags: app
 
 - name: set exec article worker script

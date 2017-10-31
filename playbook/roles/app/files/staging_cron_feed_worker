@@ -1,0 +1,4 @@
+# Run the feed worker
+SHELL=/bin/bash
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+*/1 * * * * rss2slack /bin/bash -lc "sh /opt/exec_feed_worker.sh" 1>> /tmp/cron_feed_stdout.log 2>> /tmp/cron_feed_error.log

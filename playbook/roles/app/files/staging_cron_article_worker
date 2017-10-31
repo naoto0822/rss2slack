@@ -1,0 +1,4 @@
+# Run the article worker
+SHELL=/bin/bash
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+*/5 * * * * rss2slack /bin/bash -lc "sh /opt/exec_article_worker.sh" 1>> /tmp/cron_article_stdout.log 2>> /tmp/cron_article_error.log
