@@ -24,13 +24,19 @@
   tags: nginx
 
 - name: upload dev default.conf
-  template: src=dev.default.conf dest=/etc/nginx/conf.d/default.conf
+  template: src=dev_default.conf dest=/etc/nginx/conf.d/default.conf
   notify: restart nginx
   when: inventory_hostname in groups['dev'] and nginx_installed.rc == 1
   tags: nginx
 
+- name: upload staging default.conf
+  template: src=staging_default.conf dest=/etc/nginx/conf.d/default.conf
+  notify: restart nginx
+  when: inventory_hostname in groups['staging'] and nginx_installed.rc == 1
+  tags: nginx
+
 - name: upload prod default.conf
-  template: src=prod.default.conf dest=/etc/nginx/conf.d/default.conf
+  template: src=prod_default.conf dest=/etc/nginx/conf.d/default.conf
   notify: restart nginx
   when: inventory_hostname in groups['prod'] and nginx_installed.rc == 1
   tags: nginx
