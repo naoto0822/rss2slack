@@ -31,17 +31,17 @@ end
 namespace :nginx do
   desc 'start nginx'
   task :start do
-    sh 'systemctl start nginx'
+    sh 'sudo systemctl start nginx'
   end
 
   desc 'stop nginx'
   task :stop do
-    sh 'systemctl stop nginx'
+    sh 'sudo systemctl stop nginx'
   end
 
   desc 'restart nginx'
   task :restart do
-    sh 'systemctl reload nginx'
+    sh 'sudo systemctl reload nginx'
   end
 end
 
@@ -68,12 +68,12 @@ end
 namespace :db do
   desc 'start db'
   task :start do
-    sh 'systemctl start mysqld'
+    sh 'sudo systemctl start mysqld'
   end
 
   desc 'stop db'
   task :stop do
-    sh 'systemctl stop mysqld'
+    sh 'sudo systemctl stop mysqld'
   end
 
   desc 'setup database, user, table'
