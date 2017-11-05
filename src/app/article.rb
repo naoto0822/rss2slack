@@ -9,13 +9,13 @@ module R2S
       @title = title
       @body = body
       @url = url
-      @pub_date = check_pub_date(pub_date)
+      @pub_date = convert_date_time(pub_date)
       @created_at = created_at
     end
 
     private
 
-    def check_pub_date(date)
+    def convert_date_time(date)
       return nil if date.nil?
       time = Time.parse(date)
       time.strftime('%Y-%m-%d %H:%M:%S')
