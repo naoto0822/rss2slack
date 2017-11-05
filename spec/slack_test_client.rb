@@ -11,7 +11,7 @@ require_relative '../src/app/conf'
 
 conf = R2S::Conf.new(conf_path: "./conf.test.yml")
 secret_var = YAML.load_file("../private/rss2slack/external_vars.yml")
-url = 'http://192.168.56.30/v1/slack/feed'
+url = 'http://192.168.56.40/v1/slack/feed'
 
 args = ARGV.getopts('t:')
 
