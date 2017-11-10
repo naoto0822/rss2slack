@@ -32,10 +32,6 @@
 
 ## TODO
 
-- [☓] build in CI service
-- [☓] implement spec
-- [☓] deploy
-- [☓] ansible
 - [ ] SSL
 
 reference  
