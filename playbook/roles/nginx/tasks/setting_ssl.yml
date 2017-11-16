@@ -1,0 +1,10 @@
+---
+- name: create ssl certs dir for dev or staging
+  file:
+    path: /etc/ssl/certs
+    state: directory
+    owner: root
+    group: root
+  when: (inventory_hostname in groups['dev']) or (inventory_hostname in groups['staging'])
+
+  // TODO
