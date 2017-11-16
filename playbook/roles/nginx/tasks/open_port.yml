@@ -1,10 +1,8 @@
 ---
 - name: open http port
   firewalld: service=http permanent=true state=enabled immediate=yes zone=public
-  when: nginx_installed.rc == 1
   tags: nginx
 
 - name: open https port
   firewalld: service=https permanent=true state=enabled immediate=yes zone=public
-  when: nginx_installed.rc == 1
   tags: nginx
