@@ -2,3 +2,4 @@
 - include: install_nginx.yml
 - include: setting_conf.yml
 - include: open_port.yml
+- include: setting_ssl.yml
