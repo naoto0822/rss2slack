@@ -7,4 +7,22 @@
     group: root
   when: (inventory_hostname in groups['dev']) or (inventory_hostname in groups['staging'])
 
-  // TODO
+- name: create ssl private dir for dev or staging
+  file:
+    path: /etc/ssl/private
+    state: directory
+    owner: root
+    group: root
+  when: (inventory_hostname in groups['dev']) or (inventory_hostname in groups['staging'])
+
+- name: upload dev ssl certs
+  copy:
+    src: "{{ inventory_dir }}/../private/rss2slack/dev_rss2slack.crt"
+    dest: /etc/ssl/certs/rss2slack.crt
+  when: inventory_hostname in groups['dev']
+
+- name: upload dev ssl key
+  copy:
+    src: "{{ inventory_dir }}/../private/rss2slack/dev_rss2slack.key"
+    dest: /etc/ssl/private/rss2slack.key
+  when: inventory_hostname in groups['dev']
