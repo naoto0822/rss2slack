@@ -2,7 +2,7 @@
 - name: checking ssl certs dir
   stat:
     path: /etc/ssl/certs
-    register: is_certs_dir
+  register: is_certs_dir
   tags: nginx
 
 - name: create ssl certs dir for dev or staging
