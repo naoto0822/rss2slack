@@ -3,3 +3,7 @@ http_port: 80
 https_port: 443
 nginx_user: nginx
 worker_processes: 1
+
+dev_host: dev.rss2slack.co.jp
+staging_host: staging.rss2slack.co.jp
+prod_host: rss2slack.co.jp
