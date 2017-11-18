@@ -1,11 +1,17 @@
 ---
+- name: checking ssl certs dir
+  stat:
+    path: /etc/ssl/certs
+    register: is_certs_dir
+  tags: nginx
+
 - name: create ssl certs dir for dev or staging
   file:
     path: /etc/ssl/certs
     state: directory
     owner: root
     group: root
-  when: (inventory_hostname in groups['dev']) or (inventory_hostname in groups['staging'])
+  when: ((inventory_hostname in groups['dev']) or (inventory_hostname in groups['staging'])) and not is_certs_dir.stat.exists
   tags: nginx
 
 - name: create ssl private dir for dev or staging
