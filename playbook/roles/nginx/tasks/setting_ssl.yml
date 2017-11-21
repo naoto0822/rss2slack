@@ -36,3 +36,17 @@
     dest: /etc/ssl/private/rss2slack.key
   when: inventory_hostname in groups['dev']
   tags: nginx
+
+- name: upload staging ssl certs
+  copy:
+    src: "{{ inventory_dir }}/../private/rss2slack/staging_rss2slack.crt"
+    dest: /etc/ssl/certs/rss2slack.crt
+  when: inventory_hostname in groups['staging']
+  tags: nginx
+
+- name: upload staging ssl key
+  copy:
+    src: "{{ inventory_dir }}/../private/rss2slack/staging_rss2slack.key"
+    dest: /etc/ssl/private/rss2slack.key
+  when: inventory_hostname in groups['staging']
+  tags: nginx
