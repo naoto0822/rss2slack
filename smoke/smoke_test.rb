@@ -44,21 +44,21 @@ end
 def get(url)
   uri = URI.parse(url)
   req = Net::HTTP::Get.new(uri.path)
-  request(req)
+  request(uri, req)
 end
 
 def post(url, body)
   uri = URI.parse(url)
   req = Net::HTTP::Post.new(uri.path)
   req.set_form_data(body)
-  request(req)
+  request(uri, req)
 end
 
-def request(req)
-  https = Net::HTTP.new(TARGET_DOMAIN, 443)
+def request(uri, req)
+  https = Net::HTTP.new(uri.host, uri.port)
   https.open_timeout = 5
   https.read_timeout = 5
-  https.use_ssl = true
+  https.use_ssl = (uri.scheme == "https")
   https.verify_mode = OpenSSL::SSL::VERIFY_PEER
   https.verify_depth = 5
   https.ca_file = cert_file
