@@ -12,7 +12,7 @@ TARGET_DOMAIN = 'staging.rss2slack.co.jp'.freeze
 SECRET_VAR_FILE = '../private/rss2slack/external_vars.yml'.freeze
 CHANNEL_NAME = 'dev-rss2slack'.freeze
 TRIGGER_WORD = 'rss2slack_register'.freeze
-CERT_FILE_PATH = '../private/rss2slack/staging_rss2slack.crt'.freeze
+CERT_FILE_RELATIVE_PATH = '../private/rss2slack/staging_rss2slack.crt'.freeze
 
 def secret_var(path:nil)
   path = SECRET_VAR_FILE if path.nil?
@@ -37,28 +37,33 @@ def make_body(vars, text)
   }
 end
 
+def cert_file
+  File.expand_path(CERT_FILE_RELATIVE_PATH, File.dirname(__FILE__))
+end
+
 def get(url)
   uri = URI.parse(url)
   req = Net::HTTP::Get.new(uri.path)
-  request(uri, req)
+  request(req)
 end
 
 def post(url, body)
   uri = URI.parse(url)
   req = Net::HTTP::Post.new(uri.path)
   req.set_form_data(body)
-  request(uri, req)
+  request(req)
 end
 
-def request(uri, req)
-  res = Net::HTTP.start(uri.host, uri.port,
-                        use_ssl: uri.scheme == 'https') { |http|
-    http.open_timeout = 5
-    http.read_timeout = 5
-    http.verify_depth = 5
-    http.verify_mode = OpenSSL::SSL::VERIFY_PEER
-    http.ca_file = CERT_FILE_PATH
-    http.request(req)
+def request(req)
+  https = Net::HTTP.new(TARGET_DOMAIN, 443)
+  https.open_timeout = 5
+  https.read_timeout = 5
+  https.use_ssl = true
+  https.verify_mode = OpenSSL::SSL::VERIFY_PEER
+  https.verify_depth = 5
+  https.ca_file = cert_file
+  res = https.start { |h|
+    h.request(req)
   }
   res
 rescue => e
