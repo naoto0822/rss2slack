@@ -8,13 +8,13 @@ require 'logger'
 
 # constants
 TARGET_DOMAIN = 'staging.rss2slack.co.jp'.freeze
-SECRET_VAR_FILE = '../private/rss2slack/external_vars.yml'.freeze
+SECRET_VAR_RELATIVE_PATH = '../private/rss2slack/secret_vars.yml'.freeze
 CHANNEL_NAME = 'dev-rss2slack'.freeze
 TRIGGER_WORD = 'rss2slack_register'.freeze
 CERT_FILE_RELATIVE_PATH = '../private/rss2slack/staging_rss2slack.crt'.freeze
 
-def secret_var(path:nil)
-  path = SECRET_VAR_FILE if path.nil?
+def secret_var
+  path = File.expand_path(SECRET_VAR_RELATIVE_PATH, File.dirname(__FILE__))
   YAML.load_file(path)
 rescue => e
   e
@@ -114,12 +114,15 @@ def work
   # slack/feed
   register_url = @base_url + '/v1/slack/feed'
   text = 'rss2slack_register, markezine, https://markezine.jp/rss/new/20/index.xml'
-  body = 
+  body = make_body(@var, text)
+  res = post(register_url, body)
+  output_res(res, @logger)
 
-
-  @logger.debug('@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
-  @logger.debug('@ Successfully smoke test! @')
-  @logger.debug('@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
+  @logger.debug('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
+  @logger.debug('@                                @')
+  @logger.debug('@ Successfully integration test! @')
+  @logger.debug('@                                @')
+  @logger.debug('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
 end
 
 work
