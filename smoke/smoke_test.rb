@@ -38,7 +38,7 @@ def make_body(vars, text)
 end
 
 def get(url)
-  uri = URL.parse(url)
+  uri = URI.parse(url)
   req = Net::HTTP::Get.new(uri.path)
   request(uri, req)
 end
@@ -55,6 +55,7 @@ def request(uri, req)
                         use_ssl: uri.scheme == 'https') { |http|
     http.open_timeout = 5
     http.read_timeout = 5
+    http.verify_depth = 5
     http.verify_mode = OpenSSL::SSL::VERIFY_PEER
     http.ca_file = CERT_FILE_PATH
     http.request(req)
