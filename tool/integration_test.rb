@@ -102,7 +102,7 @@ def work
   output_res(res, @logger)
 
   if res.code.to_i != 200
-    msg = 'resposne code is not 200'
+    msg = 'response code is not 200'
     failure(msg, @logger)
   end
 
@@ -119,11 +119,54 @@ def work
   output_res(res, @logger)
   # {"attachments":[{"fallback":"successflluy registerd markezine","color":"good","fields":[{"title":"successflluy registerd markezine","short":false}],"footer":"from Rss2Slack","ts":1511707196}],"username":"Rss2Slack"}
 
+  if res.code.to_i != 200
+    msg = 'response code is not 200'
+    failure(msg, @logger)
+  end
+
+  json = JSON.parse(res.body)
+  if json.nil? || json.empty?
+    msg = 'response body is nil or empty'
+    failure(msg, @logger)
+  end
+
+  username = json['username']
+  if username != 'Rss2Slack'
+    msg = 'username is not Rss2Slack'
+    failure(msg, @logger)
+  end
+
+  attachments = json['attachments']
+  if attachments.nil? || attachments.empty?
+    msg = 'attachments is nil or empty'
+    failure(msg, @logger)
+  end
+
+  attachment = attachments[0]
+  if attachment.nil? || attachment.empty?
+    msg = 'attachment is nil or empty'
+    failure(msg, @logger)
+  end
+
+  fields = attachment['fields']
+  if fields.nil? || fields.empty?
+    msg = 'fields is nil or empty'
+    failure(msg, @logger)
+  end
+
+  field = fields[0]
+  if !field['title'].to_s.include?('successflluy registerd')
+    msg = 'response title is invalid'
+    failure(msg, @logger)
+  end
+
   @logger.debug('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
   @logger.debug('@                                @')
   @logger.debug('@ Successfully integration test! @')
   @logger.debug('@                                @')
   @logger.debug('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
+rescue => e
+  failure(e, @logger)
 end
 
 work
