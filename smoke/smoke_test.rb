@@ -96,7 +96,7 @@ def work
   base_url = "https://#{TARGET_DOMAIN}"
 
   # status
-  status_url = url + "/status"
+  status_url = base_url + "/status"
   res = get(status_url)
   output_res(res, logger)
 
