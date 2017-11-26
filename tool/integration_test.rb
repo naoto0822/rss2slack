@@ -3,7 +3,6 @@ require 'net/http'
 require 'uri'
 require 'json'
 require 'yaml'
-require 'optparse'
 require 'openssl'
 require 'logger'
 
@@ -70,8 +69,8 @@ rescue => e
   e
 end
 
-def fail(e, logger)
-  logger.fail(["#{e.class}", "#{e.message}"].join(': '))
+def failure(msg, logger)
+  logger.error("#{msg}")
   exit 1
 end
 
@@ -86,30 +85,41 @@ def output_res(res, logger)
   logger.debug(res.body)
 end
 
+def setup
+  @logger = Logger.new(STDOUT)
+  @base_url = "https://#{TARGET_DOMAIN}"
+  @var = secret_var
+end
+
 # valid text
 # "rss2slack_register, feed_name, url"
 def work
-  args = ARGV.getopts('t:')
-
-  if args['t'].nil?
-    puts 'Usage: ruby slack_test_client -t <text>'
-    exit 1
-  end
-
-  text = args['t']
-
-  logger = Logger.new(STDOUT)
-  base_url = "https://#{TARGET_DOMAIN}"
+  setup
 
   # status
-  status_url = base_url + "/status"
+  status_url = @base_url + "/status"
   res = get(status_url)
-  output_res(res, logger)
+  output_res(res, @logger)
+
+  if res.code.to_i != 200
+    msg = 'resposne code is not 200'
+    failure(msg, @logger)
+  end
+
+  if res.body != 'ok'
+    msg = 'response body is not ok'
+    failure(msg, @logger)
+  end
 
   # slack/feed
+  register_url = @base_url + '/v1/slack/feed'
+  text = 'rss2slack_register, markezine, https://markezine.jp/rss/new/20/index.xml'
+  body = 
 
 
+  @logger.debug('@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
+  @logger.debug('@ Successfully smoke test! @')
+  @logger.debug('@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
 end
 
 work
-
