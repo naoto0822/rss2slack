@@ -117,6 +117,7 @@ def work
   body = make_body(@var, text)
   res = post(register_url, body)
   output_res(res, @logger)
+  # {"attachments":[{"fallback":"successflluy registerd markezine","color":"good","fields":[{"title":"successflluy registerd markezine","short":false}],"footer":"from Rss2Slack","ts":1511707196}],"username":"Rss2Slack"}
 
   @logger.debug('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
   @logger.debug('@                                @')
