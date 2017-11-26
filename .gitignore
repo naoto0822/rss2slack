@@ -56,3 +56,6 @@ etc/
 
 # cap log
 log/
+
+# Mac
+.DS_Store
