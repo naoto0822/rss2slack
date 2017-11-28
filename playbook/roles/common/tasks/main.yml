@@ -7,10 +7,18 @@
     groups={{ssh_groups}}
   tags: users
 
-- name: set authorized_keys
+- name: set dev or staging authorized_keys
   authorized_key:
-    user: {{ ssh_user }}
-    key: {{ ssh_pub_key }}
+    user: '{{ ssh_user }}'
+    key: "{{ lookup('file', '/Users/naoto/.ssh/id_rsa_dev.pub') }}"
+  when: (inventory_hostname in groups['dev']) or (inventory_hostname in groups['staging'])
+  tags: users
+
+- name: set prod authorized_keys
+  authorized_key:
+    user: '{{ ssh_user }}'
+    key: "{{ lookup('file', '/Users/naoto/.ssh/id_rsa_rss2slack.pub') }}"
+  when: inventory_hostname in groups['prod']
   tags: users
 
 - name: set sudoers.d/
