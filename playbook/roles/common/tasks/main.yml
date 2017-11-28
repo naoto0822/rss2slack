@@ -7,12 +7,11 @@
     groups={{ssh_groups}}
   tags: users
 
-- name: change permission ~/.ssh dir
-  file: path="/home/{{ssh_user}}/.ssh" state=directory owner={{ssh_user}} group={{ssh_user}} mode=0700
+- name: set authorized_keys
+  authorized_key:
+    user: {{ ssh_user }}
+    key: {{ ssh_pub_key }}
   tags: users
-
-- name: set ssh public key
-  copy: src="authorized_keys" dest="/home/{{ssh_user}}/.ssh/authorized_keys" owner={{ssh_user}} group={{ssh_user}} mode=0600
 
 - name: set sudoers.d/
   lineinfile: dest=/etc/sudoers.d/{{ssh_user}} line="{{ssh_user}} ALL=(ALL) NOPASSWD:ALL" create=yes owner=root group=root mode=0440

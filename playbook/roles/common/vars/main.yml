@@ -1,5 +1,6 @@
 ---
 ssh_user: rss2slack
+ssh_pub_key: ~/.ssh/id_rsa_dev.pub
 ssh_password: hoge
 ssh_groups: wheel
 base_locale: LANG=ja_JP.UTF-8
