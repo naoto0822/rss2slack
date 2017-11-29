@@ -56,23 +56,16 @@
   tags: selinux
 
 - name: set ssh conf. (change port, ban root login, only ssh auth, deny pass login.)
-  notify:
-    - restart sshd
   template: src="sshd_config" dest="/etc/ssh/sshd_config" owner=root group=root mode=0600
+  notify: restart sshd and firewalld
   tags: sshd
-
-- name: start sshd
-  service: name=sshd state=started enabled=yes
-  tags: sshd
-
-- name: setting firewall
-  service: name=firewalld state=started enabled=yes
-  tags: firewalld
 
 - name: allow ssh port
-  firewalld: port={{ ssh_port }}/tcp permanent=true state=enabled immediate=yes zone=public
+  firewalld: port={{ ssh_port }}/tcp permanent=true state=enabled
+  notify: restart sshd and firewalld
   tags: firewalld
 
 - name: deny default ssh port
-  firewalld: service=ssh permanent=true state=disabled immediate=yes
+  firewalld: service=ssh permanent=true state=disabled
+  notify: restart sshd and firewalld
   tags: firewalld

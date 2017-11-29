@@ -1,3 +1,6 @@
 ---
-- name: restart sshd
-  service: name=sshd state=restarted
+- name: restart sshd and firewalld
+  service: name={{item}} state=restarted
+  with_items:
+    - sshd
+    - firewalld
