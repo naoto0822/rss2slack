@@ -1,5 +1,5 @@
 ---
-- hosts: prod
+- hosts: prod_init
   remote_user: root
   roles:
     - common
