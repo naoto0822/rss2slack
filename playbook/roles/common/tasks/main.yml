@@ -60,9 +60,16 @@
   notify: restart sshd and firewalld
   tags: sshd
 
-- name: allow ssh port
-  firewalld: port={{ ssh_port }}/tcp permanent=true state=enabled
+- name: allow dev or staging ssh port
+  firewalld: port={{ dev_or_staging_ssh_port }}/tcp permanent=true state=enabled
   notify: restart sshd and firewalld
+  when: (inventory_hostname in groups['dev']) or (inventory_hostname in groups['staging'])
+  tags: firewalld
+
+- name: allow prod ssh port
+  firewalld: port={{ prod_ssh_port }}/tcp permanent=true state=enabled
+  notify: restart sshd and firewalld
+  when: inventory_hostname in groups['prod']
   tags: firewalld
 
 - name: deny default ssh port
