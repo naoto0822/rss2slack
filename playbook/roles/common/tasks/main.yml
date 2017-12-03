@@ -18,7 +18,7 @@
   authorized_key:
     user: '{{ ssh_user }}'
     key: "{{ lookup('file', '/Users/naoto/.ssh/id_rsa_rss2slack.pub') }}"
-  when: inventory_hostname in groups['prod']
+  when: inventory_hostname in groups['prod_init']
   tags: users
 
 - name: set sudoers.d/
