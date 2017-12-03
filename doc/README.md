@@ -15,7 +15,8 @@ domain is `rss2slack.com`
 
 - provided by [さくらのVPS](https://vps.sakura.ad.jp/)
 
-server spec
+#### spec
+
 - Memory 1GB
 - 2Core CPU
 - SSD 30GB
