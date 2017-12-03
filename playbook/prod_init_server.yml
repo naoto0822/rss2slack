@@ -5,3 +5,4 @@
     - common
   vars_files:
     - ../private/rss2slack/secret_vars.yml
+    - ../private/rss2slack/prod_ssh_port.yml
