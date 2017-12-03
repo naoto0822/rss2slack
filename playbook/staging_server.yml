@@ -10,3 +10,5 @@
     - app
   vars_files:
     - ../private/rss2slack/secret_vars.yml
+  vars:
+    ssh_port: 22
