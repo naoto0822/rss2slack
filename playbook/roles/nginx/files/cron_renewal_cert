@@ -1,0 +1,4 @@
+# Run the renewal_cert.sh
+SHELL=/bin/bash
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+0 4 1 * * rss2slack /bin/bash -lc "sh /opt/renewal_cert.sh" 1>> /tmp/cron_renewal_cert_stdout.log 2>> /tmp/cron_renewal_cert_error.log

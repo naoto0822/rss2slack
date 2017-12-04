@@ -1,0 +1,49 @@
+---
+- name: installed let's encrypt?
+  stat: path=/usr/local/certbot
+  register: lets_encrypt_installed
+  when: inventory_hostname in groups['prod']
+  tags: ssl
+
+- name: clone certbot
+  git:
+    repo: "https://github.com/letsencrypt/letsencrypt.git"
+    dest: /usr/local/certbot
+  when: inventory_hostname in groups['prod'] and not lets_encrypt_installed.stat.exists
+  tags: ssl
+
+- name: upload create_cert.sh
+  copy:
+    src: create_cert.sh
+    dest: /opt/create_cert.sh
+    mode: 0755
+    owner: root
+    group: root
+  when: inventory_hostname in groups['prod'] and not lets_encrypt_installed.stat.exists
+  tags: ssl
+
+- name: exec create_cert.sh
+  shell: /opt/create_cert.sh
+  when: inventory_hostname in groups['prod'] and not lets_encrypt_installed.stat.exists
+  tags: ssl
+
+- name: upload cron_renewal_cert
+  copy:
+    src: cron_renewal_cert
+    dest: /etc/cron.d/cron_renewal_cert
+    mode: 0644
+    owner: root
+    group: root
+  when: inventory_hostname in groups['prod']
+  notify: restart crond
+  tags: ssl
+
+- name: upload renewal_cert.sh
+  copy:
+    src: renewal_cert.sh
+    dest: /opt/renewal_cert.sh
+    mode: 0755
+    owner: rss2slack
+    group: wheel
+  when: inventory_hostname in groups['prod']
+  tags: ssl
