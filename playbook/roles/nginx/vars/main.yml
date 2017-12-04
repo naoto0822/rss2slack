@@ -6,4 +6,4 @@ worker_processes: 1
 
 dev_host: dev.rss2slack.co.jp
 staging_host: staging.rss2slack.co.jp
-prod_host: rss2slack.co.jp
+prod_host: rss2slack.com
