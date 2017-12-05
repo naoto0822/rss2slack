@@ -1,0 +1,7 @@
+---
+- name: start nginx for prod certbot
+  service:
+    name: nginx
+    state: started
+    enabled: yes
+  when: inventory_hostname in groups['prod']

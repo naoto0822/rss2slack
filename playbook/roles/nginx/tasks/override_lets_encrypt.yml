@@ -1,0 +1,13 @@
+---
+- name: upload override_cert.sh
+  copy:
+    src: override_cert.sh
+    dest: /opt/override_cert.sh
+    mode: 0755
+    owner: root
+    group: root
+  when: inventory_hostname in groups['prod']
+
+- name: exec override_cert.sh
+  shell: /opt/override_cert.sh
+  when: inventory_hostname in groups['prod']
