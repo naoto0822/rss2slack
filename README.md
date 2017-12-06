@@ -32,7 +32,8 @@
 
 ## TODO
 
-- [ ] SSL
+- [ ] Log rotate
+- [ ] Log monitoring
 
 reference  
 - https://www.sitepoint.com/building-a-slackbot-with-ruby-and-sinatra/
