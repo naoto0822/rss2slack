@@ -43,6 +43,7 @@ set :branch, "master"
 # --------------
 set :user, "rss2slack"
 set :ssh_options, {
+  port: 8022,
   keys: %w(~/.ssh/id_rsa_rss2slack),
   forward_agent: false,
   auth_methods: %w(publickey)
