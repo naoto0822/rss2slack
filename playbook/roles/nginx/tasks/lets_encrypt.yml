@@ -12,6 +12,21 @@
   when: inventory_hostname in groups['prod'] and not lets_encrypt_installed.stat.exists
   tags: ssl
 
+- name: exists /var/ssl
+  stat: path=/var/ssl
+  register: var_ssl
+  when: inventory_hostname in groups['prod']
+  tags: ssl
+
+- name: create /var/ssl
+  file:
+    path: /var/ssl
+    state: directory
+    owner: root
+    group: root
+  when: inventory_hostname in groups['prod'] and not var_ssl.stat.exists
+  tags: ssl
+
 - name: upload create_cert.sh
   copy:
     src: create_cert.sh
