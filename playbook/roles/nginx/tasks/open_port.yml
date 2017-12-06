@@ -1,4 +1,12 @@
 ---
+- name: start firewalld for dev or staging
+  service:
+    name: firewalld
+    state: started
+    enabled: yes
+  when: (inventory_hostname in groups['dev']) or (inventory_hostname in groups['staging'])
+  tags: nginx
+
 - name: open http port
   firewalld: service=http permanent=true state=enabled immediate=true
   tags: nginx
