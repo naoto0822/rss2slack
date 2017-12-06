@@ -2,7 +2,7 @@
 - include: install_nginx.yml
 - include: conf.yml
 - include: dev_or_staging_ssl.yml
-- include: lets_encrypt.yml
 - include: open_port.yml
+- include: lets_encrypt.yml
 - include: start_nginx.yml
-
+- include: override_lets_encrypt.yml
