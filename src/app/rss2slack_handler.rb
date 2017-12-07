@@ -28,7 +28,7 @@ module R2S
       data = Slack::OutgoingWebhooks::Message.new(body)
 
       unless valid_outgoing_webhook?(data)
-        @logger.warn("invalid request: #{data.instance_variables}")
+        @logger.warn("invalid request: #{data.inspect}")
         return bad_request_response
       end
 
