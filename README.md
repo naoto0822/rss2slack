@@ -9,23 +9,15 @@
 
 ## Required
 
-### Prod
+### Ruby
 
-- TODO
+- 2.4.0
 
-### Dev
+### Structure
 
 |    env     |   name  |
 |:----------:|:-------:|
 | OS         | CentOS  |
-| web server | nginx   |
-| app server | unicorn |
-| database   | MySQL   |
-
-### Mac Local
-
-|    env     |   name  |
-|:----------:|:-------:|
 | web server | nginx   |
 | app server | unicorn |
 | database   | MySQL   |
