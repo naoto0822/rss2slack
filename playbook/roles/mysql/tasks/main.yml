@@ -100,6 +100,19 @@
   when: mysql_installed.rc == 1
   tags: mysql
 
+- name: upload lograte conf
+  copy:
+    src: logrotate
+    dest: /etc/logrotate.d/mysql
+    mode: 0644
+    owner: root
+    group: root
+  tags: mysql
+
+- name: exec logrotate
+  shell: mysql_config_editor set --login-path=client --user=root --host=localhost --password
+  tags: mysql
+
 - name: restart mysql
   service: name=mysqld state=restarted
   when: mysql_installed.rc == 1
