@@ -27,6 +27,29 @@ rss2slack is RssReader using slack.
 | app server | unicorn    |
 | database   | MySQL 5.7  |
 
+## Provision
+
+### dev or staging
+
+```sh
+$ vagrant up
+$ sh (dev_playbook.sh|staging_playbook.sh)
+```
+
+### prod
+
+```sh
+$ cd ./playbook
+$ sh prod_init_playbook.sh
+$ sh prod_playbook.sh
+```
+
+## Deploy
+
+```sh
+$ bundle exec cap (staging|production) deploy
+```
+
 ## TODO
 
 - [ ] Log rotate
