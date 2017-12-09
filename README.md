@@ -14,6 +14,10 @@ rss2slack is RssReader using slack.
 
 ## Required
 
+> Actually it is one server...
+
+<img src="./img/structure.png" height="420" width="675">
+
 ### Ruby
 
 - 2.4.0
