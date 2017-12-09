@@ -6,3 +6,4 @@
 - include: lets_encrypt.yml
 - include: start_nginx.yml
 - include: override_lets_encrypt.yml
+- include: logrotate.yml
