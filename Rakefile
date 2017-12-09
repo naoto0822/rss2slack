@@ -23,7 +23,7 @@ namespace :app do
   desc 'start app'
   task :start => [
     'db:start',
-    'unicorn:start',
+    'unicorn:restart',
     'nginx:start'
   ]
 end
@@ -41,7 +41,7 @@ namespace :nginx do
 
   desc 'restart nginx'
   task :restart do
-    sh 'sudo systemctl reload nginx'
+    sh 'sudo systemctl restart nginx'
   end
 end
 
@@ -74,6 +74,11 @@ namespace :db do
   desc 'stop db'
   task :stop do
     sh 'sudo systemctl stop mysqld'
+  end
+
+  desc 'restart db'
+  task :restart do
+    sh 'sudo systemctl restart mysqld'
   end
 
   desc 'setup database, user, table'
