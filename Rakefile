@@ -117,9 +117,11 @@ end
 def unicorn_env(env)
   case env
   when 'prod'
-    'production'
+    return 'production'
+  when 'staging'
+    return 'development'
   when 'dev'
-    'development'
+    return 'development'
   else
     nil
   end

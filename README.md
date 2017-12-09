@@ -37,6 +37,7 @@ rss2slack is RssReader using slack.
 
 ```sh
 $ vagrant up
+$ cd ./playbook
 $ sh (dev_playbook.sh|staging_playbook.sh)
 ```
 
