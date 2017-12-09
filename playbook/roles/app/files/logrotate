@@ -1,0 +1,13 @@
+/var/log/unicorn/*.log {
+  weekly
+  missingok
+  rotate 5
+  nocompress
+  notifempty
+  create 640 rss2slack wheel
+
+  lastaction
+    pid=/tmp/unicorn.pid
+    test -s $pid && kill -USR1 "$(cat $pid)"
+  endscript
+}

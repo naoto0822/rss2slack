@@ -193,6 +193,15 @@
   when: (inventory_hostname in groups['staging']) or (inventory_hostname in groups['prod'])
   tags: app
 
+- name: upload logrotate conf
+  copy:
+    src: logrotate
+    dest: /etc/logrotate.d/unicorn
+    mode: 0644
+    owner: root
+    group: root
+  tags: app
+
 - name: restart crond.service
   service:
     name: crond
