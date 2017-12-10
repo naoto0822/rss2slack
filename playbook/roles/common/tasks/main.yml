@@ -69,3 +69,9 @@
   firewalld: service=ssh permanent=true state=disabled
   notify: restart sshd and firewalld
   tags: firewalld
+
+- name: install python-pip
+  yum: name=python-pip state=present
+
+- name: install pexpect
+  pip: name=pexpect
