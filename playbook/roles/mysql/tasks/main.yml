@@ -104,12 +104,12 @@
   file:
     path: /var/log/mysql
     state: directory
-    mode: 0644
+    mode: 0755
     owner: mysql
     group: mysql
   tags: mysql
 
-- name: upload lograte conf
+- name: upload logrotate conf
   copy:
     src: logrotate
     dest: /etc/logrotate.d/mysql
@@ -120,9 +120,9 @@
 
 - name: exec mysql_config_editor
   expect:
-    command: mysql_config_editor set --login-path=client --user=root --host=localhost --password
+    command: mysql_config_editor set --login-path=client --user='{{ db_user }}' --host=localhost --password
     responses:
-      "Enter password:": "{{ db_root_password }}"
+      "Enter password:": "{{ db_password }}"
   tags: mysql
 
 - name: restart mysql
