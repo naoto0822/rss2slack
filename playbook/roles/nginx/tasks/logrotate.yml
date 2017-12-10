@@ -2,7 +2,7 @@
 - name: upload logrotate conf
   copy:
     src: logrotate
-    dist: /etc/logrotate.d/nginx
+    dest: /etc/logrotate.d/nginx
     mode: 0644
     owner: root
     group: root
