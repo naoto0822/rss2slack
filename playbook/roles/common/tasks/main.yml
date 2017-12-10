@@ -70,8 +70,11 @@
   notify: restart sshd and firewalld
   tags: firewalld
 
+- name: install epel-release
+  yum: name=epel-release state=present
+
 - name: install python-pip
-  yum: name=python-pip state=present
+  yum: name=python-pip enablerepo=epel state=present
 
 - name: install pexpect
   pip: name=pexpect
