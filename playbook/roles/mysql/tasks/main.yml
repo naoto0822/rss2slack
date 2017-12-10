@@ -118,8 +118,11 @@
     group: root
   tags: mysql
 
-- name: exec logrotate
-  shell: mysql_config_editor set --login-path=client --user=root --host=localhost --password={{ db_root_password }}
+- name: exec mysql_config_editor
+  expect:
+    command: mysql_config_editor set --login-path=client --user=root --host=localhost --password
+    responses:
+      "Enter password:": "{{ db_root_password }}"
   tags: mysql
 
 - name: restart mysql
