@@ -118,14 +118,14 @@
     group: root
   tags: mysql
 
+- name: restart mysql
+  service: name=mysqld state=restarted
+  when: mysql_installed.rc == 1
+  tags: mysql
+
 - name: exec mysql_config_editor
   expect:
     command: mysql_config_editor set --login-path=client --user='{{ db_user }}' --host=localhost --password
     responses:
       "Enter password:": "{{ db_password }}"
-  tags: mysql
-
-- name: restart mysql
-  service: name=mysqld state=restarted
-  when: mysql_installed.rc == 1
   tags: mysql
