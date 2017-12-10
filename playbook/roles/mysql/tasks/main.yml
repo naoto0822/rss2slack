@@ -119,7 +119,7 @@
   tags: mysql
 
 - name: exec logrotate
-  shell: mysql_config_editor set --login-path=client --user=root --host=localhost --password
+  shell: mysql_config_editor set --login-path=client --user=root --host=localhost --password={{ db_root_password }}
   tags: mysql
 
 - name: restart mysql
