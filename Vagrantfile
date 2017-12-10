@@ -15,6 +15,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     dev.vm.hostname = "dev"
     dev.vm.network "private_network", ip: "192.168.56.40"
   end
+
+  config.vm.define :jenkins do |dev|
+    dev.vm.hostname = "jenkins"
+    dev.vm.network "private_network", ip: "192.168.56.50"
+  end
   
   config.vm.provider "virtualbox" do |vb|
     vb.memory = "1024"
