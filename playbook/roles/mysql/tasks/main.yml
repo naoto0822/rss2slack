@@ -125,7 +125,7 @@
 
 - name: exec mysql_config_editor
   expect:
-    command: mysql_config_editor set --login-path=client --user='{{ db_user }}' --host=localhost --password
+    command: mysql_config_editor set --login-path=client --user={{ db_user }} --host=localhost --password
     responses:
       "Enter password:": "{{ db_password }}"
   tags: mysql
