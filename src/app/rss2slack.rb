@@ -1,7 +1,7 @@
 require 'sinatra/base'
 require 'sinatra/reloader'
 require 'json'
-require 'logger'
+require_relative './logger'
 require_relative './rss2slack_handler'
 require_relative './conf'
 require_relative './db_client'
@@ -18,7 +18,7 @@ class Rss2Slack < Sinatra::Base
 
   before do
     @conf = R2S::Conf.new if @conf.nil?
-    @logger = Logger.new(@conf.logger_app_path) if @logger.nil?
+    @logger = R2S::Logger.new(@conf.logger_app_path) if @logger.nil?
     @logger.level = Logger::DEBUG
     @db = R2S::DBClient.new(@logger, @conf) if @db.nil?
     @feed_model = R2S::FeedModel.new(@logger, @db) if @feed_model.nil?
