@@ -70,9 +70,12 @@
   mysql_user:
     name: '{{ db_user }}'
     password: '{{ db_password }}'
-    priv: '{{ db_database }}.*:ALL,GRANT'
+    priv: {{ item }}
     config_file: /tmp/.my.cnf
     state: present
+  with_items:
+    - '{{ db_database }}.*:ALL,GRANT'
+    - '*.*:RELOAD'
   when: mysql_installed.rc == 1
   tags: mysql
 
