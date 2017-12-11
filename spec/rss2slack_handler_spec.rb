@@ -16,7 +16,7 @@ class MockOutgoingMessage
       :user_id => 'user_id_hoge',
       :user_name => 'me',
       :text => 'rss2slack_register',
-      :trigger_word => 'rss2slack_register, hoge, http://hoge.com'
+      :trigger_word => 'rss2slack_register, hoge, <http://hoge.com>'
     }
     base.merge(other)
   end
