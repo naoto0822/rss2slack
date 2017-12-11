@@ -70,7 +70,7 @@
   mysql_user:
     name: '{{ db_user }}'
     password: '{{ db_password }}'
-    priv: {{ item }}
+    priv: '{{ item }}'
     config_file: /tmp/.my.cnf
     state: present
   with_items:
