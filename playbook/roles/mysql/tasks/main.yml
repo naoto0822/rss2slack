@@ -66,16 +66,23 @@
   when: mysql_installed.rc == 1
   tags: mysql
 
-- name: create user
+- name: create application user
   mysql_user:
     name: '{{ db_user }}'
     password: '{{ db_password }}'
-    priv: '{{ item }}'
+    priv: '{{ db_database }}.*:ALL,GRANT'
     config_file: /tmp/.my.cnf
     state: present
-  with_items:
-    - '{{ db_database }}.*:ALL,GRANT'
-    - '*.*:RELOAD'
+  when: mysql_installed.rc == 1
+  tags: mysql
+
+- name: create reload user
+  mysql_user:
+    name: '{{ db_reload_user }}'
+    password: '{{ db_reload_password }}'
+    priv: '*.*:RELOAD'
+    config_file: /tmp/.my.cnf
+    state: present
   when: mysql_installed.rc == 1
   tags: mysql
 
@@ -128,7 +135,7 @@
 
 - name: exec mysql_config_editor
   expect:
-    command: mysql_config_editor set --login-path=client --user={{ db_user }} --host=localhost --password
+    command: mysql_config_editor set --login-path=client --user={{ db_reload_user }} --host=localhost --password
     responses:
-      "Enter password:": "{{ db_password }}"
+      "Enter password:": "{{ db_reload_password }}"
   tags: mysql
