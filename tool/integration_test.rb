@@ -113,7 +113,7 @@ def work
 
   # slack/feed
   register_url = @base_url + '/v1/slack/feed'
-  text = 'rss2slack_register, markezine, https://markezine.jp/rss/new/20/index.xml'
+  text = 'rss2slack_register, markezine, <https://markezine.jp/rss/new/20/index.xml>'
   body = make_body(@var, text)
   res = post(register_url, body)
   output_res(res, @logger)
