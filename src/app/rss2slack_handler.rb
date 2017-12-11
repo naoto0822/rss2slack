@@ -72,12 +72,18 @@ module R2S
 
       title = texts[1]
       url = texts[2]
-      feeds = @feed_model.find_by_url(url)
-      if feeds.length >= 1
-        return ok_response("already registerd url: #{url}")
+      valid_url = wash_url(url)
+      if valid_url.nil?
+        @logger.warn("failure replace unnecessary char: #{url}")
+        return bad_request_response
       end
 
-      @feed_model.save(title, url)
+      feeds = @feed_model.find_by_url(valid_url)
+      if feeds.length >= 1
+        return ok_response("already registerd url: #{valid_url}")
+      end
+
+      @feed_model.save(title, valid_url)
       @logger.debug("finish handle_slack_register_feed(), text: #{data.text}")
       ok_response("successflluy registerd #{title}")
     end
@@ -119,6 +125,14 @@ module R2S
       arr
     rescue
       @logger.warn('failure split post text')
+      nil
+    end
+
+    def wash_url(url)
+      url.gsub!(/</, "")
+      url.gsub!(/>/, "")
+      url
+    rescue
       nil
     end
 
