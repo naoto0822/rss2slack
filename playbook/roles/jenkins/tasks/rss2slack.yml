@@ -1,0 +1,6 @@
+---
+- name: install mysql-devel
+  yum:
+    name: mysql-devel
+    state: present
+  tags: jenkins
